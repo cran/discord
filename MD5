@@ -1,0 +1,16 @@
+07b4c29effa8a780ab7ac0d021943fe0 *DESCRIPTION
+331bc5d506fd7a3d64585f5377d4ebd3 *NAMESPACE
+aabf5d0a4e6fce4b30a6f94b107ca1a4 *R/discord.R
+4f12d89d8d5a004fef5a76f42d78524c *R/discord_data.R
+cb784165651de40dba9e652e8b37f367 *R/discord_regression.R
+5707f9fbe3e8f3b73dfacb9818637536 *R/efunc.R
+2058044954c54a9c8bc45cfee7ec30a3 *R/kinsim1.R
+28c29a4b6b44d7cfd8f0830f94dfc07a *R/kinsim_multi.R
+eb2a46065772fe325719147dac669315 *R/rmvn.R
+d0b8e78a1465e20f3bc6d1c91f64ce72 *man/discord-package.Rd
+49810ba1a72cb25cda1bcdea67a0c36a *man/discord_data.Rd
+d5c7695a0660d2dbf3c9dce04fc3dc61 *man/discord_regression.Rd
+98fb2fce91965733777835fd5f624aab *man/efunc.Rd
+7d968121748069995b19b3a6b8e2b896 *man/kinsim1.Rd
+51243f547bd9caa3d8f2ddad3029863b *man/kinsim_multi.Rd
+5d3900c9f0f6d76c146ccce9e0e68de9 *man/rmvn.Rd
