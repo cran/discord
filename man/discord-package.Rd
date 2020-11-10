@@ -6,17 +6,20 @@
 \alias{discord}
 \title{Functions for Discordant Kinship Modeling.}
 \description{
-Utilities and functions for discordant kinship modeling (and other sibling-based quasi-experimental designs). Also includes functions for generating genetically- and environmentally informed multivariate data for kin pairs.
+Utilities and functions for discordant kinship modeling (and
+  other sibling-based quasi-experimental designs). Currently, the package
+  contains data restructuring functions and functions for generating
+  biometrically informed data for kin pairs.
 }
 \note{
 The release version is available through \href{https://cran.r-project.org/package=discord}{CRAN} by
 running \code{install.packages('discord')}.
-The most recent development version is available through \href{https://github.com/smasongarrison/discord}{GitHub} by
+The most recent development version is available through \href{https://github.com/R-Computing-Lab/discord}{GitHub} by
 running
-\code{devtools::install_github} \code{(repo = 'smasongarrison/discord')}
+\code{devtools::install_github} \code{(repo = 'R-Computing-Lab/discord')}
 (make sure \href{https://cran.r-project.org/package=devtools}{devtools} is already installed).
 If you're having trouble with the package, please install the development version.  If this doesn't solve
-your problem, please create a \href{https://github.com/smasongarrison/discord/issues}{new issue}, or email Mason.
+your problem, please create a \href{https://github.com/R-Computing-Lab/discord/issues}{new issue}, or email Mason.
 }
 \examples{
 
@@ -28,14 +31,18 @@ install.packages('discord')
 
 # Install/update discord with the development version from GitHub
 #install.packages('devtools') #Uncomment if `devtools` isn't installed already.
-devtools::install_github('smasongarrison/discord')
+devtools::install_github('R-Computing-Lab/discord')
 }
 }
 \references{
-EJP
+test
 }
 \author{
-\href{http://www.smasongarrison.com}{S. Mason Garrison} (Vanderbilt Univerisity)
+\href{https://www.smasongarrison.com/}{S. Mason Garrison} (Wake Forest University)
+ Jonathan Trattner
+ Cermet Ream
 
-Maintainer: S. Mason Garrison <s.mason.garrison@gmail.com>
+Maintainer: S. Mason Garrison <garrissm@wfu.edu>
 }
+\keyword{"behavior}
+\keyword{genetics"}
