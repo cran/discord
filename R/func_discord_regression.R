@@ -10,8 +10,8 @@
 #' @param race A character string for the race column name.
 #' @param pair_identifiers A character vector of length two that contains the variable identifier for each kinship pair.
 #'
-#' @return A tidy dataframe containing the model metrics via the
-#'   \link[broom]{tidy} function.
+#' @return Resulting `lm` object from performing the discordant regression.
+#'
 #' @export
 #'
 #' @examples
@@ -23,7 +23,9 @@
 #' sex = NULL,
 #' race = NULL)
 #'
-discord_regression <- function(data, outcome, predictors, id = "extended_id", sex = "sex", race = "race", pair_identifiers = c("_s1", "_s2")) {
+discord_regression <- function(data, outcome, predictors,
+                               id = "extended_id", sex = "sex", race = "race",
+                               pair_identifiers = c("_s1", "_s2")) {
 
   check_discord_errors(data = data, id = id, sex = sex, race = race, pair_identifiers = pair_identifiers)
 
@@ -38,13 +40,13 @@ discord_regression <- function(data, outcome, predictors, id = "extended_id", se
   }
 
   preppedData <- discord_data(data = data,
-                                     outcome = outcome,
-                                     predictors = predictors,
-                                     id = id,
-                                     sex = sex,
-                                     race = race,
-                                     pair_identifiers = pair_identifiers,
-                                     demographics = demographics)
+                              outcome = outcome,
+                              predictors = predictors,
+                              id = id,
+                              sex = sex,
+                              race = race,
+                              pair_identifiers = pair_identifiers,
+                              demographics = demographics)
 
   # Run the discord regression
   realOutcome <- base::paste0(outcome, "_diff")
@@ -68,8 +70,6 @@ discord_regression <- function(data, outcome, predictors, id = "extended_id", se
 
   model <- stats::lm(stats::as.formula(paste(realOutcome, preds, sep = " ~ ")), data = preppedData)
 
-  output <- model %>% broom::tidy()
-
-  return(output)
+  return(model)
 
 }

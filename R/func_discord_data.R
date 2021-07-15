@@ -14,7 +14,7 @@
 #'   demographics. If both are present (default, and recommended), value should
 #'   be "both". Other options include "sex", "race", or "none".
 #'
-#' @return A data frame that
+#' @return A data frame that contains analyzable, paired data for performing kinship regressions.
 #'
 #' @export
 #'
@@ -33,31 +33,73 @@ discord_data <- function(data, outcome, predictors, id = "extended_id", sex = "s
   variables <- c(outcome, predictors)
 
   #order the data on outcome
-  orderedOnOutcome <- purrr::map_df(.x = 1:base::nrow(data), ~check_sibling_order(data = data,
-                                                                                  outcome = outcome,
-                                                                                  pair_identifiers = pair_identifiers,
-                                                                                  row = .x))
+  orderedOnOutcome <- do.call(rbind, lapply(X = 1:nrow(data),
+                                            FUN = check_sibling_order,
+                                            data = data, outcome = outcome,
+                                            pair_identifiers = pair_identifiers)
+  )
 
-  out <- NULL
-  for (i in 1:base::length(variables)) {
-    out[[i]] <- purrr::map_df(.x = 1:base::nrow(orderedOnOutcome), ~make_mean_diffs(data = orderedOnOutcome,
-                                                                                    id = id,
-                                                                                    sex = sex,
-                                                                                    race = race,
-                                                                                    pair_identifiers = pair_identifiers,
-                                                                                    demographics = demographics,
-                                                                                    variables[i], row = .x))
+
+  out <- vector(mode = "list", length = length(variables))
+
+  for (i in 1:length(variables)) {
+    out[[i]] <- do.call(rbind, lapply(X = 1:nrow(orderedOnOutcome),
+                                      FUN = make_mean_diffs,
+                                      data = orderedOnOutcome, id = id,
+                                      sex = sex, race = race,
+                                      pair_identifiers = pair_identifiers,
+                                      demographics = demographics,
+                                      variable = variables[i])
+    )
   }
 
-
   if (demographics == "none") {
-    output <- out %>% purrr::reduce(dplyr::left_join, by = c("id"))
+
+    mrg <- function(x, y) {
+      merge(x = x,
+            y = y,
+            by = c("id"),
+            all.x = TRUE)
+    }
+
+    output <- Reduce(mrg, out)
+
   } else if (demographics == "race") {
-    output <- out %>% purrr::reduce(dplyr::left_join, by = c("id", paste0(race, "_1"), paste0(race, "_2")))
+
+    mrg <- function(x, y) {
+      merge(x = x,
+            y = y,
+            by = c("id", paste0(race, "_1"),
+                   paste0(race, "_2")),
+            all.x = TRUE)
+    }
+
+    output <- Reduce(mrg, out)
+
   } else if (demographics == "sex") {
-    output <- out %>% purrr::reduce(dplyr::left_join, by = c("id", paste0(sex, "_1"), paste0(sex, "_2")))
+
+    mrg <- function(x, y) {
+      merge(x = x,
+            y = y,
+            by = c("id", paste0(sex, "_1"),
+                   paste0(sex, "_2")),
+            all.x = TRUE)
+    }
+
+    output <- Reduce(mrg, out)
+
   } else if (demographics == "both") {
-    output <- out %>% purrr::reduce(dplyr::left_join, by = c("id", paste0(sex, "_1"), paste0(sex, "_2"), paste0(race, "_1"), paste0(race, "_2")))
+
+    mrg <- function(x, y) {
+      merge(x = x,
+            y = y,
+            by = c("id", paste0(sex, "_1"), paste0(sex, "_2"),
+                   paste0(race, "_1"), paste0(race, "_2")),
+            all.x = TRUE)
+    }
+
+    output <- Reduce(mrg, out)
+
   }
 
   return(output)

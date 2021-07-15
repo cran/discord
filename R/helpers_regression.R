@@ -39,7 +39,7 @@ check_sibling_order <- function(data, outcome, pair_identifiers, row) {
 
   return(data)
 
-  }
+}
 
 make_mean_diffs <- function(data, id, sex, race, demographics, variable, pair_identifiers, row) {
 
@@ -91,20 +91,20 @@ make_mean_diffs <- function(data, id, sex, race, demographics, variable, pair_id
 
     if (data[, "order"] == "s1") {
       output_demographics <- data.frame(race_1 = data[[raceS1]],
-                                race_2 = data[[raceS2]])
+                                        race_2 = data[[raceS2]])
     } else if (data[, "order"] == "s2") {
       output_demographics <- data.frame(race_1 = data[[raceS2]],
-                                race_2 = data[[raceS1]])
+                                        race_2 = data[[raceS1]])
     }
 
   } else if (demographics == "sex") {
 
     if (data[, "order"] == "s1") {
       output_demographics <- data.frame(sex_1 = data[[sexS1]],
-                                sex_2 = data[[sexS2]])
+                                        sex_2 = data[[sexS2]])
     } else if (data[, "order"] == "s2") {
       output_demographics <- data.frame(sex_1 = data[[sexS2]],
-                                sex_2 = data[[sexS1]])
+                                        sex_2 = data[[sexS1]])
     }
 
   } else if (demographics == "both") {
