@@ -1,3 +1,26 @@
+# discord 1.2.3
+* improved documentation
+* allow for kin to not share their common environment
+* fixed vector of relatedness values not behaving as expected
+* increased test coverage to 82.39 from 47ish.
+
+# discord 1.2.2
+* Added kinship link demonstration using potter dataset from BGmisc package
+* Copy edited vignettes
+
+# discord 1.2.1
+
+* Enhanced categorical variable handling
+
+## Bug Fixes
+
+* Fixed error when prepping discordant data as a result of mismatched column names between user-supplied data and internally manipulated data. See [commit fc1ed9f](https://github.com/R-Computing-Lab/discord/commit/fc1ed9f01d813cbb7f64545003bcada621a623e8) for more details.
+* Fixed error where `discord_data()` returned multiple rows per kin-pair when the 'id' column had non-unique values. As a result, the new default for 'id' is NULL. See [commit 87d5b3b6](https://github.com/R-Computing-Lab/discord/commit/87d5b3b678826232beccb3ec8fea0e4d00abc0e4) for more details.
+
+## Minor improvements and fixes
+
+* Added error message for missing data passed to `discord_data()` for more easy debugging.
+
 # discord 1.1.0
 
 ## Minor improvements and fixes

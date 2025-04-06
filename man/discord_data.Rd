@@ -8,15 +8,16 @@ discord_data(
   data,
   outcome,
   predictors,
-  id = "extended_id",
+  id = NULL,
   sex = "sex",
   race = "race",
   pair_identifiers,
-  demographics = "both"
+  demographics = "both",
+  coding_method = "none"
 )
 }
 \arguments{
-\item{data}{A data frame.}
+\item{data}{The data set with kinship pairs}
 
 \item{outcome}{A character string containing the outcome variable of
 interest.}
@@ -24,33 +25,40 @@ interest.}
 \item{predictors}{A character vector containing the column names for
 predicting the outcome.}
 
-\item{id}{A unique kinship pair identifier.}
+\item{id}{Default's to NULL. If supplied, must specify the column name
+corresponding to unique kinship pair identifiers.}
 
 \item{sex}{A character string for the sex column name.}
 
 \item{race}{A character string for the race column name.}
 
 \item{pair_identifiers}{A character vector of length two that contains the
-variable identifier for each kinship p}
+variable identifier for each kinship pair}
 
 \item{demographics}{Indicator variable for if the data has the sex and race
 demographics. If both are present (default, and recommended), value should
 be "both". Other options include "sex", "race", or "none".}
+
+\item{coding_method}{A character string that indicates what kind of
+additional coding schemes should be used. Default is none. Other options include "binary" and "multi".}
 }
 \value{
-A data frame that contains analyzable, paired data for performing kinship regressions.
+A data frame that contains analyzable, paired data for performing
+  kinship regressions.
 }
 \description{
 Restructure Data to Determine Kinship Differences
 }
 \examples{
 
-discord_data(data = sample_data,
-outcome = "height",
-predictors = "weight",
-pair_identifiers = c("_s1", "_s2"),
-sex = NULL,
-race = NULL,
-demographics = "none")
+discord_data(
+  data = data_sample,
+  outcome = "height",
+  predictors = "weight",
+  pair_identifiers = c("_s1", "_s2"),
+  sex = NULL,
+  race = NULL,
+  demographics = "none"
+)
 
 }

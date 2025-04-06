@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mason Garrison" />
+
+
+<title>Kinship Links</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Kinship Links</h1>
+<h4 class="author">Mason Garrison</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette demonstrates how to use the discord package with
+non-NLSY data. Specifically, it shows how to construct kinship links
+from a pedigree, estimate additive genetic relatedness and shared
+environmental exposure, and fit a discordant-kinship regression model.
+We use data and tools from the {BGmisc} package to illustrate the
+process.</p>
+</div>
+<div id="loading-packages-and-data" class="section level1">
+<h1>Loading Packages and Data</h1>
+<p>We begin by loading the required packages and loading a built-in toy
+dataset from {BGmisc}.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(discord)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">data</span>(potter)</span></code></pre></div>
+<p>We rename the family ID column to avoid naming conflicts and generate
+a pedigree-encoded data frame. This creates a consistent family
+identifier for use in subsequent functions.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df_potter <span class="ot">&lt;-</span> potter</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">names</span>(df_potter)[<span class="fu">names</span>(df_potter) <span class="sc">==</span> <span class="st">&quot;famID&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;oldfam&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>df_potter <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(df_potter,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">famID =</span> <span class="st">&quot;famID&quot;</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span></code></pre></div>
+<p>Next, we compute two component matrices based on the pedigree:</p>
+<ul>
+<li><p>add: the additive genetic relatedness matrix</p></li>
+<li><p>cn: the shared environment matrix, indicating whether kin were
+raised together (1) or apart (0)</p></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(df_potter)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>cn <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(df_potter)</span></code></pre></div>
+<p>We then verify and, if necessary, repair sex coding to ensure
+compatibility with downstream pedigree-based operations.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df_potter <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(df_potter,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>)</span></code></pre></div>
+<div class="float">
+<img role="img" aria-label="Pedigree plot of the Potter dataset" src="data:image/png;base64,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" alt="Pedigree plot of the Potter dataset" />
+<div class="figcaption">Pedigree plot of the Potter dataset</div>
+</div>
+<pre><code>#&gt; named list()</code></pre>
+</div>
+<div id="create-kinship-links" class="section level1">
+<h1>Create Kinship Links</h1>
+<p>The <code>com2links</code> function generates a data frame of kinship
+links based on the pedigree data. The <code>writetodisk</code> argument
+is set to FALSE to avoid writing the output to disk, and we filter out
+upper triangular values to focus on unique pairs.</p>
+<p>We use the <code>com2links()</code> function to convert the additive
+genetic and shared environment component matrices into a long-form data
+frame of kin pairs. Each row in the resulting data frame represents a
+pair of individuals, along with their additive genetic relatedness and
+shared environmental status. Self-pairs and duplicate (upper-triangular)
+entries are removed.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df_links <span class="ot">&lt;-</span> <span class="fu">com2links</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">writetodisk =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">ad_ped_matrix =</span> add, <span class="at">cn_ped_matrix =</span> cn,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">drop_upper_triangular =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">filter</span>(ID1 <span class="sc">!=</span> ID2)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>df_links <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ID1</th>
+<th align="right">ID2</th>
+<th align="right">addRel</th>
+<th align="right">cnuRel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.500</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">0.500</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0.500</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">0.250</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">0.500</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">6</td>
+<td align="right">0.250</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">7</td>
+<td align="right">0.250</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">7</td>
+<td align="right">0.500</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">7</td>
+<td align="right">0.500</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">0.125</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>From the full set of kin links, we extract two subsets based on
+expected genetic and environmental structure:</p>
+<ul>
+<li><p>Full siblings: additive relatedness = 0.5 and shared environment
+= 1</p></li>
+<li><p>Cousins: additive relatedness = 0.125 and shared environment =
+0</p></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df_sim <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="co"># only full siblings %&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">1</span>) <span class="co"># only kin raised in the same home</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>df_cousin <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">125</span>) <span class="sc">%&gt;%</span> <span class="co"># only cousins %&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># only kin raised in separate homes</span></span></code></pre></div>
+</div>
+<div id="simulate-phenotypes-and-fit-model" class="section level1">
+<h1>Simulate Phenotypes and Fit Model</h1>
+<p>To illustrate the modeling framework, we simulate outcome variables
+for the cousin pairs using <code>kinsim()</code>. The simulated data
+reflect a known variance structure: additive genetic correlation =
+0.125, no shared environment, and residual (unique environment) variance
+= 0.4. Latent component scores are excluded from the final dataset, but
+they can be useful for debugging and understanding the underlying
+structure of the data.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>syn_df <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">kinsim</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">mu_all =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">cov_a =</span> .<span class="dv">4</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">cov_e =</span> .<span class="dv">4</span>, <span class="at">c_all =</span> <span class="dv">0</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">r_vector =</span> df_cousin<span class="sc">$</span>addRel</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    A1_1, A1_2, A2_1, A2_2,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    C1_1, C1_2, C2_1, C2_2,</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    E1_1, E1_2, E2_1, E2_2,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    r</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  ))</span></code></pre></div>
+<p>We bind the simulated outcome data to the cousin link data to prepare
+it for modeling.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>data_demo <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df_cousin, syn_df)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">summary</span>(data_demo)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt;       ID1             ID2             addRel          cnuRel       y1_1        </span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt;  Min.   : 3.00   Min.   :  7.00   Min.   :0.125   Min.   :0   Min.   :-3.6557  </span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:21.00   1st Qu.: 26.00   1st Qu.:0.125   1st Qu.:0   1st Qu.:-0.4007  </span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;  Median :23.00   Median : 28.00   Median :0.125   Median :0   Median : 0.3537  </span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;  Mean   :21.62   Mean   : 36.55   Mean   :0.125   Mean   :0   Mean   : 0.6055  </span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:24.00   3rd Qu.: 30.00   3rd Qu.:0.125   3rd Qu.:0   3rd Qu.: 1.6073  </span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;  Max.   :28.00   Max.   :104.00   Max.   :0.125   Max.   :0   Max.   : 4.5506  </span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;       y1_2              y2_1              y2_2               id      </span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt;  Min.   :-1.1505   Min.   :-2.2658   Min.   :-2.3618   Min.   : 1.0  </span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:-0.0983   1st Qu.:-0.4629   1st Qu.: 0.3215   1st Qu.:12.5  </span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt;  Median : 1.1069   Median : 0.7087   Median : 1.4460   Median :24.0  </span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt;  Mean   : 1.1957   Mean   : 0.9443   Mean   : 1.1523   Mean   :24.0  </span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: 2.1121   3rd Qu.: 2.2073   3rd Qu.: 2.1726   3rd Qu.:35.5  </span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt;  Max.   : 5.0089   Max.   : 5.3431   Max.   : 4.2828   Max.   :47.0</span></span></code></pre></div>
+<p>We then use <code>discord_regression()</code> to fit a
+discordant-kinship model, predicting y1 from y2. Based on the structure
+of the data, we expect that there will be a significant association
+between the two outcome variables, as there is a known overlapping
+non-shared environment covariance.</p>
+<p>The model is fit using the <code>discord_regression()</code>
+function, which takes the following arguments:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>model_output <span class="ot">&lt;-</span> <span class="fu">discord_regression</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">data =</span> data_demo,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;y1&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;id&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">sex =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">race =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_1&quot;</span>, <span class="st">&quot;_2&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="fu">summary</span>(model_output)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = stats::as.formula(paste(realOutcome, preds, </span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;     sep = &quot; ~ &quot;)), data = preppedData)</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; -1.6044 -0.9315 -0.1824  0.7204  2.7929 </span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; (Intercept)  1.21796    0.24153   5.043  8.8e-06 ***</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; y1_mean      0.08375    0.13099   0.639   0.5260    </span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; y2_diff      0.27022    0.08830   3.060   0.0038 ** </span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; y2_mean      0.11734    0.11812   0.993   0.3261    </span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.117 on 43 degrees of freedom</span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.2033, Adjusted R-squared:  0.1477 </span></span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&gt; F-statistic: 3.657 on 3 and 43 DF,  p-value: 0.01959</span></span></code></pre></div>
+<p>The output of the model includes estimates of the regression
+coefficients, standard errors, and p-values for the association between
+the two outcome variables.</p>
+<p>This example demonstrates how the discord package can be used with
+custom kinship data derived from pedigrees. By extracting component
+matrices for additive genetic relatedness and shared environment using
+{BGmisc}, and converting them to linked pair data, we can apply
+discordant-kinship regression outside of the NLSY context. This enables
+flexible applications of the method to any dataset where kin structure
+is known or derivable.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

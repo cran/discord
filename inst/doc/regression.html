@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jonathan Trattner" />
+
+
+<title>Regression demonstration</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+border-bottom: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic tfoot tr td {
+border: 0;
+}
+.lightable-classic tfoot tr:first-child td {
+border-top: 0.14em solid #111111;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+border-bottom: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 tfoot tr td {
+border: 0;
+}
+.lightable-classic-2 tfoot tr:first-child td {
+border-top: 3px double #111111;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material tfoot tr td {
+border: 0;
+}
+.lightable-material tfoot tr:first-child td {
+border-top: 1px solid #EEE;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark tfoot tr td {
+border: 0;
+}
+.lightable-material-dark tfoot tr:first-child td {
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper tfoot tr td {
+border: 0;
+}
+.lightable-paper tfoot tr:first-child td {
+border-top: 1px solid #00000020;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Regression demonstration</h1>
+<h4 class="author">Jonathan Trattner</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette presents a simple example of a discordant-kinship
+regression using the <code>discord</code> package.</p>
+<p>The analysis draws from work presented by Trattner et al (2020) <span class="citation">(Trattner, Kennon, and Garrison 2020)</span>, which was
+initially motivated by reports of health disparities among ethnic
+minority groups during the COVID-19 pandemic <span class="citation">(Hooper, Nápoles, and Pérez-Stable 2020)</span>. The
+data come from the 1979 National Longitudinal Survey of Youth (NLSY79),
+a nationally-representative household probability sample jointly
+sponsored by the U.S. Bureau of Labor Statistics and the Department of
+Defense. Participants were surveyed annually from 1979 until 1994 at
+which point surveys occurred biennially. The data are publicly available
+at <a href="https://www.nlsinfo.org/" class="uri">https://www.nlsinfo.org/</a> and include responses from a
+biennial flu vaccine survey administered between 2006 and 2016.</p>
+<p>The original analysis examined whether socioeconomic status (SES) at
+age 40 predicted flu vaccination rates, using a discordant kinship
+design. For this vignette, the data were downloaded using the <a href="https://www.nlsinfo.org/investigator/pages/login">NLS
+Investigator</a> and are available <a href="https://github.com/R-Computing-Lab/discord/blob/main/data-raw/flu_shot.dat">here</a>.
+SES at age 40 values can be found <a href="https://github.com/R-Computing-Lab/discord/blob/main/data-raw/nlsy-ses.csv">here</a>.
+For clarity and to emphasize the functionality of {discord}, the data
+has been pre-processed using <a href="https://github.com/R-Computing-Lab/discord/blob/main/data-raw/preprocess-discord-flu.R">this
+script</a>. This analysis is enabled by recent work that inferred
+genetic relatedness for approximately 95% of kin pairs in the NLSY79
+cohort <span class="citation">(Rodgers et al. 2016)</span>. These
+kinship links are provided in the <a href="https://nlsy-links.github.io/NlsyLinks/index.html">{NlsyLinks}</a>
+R package <span class="citation">(Beasley et al. 2016)</span>, and can
+be easily utilized with the {discord} package.</p>
+<div id="data-cleaning" class="section level2">
+<h2>Data Cleaning</h2>
+<p>For this example, we will load the following packages.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># For easy data manipulation</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># For kinship linkages</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(NlsyLinks)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># For discordant-kinship regression</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(discord)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># To clean data frame names</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co"># tidy up output</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co"># pipe</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="fu">data</span>(data_flu_ses)</span></code></pre></div>
+<p>After preprocessing, we obtain a data frame that contain subject
+identifiers, demographic information such as race and sex, and
+behavioral variables such as flu vaccination totals and SES at age 40. A
+random slice of this dataset is shown below.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+CASEID
+</th>
+<th style="text-align:center;">
+RACE
+</th>
+<th style="text-align:center;">
+SEX
+</th>
+<th style="text-align:center;">
+FLU_total
+</th>
+<th style="text-align:center;">
+S00_H40
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+591
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+48.92893
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+136
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+28.09980
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+306
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+46.09039
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+256
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+45.76613
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+224
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+28.75588
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+138
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+76.36864
+</td>
+</tr>
+</tbody>
+</table>
+<p>Using kinship data from the NlsyLinks package, we restructure the
+dataset to better lend itself to discordant kinship analysis. For each
+kin pair, the function <code>CreatePairLinksSingleEntered()</code> takes
+a data set like the one above, <strong>[a specification of the NLSY
+database and the kin’s relatedness]</strong>, and the variables of
+interest. It returns a data frame where each row represents a kin pair,
+and each variable appears twice—once for each sibling—using suffixes to
+distinguish individuals.</p>
+<p>In this example, we examine the relationship between total flu
+vaccinations (received between 2006 and 2016) and SES at age 40,
+focusing on full siblings. The variable names used in this linkage are
+drawn from the preprocessed data previewed above.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Get kinship links for individuals with the following variables:</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>link_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="st">&quot;FLU_total&quot;</span>, <span class="st">&quot;FLU_2008&quot;</span>, <span class="st">&quot;FLU_2010&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="st">&quot;FLU_2012&quot;</span>, <span class="st">&quot;FLU_2014&quot;</span>, <span class="st">&quot;FLU_2016&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="st">&quot;S00_H40&quot;</span>, <span class="st">&quot;RACE&quot;</span>, <span class="st">&quot;SEX&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span></code></pre></div>
+<p>We now link the subjects by the specified variables using
+<code>CreatePairLinksSingleEntered()</code>, from the {NlsyLinks}
+package.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Specify NLSY database and kin relatedness</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>link_pairs <span class="ot">&lt;-</span> Links79PairExpanded <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">filter</span>(RelationshipPath <span class="sc">==</span> <span class="st">&quot;Gen1Housemates&quot;</span> <span class="sc">&amp;</span> RFull <span class="sc">==</span> <span class="fl">0.5</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>df_link <span class="ot">&lt;-</span> <span class="fu">CreatePairLinksSingleEntered</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">outcomeDataset =</span> data_flu_ses,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="at">linksPairDataset =</span> link_pairs,</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="at">outcomeNames =</span> link_vars</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>)</span></code></pre></div>
+<p>We have saved this data frame as <code>df_link</code>. A random
+subset of this data is shown below::<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+ExtendedID
+</th>
+<th style="text-align:center;">
+SubjectTag_S1
+</th>
+<th style="text-align:center;">
+SubjectTag_S2
+</th>
+<th style="text-align:center;">
+FLU_total_S1
+</th>
+<th style="text-align:center;">
+FLU_total_S2
+</th>
+<th style="text-align:center;">
+S00_H40_S1
+</th>
+<th style="text-align:center;">
+S00_H40_S2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1030
+</td>
+<td style="text-align:center;">
+103000
+</td>
+<td style="text-align:center;">
+103400
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+8.908928
+</td>
+<td style="text-align:center;">
+42.35215
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+969
+</td>
+<td style="text-align:center;">
+97000
+</td>
+<td style="text-align:center;">
+97100
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+53.581989
+</td>
+<td style="text-align:center;">
+30.70186
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+575
+</td>
+<td style="text-align:center;">
+57500
+</td>
+<td style="text-align:center;">
+57600
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+57.948751
+</td>
+<td style="text-align:center;">
+92.75390
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+309
+</td>
+<td style="text-align:center;">
+30900
+</td>
+<td style="text-align:center;">
+31000
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+48.006737
+</td>
+<td style="text-align:center;">
+48.54822
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+859
+</td>
+<td style="text-align:center;">
+85900
+</td>
+<td style="text-align:center;">
+86100
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+46.923766
+</td>
+<td style="text-align:center;">
+30.82954
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1649
+</td>
+<td style="text-align:center;">
+164900
+</td>
+<td style="text-align:center;">
+165000
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+8.675655
+</td>
+<td style="text-align:center;">
+62.73942
+</td>
+</tr>
+</tbody>
+</table>
+<p>This data is almost ready for analysis, but we want to ensure that
+the data are representative of actual trends. The <code>FLU_total</code>
+column is simply a sum of the biennial survey responses. So for a given
+sibling-pair, one or both individuals may not have responded to the
+survey indicating their vaccination status. If that’s the case, we want
+to exclude those siblings to reduce <strong>[non-response
+bias]</strong>, by examining the biennial responses and removing any
+rows with missingness.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Take the linked data, group by the sibling pairs and</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># count the number of responses for flu each year. If there is an NA,</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># then data is missing for one of the years, and we omit it.</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>consistent_kin <span class="ot">&lt;-</span> df_link <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">group_by</span>(SubjectTag_S1, SubjectTag_S2) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">count</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    FLU_2008_S1, FLU_2010_S1,</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    FLU_2012_S1, FLU_2014_S1,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    FLU_2016_S1, FLU_2008_S2,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    FLU_2010_S2, FLU_2012_S2,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    FLU_2014_S2, FLU_2016_S2</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co"># Create the flu_modeling_data object with only consistent responders.</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co"># Clean the column names with the {janitor} package.</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>flu_modeling_data <span class="ot">&lt;-</span> <span class="fu">semi_join</span>(df_link,</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  consistent_kin,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>    <span class="st">&quot;SubjectTag_S1&quot;</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>    <span class="st">&quot;SubjectTag_S2&quot;</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  )</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span></code></pre></div>
+<p>To avoid violating assumptions of independence, in our analysis we
+specify that the kin-pairs should be from unique households (i.e. we
+randomly select one sibling pair per household).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>flu_modeling_data <span class="ot">&lt;-</span> flu_modeling_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">group_by</span>(extended_id) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">slice_sample</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div>
+<p>The data we will use for modeling now contains additional information
+for each member of the kin pair, including sex and race of each
+individual, flu vaccination status for the biennial survey between
+2006-2016, and a total flu vaccination count for that period. The total
+vaccination count ranges from 0 - 5, where 0 indicates that the
+individual did not get a vaccine in any year between 2006-2016 and 5
+indicates that an individual got at least 5 vaccines between 2006-2016.
+Although our data set has individual years, we focused on the aggregate
+as we felt that was a measure of general tendency. A subset of the data
+to use in this regression looks like:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+extended_id
+</th>
+<th style="text-align:center;">
+subject_tag_s1
+</th>
+<th style="text-align:center;">
+subject_tag_s2
+</th>
+<th style="text-align:center;">
+flu_total_s1
+</th>
+<th style="text-align:center;">
+flu_total_s2
+</th>
+<th style="text-align:center;">
+race_s1
+</th>
+<th style="text-align:center;">
+race_s2
+</th>
+<th style="text-align:center;">
+sex_s1
+</th>
+<th style="text-align:center;">
+sex_s2
+</th>
+<th style="text-align:center;">
+ses_age_40_s1
+</th>
+<th style="text-align:center;">
+ses_age_40_s2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;text-align: center;">
+17
+</td>
+<td style="text-align:center;text-align: center;">
+1700
+</td>
+<td style="text-align:center;text-align: center;">
+1800
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+49.26537
+</td>
+<td style="text-align:center;text-align: center;">
+74.92440
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+29
+</td>
+<td style="text-align:center;text-align: center;">
+2900
+</td>
+<td style="text-align:center;text-align: center;">
+3000
+</td>
+<td style="text-align:center;text-align: center;">
+2
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+56.80481
+</td>
+<td style="text-align:center;text-align: center;">
+32.05423
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+37
+</td>
+<td style="text-align:center;text-align: center;">
+3700
+</td>
+<td style="text-align:center;text-align: center;">
+3800
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+5
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+58.55547
+</td>
+<td style="text-align:center;text-align: center;">
+50.45408
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+40
+</td>
+<td style="text-align:center;text-align: center;">
+4000
+</td>
+<td style="text-align:center;text-align: center;">
+4100
+</td>
+<td style="text-align:center;text-align: center;">
+2
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+78.19220
+</td>
+<td style="text-align:center;text-align: center;">
+73.41860
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+58
+</td>
+<td style="text-align:center;text-align: center;">
+5800
+</td>
+<td style="text-align:center;text-align: center;">
+5900
+</td>
+<td style="text-align:center;text-align: center;">
+5
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+80.56835
+</td>
+<td style="text-align:center;text-align: center;">
+49.68414
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+61
+</td>
+<td style="text-align:center;text-align: center;">
+6100
+</td>
+<td style="text-align:center;text-align: center;">
+6200
+</td>
+<td style="text-align:center;text-align: center;">
+3
+</td>
+<td style="text-align:center;text-align: center;">
+4
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+74.43720
+</td>
+<td style="text-align:center;text-align: center;">
+50.56920
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+67
+</td>
+<td style="text-align:center;text-align: center;">
+6700
+</td>
+<td style="text-align:center;text-align: center;">
+6800
+</td>
+<td style="text-align:center;text-align: center;">
+4
+</td>
+<td style="text-align:center;text-align: center;">
+4
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+89.67767
+</td>
+<td style="text-align:center;text-align: center;">
+82.68649
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+74
+</td>
+<td style="text-align:center;text-align: center;">
+7500
+</td>
+<td style="text-align:center;text-align: center;">
+7600
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+88.15524
+</td>
+<td style="text-align:center;text-align: center;">
+61.54234
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+83
+</td>
+<td style="text-align:center;text-align: center;">
+8300
+</td>
+<td style="text-align:center;text-align: center;">
+8400
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+3
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+46.41507
+</td>
+<td style="text-align:center;text-align: center;">
+64.12765
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+85
+</td>
+<td style="text-align:center;text-align: center;">
+8500
+</td>
+<td style="text-align:center;text-align: center;">
+8700
+</td>
+<td style="text-align:center;text-align: center;">
+0
+</td>
+<td style="text-align:center;text-align: center;">
+4
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+1
+</td>
+<td style="text-align:center;text-align: center;">
+40.12748
+</td>
+<td style="text-align:center;text-align: center;">
+64.14045
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="modeling-and-interpretation" class="section level2">
+<h2>Modeling and Interpretation</h2>
+<p>To perform the regression using the {discord} package, we supply the
+data frame and specify the outcome and predictors. It also requires a
+kinship pair id, <code>extended_id</code> in our case, as well as pair
+identifiers – the column name suffixes that identify to which kin a
+column’s values correspond (“_s1” and “_s2” in our case).<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Optional, although
+recommended, are columns containing sex and race information to control
+for as additional covariates. In our case, these columns are prefixed
+“race” and “sex”. Per the <a href="https://github.com/R-Computing-Lab/discord/blob/main/data-raw/preprocess-discord-flu.R">pre-processing
+script</a>, these columns contain dummy variables where the reference
+group for race is “non-Black, non-Hispanic” and the reference group for
+sex is female.</p>
+<p>By entering this information into the
+<code>discord_regression()</code> function, we can run the model as
+such:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Setting a seed for reproducibility</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">18</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>flu_model_output <span class="ot">&lt;-</span> <span class="fu">discord_regression</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">data =</span> flu_modeling_data,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;flu_total&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="st">&quot;s00_h40&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;extended_id&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">sex =</span> <span class="st">&quot;sex&quot;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">race =</span> <span class="st">&quot;race&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_s1&quot;</span>, <span class="st">&quot;_s2&quot;</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>)</span></code></pre></div>
+<p>The default output of <code>discord_regression()</code> is an
+<code>lm</code> object. The metrics for our regression can be summarized
+as follows:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Term
+</th>
+<th style="text-align:center;">
+Estimate
+</th>
+<th style="text-align:center;">
+Standard Error
+</th>
+<th style="text-align:center;">
+T Statistic
+</th>
+<th style="text-align:center;">
+P Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;text-align: center;">
+(Intercept)
+</td>
+<td style="text-align:center;text-align: center;">
+1.544
+</td>
+<td style="text-align:center;text-align: center;">
+0.190
+</td>
+<td style="text-align:center;text-align: center;">
+8.109
+</td>
+<td style="text-align:center;text-align: center;">
+p&lt;0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+flu_total_mean
+</td>
+<td style="text-align:center;text-align: center;">
+0.186
+</td>
+<td style="text-align:center;text-align: center;">
+0.033
+</td>
+<td style="text-align:center;text-align: center;">
+5.571
+</td>
+<td style="text-align:center;text-align: center;">
+p&lt;0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+s00_h40_diff
+</td>
+<td style="text-align:center;text-align: center;">
+0.006
+</td>
+<td style="text-align:center;text-align: center;">
+0.002
+</td>
+<td style="text-align:center;text-align: center;">
+2.747
+</td>
+<td style="text-align:center;text-align: center;">
+p=0.006
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+s00_h40_mean
+</td>
+<td style="text-align:center;text-align: center;">
+0.000
+</td>
+<td style="text-align:center;text-align: center;">
+0.003
+</td>
+<td style="text-align:center;text-align: center;">
+0.154
+</td>
+<td style="text-align:center;text-align: center;">
+p=0.878
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+sex_1
+</td>
+<td style="text-align:center;text-align: center;">
+-0.143
+</td>
+<td style="text-align:center;text-align: center;">
+0.098
+</td>
+<td style="text-align:center;text-align: center;">
+-1.462
+</td>
+<td style="text-align:center;text-align: center;">
+p=0.144
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+race_1
+</td>
+<td style="text-align:center;text-align: center;">
+-0.092
+</td>
+<td style="text-align:center;text-align: center;">
+0.103
+</td>
+<td style="text-align:center;text-align: center;">
+-0.893
+</td>
+<td style="text-align:center;text-align: center;">
+p=0.372
+</td>
+</tr>
+<tr>
+<td style="text-align:center;text-align: center;">
+sex_2
+</td>
+<td style="text-align:center;text-align: center;">
+0.069
+</td>
+<td style="text-align:center;text-align: center;">
+0.098
+</td>
+<td style="text-align:center;text-align: center;">
+0.703
+</td>
+<td style="text-align:center;text-align: center;">
+p=0.482
+</td>
+</tr>
+</tbody>
+</table>
+<p>Looking at this output, the intercept can be thought of as the
+average difference in outcomes between siblings, controlling for all
+other variables. That is, it looks like the average difference for two
+sisters of a non-minority ethnic background (the reference groups for
+sex and race) is approximately 1.5. The term <code>flu_total_mean</code>
+is essentially an extra component of the intercept that captures some
+non-linear trends and allows the difference score to change as a
+function of the average predictors. Here, this is the mean socioeconomic
+status for the siblings, <code>s00_h40_mean</code>. We also accounted
+for sex and race, neither of which have a statistically significant
+effect on the differences in flu vaccine shots between siblings
+(different families) or within a sibling pair (same family).</p>
+<p>The most important metric from the output, though, is the difference
+score, <code>s00_h40_diff</code>. Here, it is statistically significant.
+An interpretation of this result might be, “the difference in
+socioeconomic status between siblings at age 40 is positively associated
+with the difference in the number of flu vaccinations received between
+2006-2016.” This finding means that a sibling with 10% higher SES is
+expected to have 0.0553768 average in flu shots.</p>
+<p>The goal of performing a discordant-kinship regression is to see
+whether there is a significant difference in some behavioral measure
+while controlling for as much gene-and-environmental variance as
+possible. In this section, we walked through an analysis showing a
+statistically significant difference in the number of flu shots a
+sibling received and their socioeconomic status. From this finding, we
+<em>could not</em> claim the relationship is causal. However, we cannot
+eliminate causality because there are statistically significant within-
+and between-family differences in our predictors and outcomes.</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>In its current implementation, the {discord} package encourages best
+practices for performing discordant-kinship regressions. For example,
+the main function has the default expectation that sex and race
+indicators will be supplied. These measures are both important
+covariates <strong>when testing for causality between familial
+background and psychological characteristics.</strong></p>
+<p>This, and other design choices, are crucial to facilitating
+transparent and reproducible results. Software ever-evolves, however,
+and to further support reproducible research we plan to provide improved
+documentation and allow for easier inspection of the underlying model
+implementation and results.</p>
+</div>
+<div id="acknowledgments" class="section level1">
+<h1>Acknowledgments</h1>
+<p>We acknowledge contributions from Cermet Ream, Joe Rodgers, and
+support from Lucy D’Agostino McGowan on this project.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-beasley2016" class="csl-entry">
+Beasley, Will, Joe Rodgers, David Bard, Michael Hunter, S. Mason
+Garrison, and Kelly Meredith. 2016. <em>NlsyLinks: Utilities and Kinship
+Information for Research with the NLSY</em>. <a href="https://CRAN.R-project.org/package=NlsyLinks">https://CRAN.R-project.org/package=NlsyLinks</a>.
+</div>
+<div id="ref-hooper2020" class="csl-entry">
+Hooper, Monica Webb, Anna María Nápoles, and Eliseo J. Pérez-Stable.
+2020. <span>“COVID-19 and Racial/Ethnic Disparities.”</span>
+<em>JAMA</em>, May. <a href="https://doi.org/10.1001/jama.2020.8598">https://doi.org/10.1001/jama.2020.8598</a>.
+</div>
+<div id="ref-rodgers2016" class="csl-entry">
+Rodgers, Joseph Lee, William H. Beasley, David E. Bard, Kelly M.
+Meredith, Michael D. Hunter, Amber B. Johnson, Maury Buster, et al.
+2016. <span>“The NLSY Kinship Links: Using the NLSY79 and NLSY-Children
+Data to Conduct Genetically-Informed and Family-Oriented
+Research.”</span> <em>Behavior Genetics</em> 46 (4): 538–51. <a href="https://doi.org/10.1007/s10519-016-9785-3">https://doi.org/10.1007/s10519-016-9785-3</a>.
+</div>
+<div id="ref-jonathantrattner2020" class="csl-entry">
+Trattner, Jonathan, Later Kennon, and S. Mason Garrison. 2020.
+<span>“Vaccine Willingness and Socioeconomic Status: A Biometrically
+Controlled Design.”</span> <em>Behavior Genetics</em>, Behavior Genetics
+Association 50th Annual Meeting Abstracts, 50 (6): 483–83. <a href="https://doi.org/10.1007/s10519-020-10018-8">https://doi.org/10.1007/s10519-020-10018-8</a>.
+</div>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Each variable name includes the suffix “_S1” and “_S2”,
+identifying the sibling to whom the value belongs. The only exception is
+the first column, which identifies the kin pair.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Note these ids were previously “_S1” and “_S2”, however,
+we used the <code>clean_names()</code> function which coerced the column
+names to lowercase.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

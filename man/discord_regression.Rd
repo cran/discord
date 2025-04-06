@@ -8,14 +8,17 @@ discord_regression(
   data,
   outcome,
   predictors,
-  id = "extended_id",
+  demographics = NULL,
+  id = NULL,
   sex = "sex",
   race = "race",
-  pair_identifiers = c("_s1", "_s2")
+  pair_identifiers = c("_s1", "_s2"),
+  data_processed = FALSE,
+  coding_method = "none"
 )
 }
 \arguments{
-\item{data}{A data frame.}
+\item{data}{The data set with kinship pairs}
 
 \item{outcome}{A character string containing the outcome variable of
 interest.}
@@ -23,13 +26,24 @@ interest.}
 \item{predictors}{A character vector containing the column names for
 predicting the outcome.}
 
-\item{id}{A unique kinship pair identifier.}
+\item{demographics}{Indicator variable for if the data has the sex and race
+demographics. If both are present (default, and recommended), value should
+be "both". Other options include "sex", "race", or "none".}
+
+\item{id}{Default's to NULL. If supplied, must specify the column name
+corresponding to unique kinship pair identifiers.}
 
 \item{sex}{A character string for the sex column name.}
 
 \item{race}{A character string for the race column name.}
 
-\item{pair_identifiers}{A character vector of length two that contains the variable identifier for each kinship pair.}
+\item{pair_identifiers}{A character vector of length two that contains the
+variable identifier for each kinship pair}
+
+\item{data_processed}{Logical operator if data are already preprocessed by discord_data , default is FALSE}
+
+\item{coding_method}{A character string that indicates what kind of
+additional coding schemes should be used. Default is none. Other options include "binary" and "multi".}
 }
 \value{
 Resulting `lm` object from performing the discordant regression.
@@ -39,11 +53,13 @@ Perform a Linear Regression within the Discordant Kinship Framework
 }
 \examples{
 
-discord_regression(data = sample_data,
-outcome = "height",
-predictors = "weight",
-pair_identifiers = c("_s1", "_s2"),
-sex = NULL,
-race = NULL)
+discord_regression(
+  data = data_sample,
+  outcome = "height",
+  predictors = "weight",
+  pair_identifiers = c("_s1", "_s2"),
+  sex = NULL,
+  race = NULL
+)
 
 }
