@@ -13,7 +13,7 @@
 <meta name="author" content="Mason Garrison" />
 
 
-<title>Kinship Links</title>
+<title>No Database? No Problem: Using discord with Simple Family Structures</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -337,32 +337,44 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Kinship Links</h1>
+<h1 class="title toc-ignore">No Database? No Problem: Using discord with
+Simple Family Structures</h1>
 <h4 class="author">Mason Garrison</h4>
 
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This vignette demonstrates how to use the discord package with
-non-NLSY data. Specifically, it shows how to construct kinship links
-from a pedigree, estimate additive genetic relatedness and shared
-environmental exposure, and fit a discordant-kinship regression model.
-We use data and tools from the {BGmisc} package to illustrate the
-process.</p>
+<p>The {discord} package was originally developed for use with the
+National Longitudinal Survey of Youth (NLSY), but its functionality
+extends far beyond that. When paired with its sister package {BGmisc},
+discord can be applied to any dataset containing basic family structure
+information, allowing researchers to explore genetic and environmental
+influences without requiring pre-constructed kinship links.</p>
+<p>This vignette demonstrates how to:</p>
+<ul>
+<li>Construct kinship links from simple family data (e.g., individual
+ID, mother ID, father ID).</li>
+<li>Simulate phenotyipic data based on known genetic and environmental
+structures.</li>
+<li>Fit a discordant-kinship regression model using the simulated
+data.</li>
+</ul>
+<p>We use tools from {BGmisc} and a toy dataset to illustrate the
+workflow.</p>
 </div>
 <div id="loading-packages-and-data" class="section level1">
 <h1>Loading Packages and Data</h1>
-<p>We begin by loading the required packages and loading a built-in toy
-dataset from {BGmisc}.</p>
+<p>We begin by loading the required packages and a built-in dataset from
+{BGmisc}.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(discord)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">data</span>(potter)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggpedigree)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(discord)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">data</span>(potter)</span></code></pre></div>
 <p>We rename the family ID column to avoid naming conflicts and generate
-a pedigree-encoded data frame. This creates a consistent family
-identifier for use in subsequent functions.</p>
+a pedigree-encoded data frame.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df_potter <span class="ot">&lt;-</span> potter</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">names</span>(df_potter)[<span class="fu">names</span>(df_potter) <span class="sc">==</span> <span class="st">&quot;famID&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;oldfam&quot;</span></span>
@@ -371,39 +383,51 @@ identifier for use in subsequent functions.</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">famID =</span> <span class="st">&quot;famID&quot;</span>,</span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span></code></pre></div>
-<p>Next, we compute two component matrices based on the pedigree:</p>
+<p>We also verify and repair sex coding to ensure compatibility with
+downstream pedigree operations.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>df_potter <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(df_potter,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">ggpedigree</span>(potter)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img role="img" aria-label="Pedigree plot of the Potter dataset" src="data:image/png;base64,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" alt="Pedigree plot of the Potter dataset" />
+<p class="caption">
+Pedigree plot of the Potter dataset
+</p>
+</div>
+<p>The pedigree plot provides a visual representation of the kinship
+structure in the dataset. Each node represents an individual, and the
+edges indicate familial relationships.</p>
+</div>
+<div id="constructing-kinship-links" class="section level1">
+<h1>Constructing Kinship Links</h1>
+<p>To extract the necessary kinship information, we need to compute two
+matrices: the additive genetic relatedness matrix and the shared
+environment matrix. These matrices are derived from the pedigree data
+and are essential for understanding the genetic and environmental
+relationships among individuals. Using {BGmisc}, we compute:</p>
 <ul>
-<li><p>add: the additive genetic relatedness matrix</p></li>
-<li><p>cn: the shared environment matrix, indicating whether kin were
-raised together (1) or apart (0)</p></li>
+<li><p>The additive genetic relatedness matrix (add).</p></li>
+<li><p>The shared environment matrix (cn), indicating whether kin were
+raised together (1) or apart (0).</p></li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(df_potter)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>cn <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(df_potter)</span></code></pre></div>
-<p>We then verify and, if necessary, repair sex coding to ensure
-compatibility with downstream pedigree-based operations.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df_potter <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(df_potter,</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>)</span></code></pre></div>
-<div class="float">
-<img role="img" aria-label="Pedigree plot of the Potter dataset" src="data:image/png;base64,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" alt="Pedigree plot of the Potter dataset" />
-<div class="figcaption">Pedigree plot of the Potter dataset</div>
-</div>
-<pre><code>#&gt; named list()</code></pre>
-</div>
-<div id="create-kinship-links" class="section level1">
-<h1>Create Kinship Links</h1>
-<p>The <code>com2links</code> function generates a data frame of kinship
-links based on the pedigree data. The <code>writetodisk</code> argument
-is set to FALSE to avoid writing the output to disk, and we filter out
-upper triangular values to focus on unique pairs.</p>
-<p>We use the <code>com2links()</code> function to convert the additive
-genetic and shared environment component matrices into a long-form data
-frame of kin pairs. Each row in the resulting data frame represents a
-pair of individuals, along with their additive genetic relatedness and
-shared environmental status. Self-pairs and duplicate (upper-triangular)
-entries are removed.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(df_potter)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>cn <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(df_potter)</span></code></pre></div>
+<p>The <code>ped2add()</code> function computes the additive genetic
+relatedness matrix, which quantifies the genetic similarity between
+individuals based on their pedigree information. The
+<code>ped2cn()</code> function computes the shared environment matrix,
+which indicates whether individuals were raised in the same environment
+(1) or different environments (0).</p>
+<p>The resulting matrices are symmetric, with diagonal elements
+representing self-relatedness (1.0). The off-diagonal elements represent
+the relatedness between pairs of individuals, with values ranging from 0
+(no relatedness) to 0.5 (full siblings) to 1 (themselves).</p>
+<p>We convert the component matrices into a long-form data frame of kin
+pairs using <code>com2links()</code>. Self-pairs and duplicate entries
+are removed.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df_links <span class="ot">&lt;-</span> <span class="fu">com2links</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">writetodisk =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">ad_ped_matrix =</span> add, <span class="at">cn_ped_matrix =</span> cn,</span>
@@ -486,8 +510,7 @@ entries are removed.</p>
 </tr>
 </tbody>
 </table>
-<p>From the full set of kin links, we extract two subsets based on
-expected genetic and environmental structure:</p>
+<p>We then extract two subsets:</p>
 <ul>
 <li><p>Full siblings: additive relatedness = 0.5 and shared environment
 = 1</p></li>
@@ -502,27 +525,34 @@ expected genetic and environmental structure:</p>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">125</span>) <span class="sc">%&gt;%</span> <span class="co"># only cousins %&gt;%</span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># only kin raised in separate homes</span></span></code></pre></div>
 </div>
-<div id="simulate-phenotypes-and-fit-model" class="section level1">
-<h1>Simulate Phenotypes and Fit Model</h1>
-<p>To illustrate the modeling framework, we simulate outcome variables
-for the cousin pairs using <code>kinsim()</code>. The simulated data
-reflect a known variance structure: additive genetic correlation =
-0.125, no shared environment, and residual (unique environment) variance
-= 0.4. Latent component scores are excluded from the final dataset, but
-they can be useful for debugging and understanding the underlying
-structure of the data.</p>
+<div id="simulate-phenotypic-data" class="section level1">
+<h1>Simulate Phenotypic Data</h1>
+<p>To simulate phenotypic data, we need to create a data frame that
+includes the kinship information and the outcome variables. We will
+simulate two outcome variables (y1 and y2) for each cousin pair in the
+dataset. The <code>kinsim()</code> function from {discord} is used to
+generate the simulated data based on the specified variance
+structure.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>syn_df <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">kinsim</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">mu_all =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">cov_a =</span> .<span class="dv">4</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">cov_e =</span> .<span class="dv">4</span>, <span class="at">c_all =</span> <span class="dv">0</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">r_vector =</span> df_cousin<span class="sc">$</span>addRel</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    A1_1, A1_2, A2_1, A2_2,</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    C1_1, C1_2, C2_1, C2_2,</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    E1_1, E1_2, E2_1, E2_2,</span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    r</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  ))</span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">mu_all =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">cov_a =</span> .<span class="dv">4</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">cov_e =</span> .<span class="dv">4</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="at">c_all =</span> <span class="dv">0</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">r_vector =</span> df_cousin<span class="sc">$</span>addRel</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    A1_1, A1_2, A2_1, A2_2,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    C1_1, C1_2, C2_1, C2_2,</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    E1_1, E1_2, E2_1, E2_2,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>    r</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  ))</span></code></pre></div>
+<p>The simulated data reflect a known variance structure: additive
+genetic covariance = .4, genetic correlation = 0.125, no shared
+environment, and residual (unique environment) variance = 0.4. Latent
+component scores are excluded from the final dataset, but they can be
+useful for debugging and understanding the underlying structure of the
+data.</p>
 <p>We bind the simulated outcome data to the cousin link data to prepare
 it for modeling.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>data_demo <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df_cousin, syn_df)</span>
@@ -543,6 +573,13 @@ it for modeling.</p>
 <span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt;  Mean   : 1.1957   Mean   : 0.9443   Mean   : 1.1523   Mean   :24.0  </span></span>
 <span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: 2.1121   3rd Qu.: 2.2073   3rd Qu.: 2.1726   3rd Qu.:35.5  </span></span>
 <span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt;  Max.   : 5.0089   Max.   : 5.3431   Max.   : 4.2828   Max.   :47.0</span></span></code></pre></div>
+<p>The <code>data_demo</code> data frame now contains the kinship
+information along with the simulated outcome variables y1 and y2. Each
+row represents a pair of cousins, and the columns include the IDs of the
+individuals, their relatedness, and the simulated phenotypic data.</p>
+</div>
+<div id="fitting-a-discordant-kinship-regression-model" class="section level1">
+<h1>Fitting a Discordant-Kinship Regression Model</h1>
 <p>We then use <code>discord_regression()</code> to fit a
 discordant-kinship model, predicting y1 from y2. Based on the structure
 of the data, we expect that there will be a significant association
@@ -562,35 +599,36 @@ function, which takes the following arguments:</p>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="fu">summary</span>(model_output)</span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = stats::as.formula(paste(realOutcome, preds, </span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;     sep = &quot; ~ &quot;)), data = preppedData)</span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; -1.6044 -0.9315 -0.1824  0.7204  2.7929 </span></span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; (Intercept)  1.21796    0.24153   5.043  8.8e-06 ***</span></span>
-<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; y1_mean      0.08375    0.13099   0.639   0.5260    </span></span>
-<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; y2_diff      0.27022    0.08830   3.060   0.0038 ** </span></span>
-<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; y2_mean      0.11734    0.11812   0.993   0.3261    </span></span>
-<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
-<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.117 on 43 degrees of freedom</span></span>
-<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.2033, Adjusted R-squared:  0.1477 </span></span>
-<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&gt; F-statistic: 3.657 on 3 and 43 DF,  p-value: 0.01959</span></span></code></pre></div>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = y1_diff ~ y1_mean + y2_diff + y2_mean, data = preppedData)</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; -1.6044 -0.9315 -0.1824  0.7204  2.7929 </span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value  Pr(&gt;|t|)    </span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; (Intercept)  1.21796    0.24153   5.043 0.0000088 ***</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; y1_mean      0.08375    0.13099   0.639    0.5260    </span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; y2_diff      0.27022    0.08830   3.060    0.0038 ** </span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; y2_mean      0.11734    0.11812   0.993    0.3261    </span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.117 on 43 degrees of freedom</span></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.2033, Adjusted R-squared:  0.1477 </span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; F-statistic: 3.657 on 3 and 43 DF,  p-value: 0.01959</span></span></code></pre></div>
 <p>The output of the model includes estimates of the regression
 coefficients, standard errors, and p-values for the association between
 the two outcome variables.</p>
-<p>This example demonstrates how the discord package can be used with
-custom kinship data derived from pedigrees. By extracting component
-matrices for additive genetic relatedness and shared environment using
-{BGmisc}, and converting them to linked pair data, we can apply
-discordant-kinship regression outside of the NLSY context. This enables
-flexible applications of the method to any dataset where kin structure
-is known or derivable.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>This vignette demonstrates how {BGmisc} and discord enable
+researchers to perform discordant-kinship analyses starting from simple
+family data. There’s no need for pre-constructed kinship links or
+specialized datasets like the NLSY—just basic family identifiers are
+sufficient to generate kinship structures and apply powerful behavior
+genetic models.</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>

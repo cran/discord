@@ -60,7 +60,7 @@ df_link <- df_link %>%
     )
   )
 
-# we only include same-race pairs in this example for demonstration purpose
+## -----------------------------------------------------------------------------
 df_link <- df_link %>%
   dplyr::filter(RACE_S1 == RACE_S2)
 
@@ -156,7 +156,7 @@ cat_both <- discord_data(
   coding_method = "both"
 )
 
-## ----preview-both, echo = FALSE, eval = knitr::is_html_output()---------------
+## ----processboth--------------------------------------------------------------
 cat_both <- cat_both %>%
   dplyr::mutate(
     RACE_binarymatch = case_when(
@@ -168,6 +168,8 @@ cat_both <- cat_both %>%
       SEX_binarymatch == 1 ~ "same-sex"
     )
   )
+
+## ----preview-both, echo = FALSE, eval = knitr::is_html_output()---------------
 cat_both %>%
   group_by(RACE_multimatch, RACE_1, RACE_2, SEX_binarymatch, SEX_multimatch, SEX_1, SEX_2) %>%
   summarize(n(), .groups = "drop") %>%

@@ -13,7 +13,9 @@ discord_data(
   race = "race",
   pair_identifiers,
   demographics = "both",
-  coding_method = "none"
+  coding_method = "none",
+  fast = TRUE,
+  ...
 )
 }
 \arguments{
@@ -41,6 +43,10 @@ be "both". Other options include "sex", "race", or "none".}
 
 \item{coding_method}{A character string that indicates what kind of
 additional coding schemes should be used. Default is none. Other options include "binary" and "multi".}
+
+\item{fast}{Logical. If TRUE, uses a faster method for data processing.}
+
+\item{...}{Additional arguments to be passed to the function.}
 }
 \value{
 A data frame that contains analyzable, paired data for performing

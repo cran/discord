@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+<a href="https://r-computing-lab.github.io/discord/"><img src="man/figures/logo.png" align="right" height="139" alt="discord website" /></a>
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -13,7 +14,12 @@ version](https://www.r-pkg.org/badges/version/discord)](https://cran.r-project.o
 [![Package
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/discord)](https://cran.r-project.org/package=discord)</br>
 [![R-CMD-check](https://github.com/R-Computing-Lab/discord/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/discord/actions/workflows/R-CMD-check.yaml)
+[![Dev Main
+branch](https://github.com/R-Computing-Lab/discord/actions/workflows/R-CMD-dev_check.yaml/badge.svg)](https://github.com/R-Computing-Lab/discord/actions/workflows/R-CMD-dev_check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/R-Computing-Lab/discord/graph/badge.svg)](https://app.codecov.io/gh/R-Computing-Lab/discord)
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
+
 <!-- badges: end -->
 
 The goal of discord is to provide functions for discordant kinship
@@ -47,10 +53,12 @@ cite the following paper:
 
 ``` r
 citation(package = "discord")
+Warning in citation(package = "discord"): could not determine year for
+'discord' from package DESCRIPTION file
 To cite package 'discord' in publications use:
 
-  Garrison S, Trattner J, Hwang Y (2025). _discord: Functions for
-  Discordant Kinship Modeling_. R package version 1.2.3,
+  Garrison S, Trattner J, Hwang Y (????). _discord: Functions for
+  Discordant Kinship Modeling_. R package version 1.2.4.1,
   <https://github.com/R-Computing-Lab/discord>.
 
 A BibTeX entry for LaTeX users is
@@ -58,8 +66,7 @@ A BibTeX entry for LaTeX users is
   @Manual{,
     title = {discord: Functions for Discordant Kinship Modeling},
     author = {S. Mason Garrison and Jonathan Trattner and Yoo Ri Hwang},
-    year = {2025},
-    note = {R package version 1.2.3},
+    note = {R package version 1.2.4.1},
     url = {https://github.com/R-Computing-Lab/discord},
   }
 ```

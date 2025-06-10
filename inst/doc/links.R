@@ -1,12 +1,14 @@
 ## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.align = "center"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
 
 ## ----echo=TRUE, message=FALSE, warning=FALSE----------------------------------
 library(BGmisc)
+library(ggpedigree)
 library(tidyverse)
 library(discord)
 
@@ -23,18 +25,18 @@ df_potter <- ped2fam(df_potter,
 )
 
 ## -----------------------------------------------------------------------------
-add <- ped2add(df_potter)
-cn <- ped2cn(df_potter)
-
-## -----------------------------------------------------------------------------
 df_potter <- checkSex(df_potter,
   code_male = 1,
   code_female = 0,
   verbose = FALSE, repair = TRUE
 )
 
-## ----fig.cap="Pedigree plot of the Potter dataset", fig.width=8, fig.height=6, echo=FALSE----
-plotPedigree(df_potter) %>% suppressMessages()
+## ----echo=TRUE, fig.cap="Pedigree plot of the Potter dataset", fig.height=3, fig.width=4, message=FALSE, warning=FALSE----
+ggpedigree(potter)
+
+## -----------------------------------------------------------------------------
+add <- ped2add(df_potter)
+cn <- ped2cn(df_potter)
 
 ## -----------------------------------------------------------------------------
 df_links <- com2links(
@@ -60,8 +62,10 @@ df_cousin <- df_links %>%
 ## -----------------------------------------------------------------------------
 set.seed(1234)
 syn_df <- discord::kinsim(
-  mu_all = c(1, 1), cov_a = .4,
-  cov_e = .4, c_all = 0,
+  mu_all = c(1, 1),
+  cov_a = .4,
+  cov_e = .4,
+  c_all = 0,
   r_vector = df_cousin$addRel
 ) %>%
   select(-c(

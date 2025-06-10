@@ -2,6 +2,7 @@
 % Please edit documentation in R/func_discord_regression.R
 \name{discord_regression}
 \alias{discord_regression}
+\alias{discord_within_model}
 \title{Perform a Linear Regression within the Discordant Kinship Framework}
 \usage{
 discord_regression(
@@ -14,7 +15,22 @@ discord_regression(
   race = "race",
   pair_identifiers = c("_s1", "_s2"),
   data_processed = FALSE,
-  coding_method = "none"
+  coding_method = "none",
+  fast = TRUE
+)
+
+discord_within_model(
+  data,
+  outcome,
+  predictors,
+  demographics = NULL,
+  id = NULL,
+  sex = "sex",
+  race = "race",
+  pair_identifiers = c("_s1", "_s2"),
+  data_processed = FALSE,
+  coding_method = "none",
+  fast = TRUE
 )
 }
 \arguments{
@@ -44,6 +60,8 @@ variable identifier for each kinship pair}
 
 \item{coding_method}{A character string that indicates what kind of
 additional coding schemes should be used. Default is none. Other options include "binary" and "multi".}
+
+\item{fast}{Logical. If TRUE, uses a faster method for data processing.}
 }
 \value{
 Resulting `lm` object from performing the discordant regression.

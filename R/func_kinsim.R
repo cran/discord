@@ -114,6 +114,8 @@ kinsim <- function(
     data_v$y1_u <- data_v$y1
     data_v$y2_u <- data_v$y2
 
+
+
     merged.data.frame <- data_v
     names(merged.data.frame)[c(1, 10)] <- c("id", "r")
   }
@@ -135,7 +137,7 @@ kinsim <- function(
       sigma_a[4, 1] <- cov_a * r_all[i]
       sigma_a[3, 2] <- cov_a * r_all[i]
       sigma_a[2, 3] <- cov_a * r_all[i]
-      A.r <- rmvn(n,
+      A.r <- .rmvn(n,
         sigma = sigma_a
       )
 
@@ -152,7 +154,7 @@ kinsim <- function(
       sigma_c[4, 1] <- cov_c * 1
       sigma_c[3, 2] <- cov_c * 1
       sigma_c[2, 3] <- cov_c * 1
-      C.r <- rmvn(n,
+      C.r <- .rmvn(n,
         sigma = sigma_c
       )
       C.r[, 1:2] <- C.r[, 1:2] * sC[1]
@@ -164,7 +166,7 @@ kinsim <- function(
       sigma_e[3, 1] <- cov_e
       sigma_e[2, 4] <- cov_e
       sigma_e[4, 2] <- cov_e
-      E.r <- rmvn(n,
+      E.r <- .rmvn(n,
         sigma = sigma_e
       )
       E.r[, 1:2] <- E.r[, 1:2] * sE[1]
@@ -195,7 +197,7 @@ kinsim <- function(
       datalist[[i]] <- data.r
       names(datalist)[i] <- paste0("datar", r_all[i])
     }
-    merged.data.frame <- Reduce(function(...) merge(..., all = T), datalist)
+    merged.data.frame <- Reduce(function(...) merge(..., all = TRUE), datalist)
     merged.data.frame$id <- id
   } else {
     id <- seq_along(r_vector)
@@ -223,7 +225,7 @@ kinsim <- function(
       sigma_a[3, 2] <- cov_a * r_val
       sigma_a[2, 3] <- cov_a * r_val
 
-      A_tmp <- rmvn(n_sub, sigma = sigma_a)
+      A_tmp <- .rmvn(n_sub, sigma = sigma_a)
 
       A.r[idx, 1:2] <- A_tmp[, 1:2] * sA[1]
       A.r[idx, 3:4] <- A_tmp[, 3:4] * sA[2]
@@ -239,7 +241,7 @@ kinsim <- function(
       sigma_c[3, 2] <- cov_c * 1
       sigma_c[2, 3] <- cov_c * 1
 
-      C_tmp <- rmvn(n_sub, sigma = sigma_c)
+      C_tmp <- .rmvn(n_sub, sigma = sigma_c)
       C.r[idx, 1:2] <- C_tmp[, 1:2] * sC[1]
       C.r[idx, 3:4] <- C_tmp[, 3:4] * sC[2]
 
@@ -250,7 +252,7 @@ kinsim <- function(
       sigma_e[2, 4] <- cov_e
       sigma_e[4, 2] <- cov_e
 
-      E_tmp <- rmvn(n_sub, sigma = sigma_e)
+      E_tmp <- .rmvn(n_sub, sigma = sigma_e)
       E.r[idx, 1:2] <- E_tmp[, 1:2] * sE[1]
       E.r[idx, 3:4] <- E_tmp[, 3:4] * sE[2]
     }

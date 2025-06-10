@@ -372,6 +372,36 @@ test_that("half-siblings nonsignificant: new & legacy data prep code results are
 })
 
 
+test_that("half-siblings nonsignificant: new & legacy data prep code results are equal", {
+  set.seed(18)
+  new_data <- discord_data(half_sibs_nonsignif,
+    outcome = "y1",
+    predictors = "y2",
+    id = "id",
+    sex = NULL,
+    race = NULL,
+    pair_identifiers = c("_1", "_2"),
+    demographics = "none",
+    fast = FALSE
+  )
+  rownames(new_data) <- NULL
+
+  set.seed(18)
+  old_data <- discord_data_legacy(
+    df = make_double_entered(half_sibs_nonsignif),
+    outcome = "y1",
+    predictors = "y2",
+    id = "id",
+    sep = "_",
+    doubleentered = TRUE
+  )
+  rownames(old_data) <- NULL
+
+  expect_equal(new_data, old_data)
+})
+
+
+
 test_that("discord_data_legacy returns scaled values when scale = TRUE", {
   set.seed(18)
   tolerance <- .1
@@ -394,11 +424,11 @@ test_that("discord_data_legacy returns scaled values when scale = TRUE", {
     sep = "_",
     id = "id"
   )
-  expect_gte(mean(result$y1_1),mean(result$y1_2))
-  expect_equal(mean(rbind(result$y1_1,result$y1_2)), 0, tolerance = tolerance)
-  expect_equal(sd(rbind(result$y1_1,result$y1_2)), 1, tolerance = tolerance)
+  expect_gte(mean(result$y1_1), mean(result$y1_2))
+  expect_equal(mean(rbind(result$y1_1, result$y1_2)), 0, tolerance = tolerance)
+  expect_equal(sd(rbind(result$y1_1, result$y1_2)), 1, tolerance = tolerance)
 
-  expect_equal(mean(rbind(result$x_1,result$x_2)), 0, tolerance = tolerance)
+  expect_equal(mean(rbind(result$x_1, result$x_2)), 0, tolerance = tolerance)
   expect_equal(sd(result$x_1), 1, tolerance = tolerance)
   expect_equal(sd(result$x_2), 1, tolerance = tolerance)
 })
@@ -449,4 +479,3 @@ test_that("discord_data_legacy infers predictors when predictors = NULL", {
   expect_true("x_diff" %in% names(result))
   expect_true("x_mean" %in% names(result))
 })
-

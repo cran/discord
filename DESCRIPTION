@@ -1,8 +1,7 @@
 Package: discord
 Type: Package
 Title: Functions for Discordant Kinship Modeling
-Version: 1.2.3
-Date: 2025-04-03
+Version: 1.2.4.1
 Authors@R: c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu",
                   role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-4804-6003")),
@@ -12,7 +11,7 @@ Authors@R: c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu",
              person("Yoo Ri", "Hwang", email = "yrhwang89@gmail.com",
                   role = "aut"),
              person("Cermet", "Ream", role = c("ctb")))
-Description: Functions for discordant kinship modeling (and other sibling-based quasi-experimental designs). Contains data restructuring functions and functions for generating biometrically informed data for kin pairs. See [Garrison and Rodgers, 2016 <doi:10.1016/j.intell.2016.08.008>], [Sims, Trattner, and Garrison, 2024 <doi:10.3389/fpsyg.2024.1430978>] for empirical examples, and Garrison et al for theoretical work <https://osf.io/zpdwt/>.
+Description: Functions for discordant kinship modeling (and other sibling-based quasi-experimental designs). Contains data restructuring functions and functions for generating biometrically informed data for kin pairs. See [Garrison and Rodgers, 2016 <doi:10.1016/j.intell.2016.08.008>], [Sims, Trattner, and Garrison, 2024 <doi:10.3389/fpsyg.2024.1430978>] for empirical examples, and Garrison and colleagues for theoretical work <https://osf.io/zpdwt/>.
 URL: https://github.com/R-Computing-Lab/discord,
         https://r-computing-lab.github.io/discord/
 License: GPL-3
@@ -21,17 +20,19 @@ RoxygenNote: 7.3.2
 Encoding: UTF-8
 Depends: R (>= 3.50)
 Imports: stats
-Suggests: NlsyLinks, broom, dplyr, janitor, kableExtra, BGmisc, knitr,
-        magrittr, rmarkdown, scales, snakecase, testthat, tidyverse
+Suggests: NlsyLinks, ggpedigree, BGmisc, broom, dplyr, grid, gridExtra,
+        ggplot2, janitor, kableExtra, knitr, magrittr, rmarkdown,
+        scales, stargazer, snakecase, testthat, tidyverse
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2025-04-05 19:24:35 UTC; smaso
-Author: S. Mason Garrison [aut, cre, cph]
-    (<https://orcid.org/0000-0002-4804-6003>),
-  Jonathan Trattner [aut] (<https://orcid.org/0000-0002-1097-7603>,
+Packaged: 2025-06-10 16:02:46 UTC; smaso
+Author: S. Mason Garrison [aut, cre, cph] (ORCID:
+    <https://orcid.org/0000-0002-4804-6003>),
+  Jonathan Trattner [aut] (ORCID:
+    <https://orcid.org/0000-0002-1097-7603>, url:
     https://www.jdtrat.com/),
   Yoo Ri Hwang [aut],
   Cermet Ream [ctb]
 Maintainer: S. Mason Garrison <garrissm@wfu.edu>
 Repository: CRAN
-Date/Publication: 2025-04-06 08:00:02 UTC
+Date/Publication: 2025-06-10 16:30:02 UTC

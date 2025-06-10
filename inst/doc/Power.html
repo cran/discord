@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="S. Mason Garrison" />
+
+
+<title>Power</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Power</h1>
+<h4 class="author">S. Mason Garrison</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette demonstrates how to conduct simulation-based power
+analysis for discordant sibling designs. These designs estimate causal
+effects by comparing differences between genetically related
+individuals, controlling for shared background.</p>
+<p>We simulate multivariate phenotypes using the <code>kinsim()</code>
+function, fit regression models of interest, and calculate empirical
+power across multiple design conditions.</p>
+</div>
+<div id="function-overview-kinsim" class="section level1">
+<h1>Function Overview: kinsim()</h1>
+<p>The <code>kinsim()</code> function is designed to simulate data for
+kinship studies. It generates paired multivariate data informed by
+biometric models (ACE), supporting variable relatedness levels and
+covariance structures.</p>
+<div id="key-arguments" class="section level2">
+<h2>Key Arguments</h2>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>r_all</code></td>
+<td>Vector of genetic relatedness values (e.g., <code>1</code>,
+<code>0.5</code>, <code>0.25</code>, <code>0</code>)</td>
+</tr>
+<tr class="even">
+<td><code>npergroup_all</code></td>
+<td>Sample sizes for each level of relatedness</td>
+</tr>
+<tr class="odd">
+<td><code>ace_list</code></td>
+<td>Matrix of ACE parameters per variable (rows = traits; columns = a,
+c, e)</td>
+</tr>
+<tr class="even">
+<td><code>cov_a</code>, <code>cov_c</code>, <code>cov_e</code></td>
+<td>Cross-variable covariance for A, C, and E components</td>
+</tr>
+<tr class="odd">
+<td><code>mu_list</code></td>
+<td>Mean values for each phenotype</td>
+</tr>
+<tr class="even">
+<td><code>r_vector</code></td>
+<td>Optional: pairwise relatedness at the observation level</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="output" class="section level2">
+<h2>Output</h2>
+<p>A data.frame with:</p>
+<ul>
+<li><p>Latent variables: A, C, E for each phenotype and sibling</p></li>
+<li><p>Phenotypic outcomes: y1 and y2 for both phenotypes</p></li>
+<li><p>Metadata: relatedness level (r) and pair id</p></li>
+</ul>
+</div>
+</div>
+<div id="example-usage" class="section level1">
+<h1>Example Usage</h1>
+<div id="step-1-define-simulation-grid" class="section level2">
+<h2>Step 1: Define Simulation Grid</h2>
+<p>We define a grid of simulation conditions, varying genetic
+relatedness, ACE variance components, and genetic correlations.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(NlsyLinks)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(discord)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(utils)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># Set random seed for reproducibility</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1492</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># Disable scientific notation for clarity</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>conditions <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="at">total_pairs =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">250</span>, <span class="dv">500</span>, <span class="dv">750</span>, <span class="dv">1000</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>  <span class="at">relatedness =</span> <span class="fu">c</span>(<span class="dv">1</span>, .<span class="dv">5</span>),</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  <span class="at">cov_a =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>),</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  <span class="at">cov_c =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>),</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>  <span class="at">cov_e =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>),</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>  <span class="at">ace_a =</span> <span class="fu">c</span>(<span class="dv">1</span>),</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>  <span class="at">ace_c =</span> <span class="fu">c</span>(<span class="dv">1</span>),</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>  <span class="at">ace_e =</span> <span class="fu">c</span>(<span class="dv">1</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-2-run-simulations" class="section level2">
+<h2>Step 2: Run Simulations</h2>
+<p>For each condition, we simulate 100 replications of fitting
+discordant sibling models. We have kept the number of trials low for
+demonstration purposes, but you can increase <code>n_trials</code> for
+more robust power estimates.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1492</span>) <span class="co"># Set seed for reproducibility</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>n_trials <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>FAST <span class="ot">&lt;-</span> <span class="cn">FALSE</span> <span class="co"># Set to FALSE for slower, more detailed analysis</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>results_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>name.results <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;coef_xdiff&quot;</span>, <span class="st">&quot;p_xdiff&quot;</span>, <span class="st">&quot;r.squared&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="cf">for</span> (cond <span class="cf">in</span> <span class="fu">seq_along</span>(conditions)) {</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  current <span class="ot">&lt;-</span> conditions[cond, ]</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  temp_results <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> n_trials, <span class="at">ncol =</span> <span class="fu">length</span>(name.results))</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="fu">colnames</span>(temp_results) <span class="ot">&lt;-</span> name.results</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    trial <span class="ot">&lt;-</span> <span class="fu">kinsim</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>      <span class="at">r_vector =</span> <span class="fu">rep</span>(current<span class="sc">$</span>relatedness, <span class="at">each =</span> current<span class="sc">$</span>total_pairs),</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>      <span class="at">npg_all =</span> current<span class="sc">$</span>total_pairs,</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>      <span class="at">ace_all =</span> <span class="fu">c</span>(current<span class="sc">$</span>ace_a, current<span class="sc">$</span>ace_c, current<span class="sc">$</span>ace_e),</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>      <span class="at">cov_a =</span> current<span class="sc">$</span>cov_a,</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>      <span class="at">cov_c =</span> current<span class="sc">$</span>cov_c,</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>      <span class="at">cov_e =</span> current<span class="sc">$</span>cov_e,</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>      <span class="at">variables =</span> <span class="dv">2</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    )</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    extract <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>      <span class="at">id =</span> trial<span class="sc">$</span>id, <span class="at">r =</span> trial<span class="sc">$</span>r,</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>      <span class="at">y_s1 =</span> trial<span class="sc">$</span>y1_1, <span class="at">y_s2 =</span> trial<span class="sc">$</span>y1_2,</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>      <span class="at">x_s1 =</span> trial<span class="sc">$</span>y2_1, <span class="at">x_s2 =</span> trial<span class="sc">$</span>y2_2</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>    )</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>    <span class="cf">if</span> (FAST <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>      <span class="co"># faster</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>      <span class="co"># double enter the data</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>      extract2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>        <span class="fu">transform</span>(extract,</span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>          <span class="at">y_s1 =</span> y_s2, <span class="at">y_s2 =</span> y_s1,</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>          <span class="at">x_s1 =</span> x_s2, <span class="at">x_s2 =</span> x_s1</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>        ),</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>        extract</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>      )</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>      extract2<span class="sc">$</span>y_diff <span class="ot">&lt;-</span> extract2<span class="sc">$</span>y_s1 <span class="sc">-</span> extract2<span class="sc">$</span>y_s2</span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>      extract2<span class="sc">$</span>x_diff <span class="ot">&lt;-</span> extract2<span class="sc">$</span>x_s1 <span class="sc">-</span> extract2<span class="sc">$</span>x_s2</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>      extract2<span class="sc">$</span>x_bar <span class="ot">&lt;-</span> (extract2<span class="sc">$</span>x_s1 <span class="sc">+</span> extract2<span class="sc">$</span>x_s2) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>      extract2<span class="sc">$</span>y_bar <span class="ot">&lt;-</span> (extract2<span class="sc">$</span>y_s1 <span class="sc">+</span> extract2<span class="sc">$</span>y_s2) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a>      <span class="co"># select pair with ydiff &gt; 0</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>      extract3 <span class="ot">&lt;-</span> extract2[extract2<span class="sc">$</span>y_diff <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>      fit <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>        <span class="fu">lm</span>(y_diff <span class="sc">~</span> x_bar <span class="sc">+</span> y_bar <span class="sc">+</span> x_diff, <span class="at">data =</span> extract3),</span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>        <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>          <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a>        }</span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>      )</span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a>    }</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>    <span class="co"># slower</span></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a>    <span class="cf">if</span> (FAST <span class="sc">==</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a>      fit <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a>        <span class="fu">discord_regression</span>(</span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a>          <span class="at">data =</span> extract, <span class="at">outcome =</span> <span class="st">&quot;y&quot;</span>, <span class="at">predictors =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a>          <span class="at">id =</span> <span class="st">&quot;id&quot;</span>,</span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a>          <span class="at">sex =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a>          <span class="at">race =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a>          <span class="at">fast =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a>        ),</span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>        <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>          <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a>        }</span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a>      )</span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a>    }</span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(fit)) {</span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a>      sm <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)</span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a>      temp_results[i, <span class="st">&quot;coef_xdiff&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">coef</span>(sm)[<span class="st">&quot;x_diff&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a>      temp_results[i, <span class="st">&quot;p_xdiff&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">coef</span>(sm)[<span class="st">&quot;x_diff&quot;</span>, <span class="st">&quot;Pr(&gt;|t|)&quot;</span>]</span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a>      temp_results[i, <span class="st">&quot;r.squared&quot;</span>] <span class="ot">&lt;-</span> sm<span class="sc">$</span>r.squared</span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a>    }</span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a>  }</span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a>  results_list[[cond]] <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(temp_results)</span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="step-3-summarize-power" class="section level2">
+<h2>Step 3: Summarize Power</h2>
+<p>Our final step is to summarize the power across all conditions. We
+calculate the proportion of trials where the p-value for the difference
+in means (<code>p_xdiff</code>) is less than 0.05, and we also report
+the median R-squared value from the regression models. Note that we’ve
+limited the number of trials to 10 for demonstration purposes, but you
+can (and should) increase this for more robust estimates.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>power_summary <span class="ot">&lt;-</span> <span class="fu">lapply</span>(results_list, <span class="cf">function</span>(res) {</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="at">power_xdiff =</span> <span class="fu">mean</span>(res<span class="sc">$</span>p_xdiff <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">median_r2   =</span> <span class="fu">median</span>(res<span class="sc">$</span>r.squared, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  )</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>})</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>final_results <span class="ot">&lt;-</span> <span class="fu">cbind</span>(conditions, <span class="fu">do.call</span>(rbind, power_summary))</span></code></pre></div>
+</div>
+<div id="step-4-visualize-power" class="section level2">
+<h2>Step 4: Visualize Power</h2>
+<p>We can visualize the power estimates across different conditions. The
+plots below show the power estimates for each condition, including the
+total number of pairs, relatedness level, covariate settings, and the
+median R-squared value from the regression models. As expected, power
+increases with the number of pairs and is influenced by the relatedness
+level and covariate settings. In the plots below, we visualize the power
+estimates across different conditions, focusing on the impact of
+covariates and relatedness levels.</p>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAHgCAMAAABNUi8GAAAByFBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrYAv8QZGUgZGXEZSHEZSJcZcboaGho6AAA6ADo6AGY6OgA6Ojo6OmY6OpA6ZmY6ZpA6ZrY6kLY6kNtIGRlIGUhIGXFISBlISHFISJdIl91NTU1NTW5NTY5NbqtNjshmAABmADpmAGZmOgBmOjpmOmZmkJBmkLZmkNtmtpBmtrZmtttmtv9uTU1uTW5uTY5ubo5ubqtuq8huq+RxGRlxGUhxGXFxSBlxSJdxcbpxuv+OTU2OTW6OTY6Obk2ObquOyP+QOgCQOjqQOmaQZgCQZjqQZmaQkDqQkGaQkLaQtpCQtraQttuQ27aQ2/+XSBmXSEiXSHGXupeX3f+rbk2rbm6rjk2r5OSr5P+2ZgC2Zjq2kDq2kGa2tpC2ttu225C229u22/+2/7a2/9u2//+6cRm6cUi6cXG6unG63Ze6/7q6/926///Ijk3I///bkDrbkGbbtmbbtpDb27bb29vb2//b/7bb///dl0jdunHd/7rd/93d///kq27k///r6+v4dm3/tmb/unH/yI7/25D/27b/29v/3Zf/3d3/5Kv//7b//7r//8j//9v//93//+T///+2wXpwAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAf5UlEQVR4nO2diX8c5X2HVwZXNsW7BgKhArdYYKtx27RBjuPKOKlsBzltelAiOZUgVmna0Fg9EiEF0kZqazleeYmyOlbz7/Y95njf3fedmd+c785+nw94Z2fmPefRe8y1LQ8Ah2nVnQEA4oCgwGkgKHAaCAqcBoICp4GgwGkgKHAaCAqcJrug2y3B8x/Sg3Zb87ZNJ/fP7qRb+4+t1rRh1zBjX/nUGp0t6Wnzht4fPwr3+aeXW63nvr4jYz6cmw7Dnt2JT0vNlTHx9BmdKHIL2rLLZmW9ZVGBIGiXpWyORc1YIYJun3kU7iJjZpFmFNRWXRDUQg5B5WH7vEWu2V7nlally7bUB8reCsuMnfyiY03ElnSioN3WWdYCfnnfT1sXND72rLmadHIL6q3zzy+vsc7+U/84bbdm/MPNV/NOjX3Zbp35NAz5Lx22B9/7xy+3pv6Ur/ucdZ18iccg3Tucm/FOvs/Wvusf/+CLTJW1RSxhP10tgSBjXZaNoYCfd1rPCz+Gw/ENPxGCKhmRmROt5oyfc2kXF9NvQbsdPx7ZgmpF6rSmvh5Kr+Yqqhi9hGEQJRqt1BNIMYKyw8RgR08cQdGD95iDvWD1yf3nOmFLy6SQhyPoMOfDDnBe6Tm7U8v+DvP+8Vd7SClo15RAkLFImiBg19/bGw4nkn/+2rSWEX9JFbQbLARj0Oc6QTxaWkqRhgUVRVcqRilhFCSKRi/1BFJAFy/q811+RM7u9DrzrH3hbZvwi//pf9ERO4RHVnTOXTlA5NOcbREBb/16HdkwyUZ5ncf2+k64NvwSxRKlqyYQ9sgsGi0gy88yy+/MSLjDuakPecetZyTInNLFs5nZ1Gt//998SQra+r2dk09a06qgfqgoTlOugorRSqhmI4hmqNSTR/5JEjvofgWuTy3zxq938YOLy9IvIc02PyLRMRb6iUZSrvUHcv/147/u+EdayMd7+F7nuT/5Cd8oPfO/SPg+UbpqAqOC+gH9/Hgj4eQGf22YkTBziqDeL7/fifrkwznZEch05P9BKNnYRmqpuYoqRithFCSKZqjUk0duQb8iWhzRBbFGk3vZPfOvc/Pcr26osDqHkN0bb2SDjn46XOkLKg6wHCwwvuqPbYMvEilokK6awLCgYUB/d28knBz0GjIi16mC8v2++CN/dMsL6YmRqTIG9UPJ4erJyBiU5yqqGK2EURAlcb3Uk0f+MainCcr+X2dDzGm+yixo0PLOKIeB9ZWv/d0//2ouODTsIK6LEF9cEy7Ltf4XGU2yoJEwfsAUgg5nxCRoFHMWQWVTGQqqltAoqF7qyaMgQYMuky1+4/6Mt332E7Y1FEI9C+Mv8t4xOgxyz3AMyoz5xlwwpvzlX/GJih+ef5Grh7v4UUHDWXwQ0NjF8+1yg+xR9Yzogsou3QvbZjk60bv4IJSti+fro4rRSqh28ZGgWqknj0IEjSYdfFp8kbejL4sxJhv0s1F/0AIKgolwaIcUlM0JvrzWio7wKxf5ZJvNQbyTT+Se4ZcgHn2SNCzoyS86/ihCiYX/BYm/DD0cm528KyYmhoxMhyeXeKZFZ3vyeSdoQfnfgD5JijoF0yQpyFVQMVoJ1UlS5LlW6smjEEGj0zb8sIs5kPiT7+qduWDdr+tuazo6DNEVGn9PEUuwWjuDE0QkumXldNHoGCK4khQF7Aarh8OJDfw003BGpKDhaSZWrpYS8nDutU40nNYFHTnNpORKrRg1OeU001DNTO5lpmIE9Xr+iW8hnidP6Pirn3tX7eLDiy+sY/xpdDTFifMP18O21u8axVnq13eU8+2vRy3xvJLuqKBTXw2vxUcB+Ynwdz1DODbQe/6nhoyIzB1eC6/6i2vxImp/DMpUf1U/UR/2zTyxP5ubNuQqqhi9hGEQJRq91JOHo3czxdxOMlYczs0k75Q7SJNxU9Avr419n9br/A5rF9cpf2gZgjQfFwXlI72xb0UyDB4nfrxpwkVB2YF6ve485CfD4HHSx5smXBQUgBAICpwGggKngaDAaSAocBoICpwGggKngaDAaSAocBoICpwGggKngaDAaSAocBoICpwGggKnqVfQ/Xa7/eJj29aDS5sjSyPBdi97R7eCbwdvtNuLbB3b/sLmwVvWmOvl4I1FL7ZMhiBpqqKR1Cro7gussjdS1K9+VNRgzMLByqK3e4F/OXpv1Tt4c9XbWJT7XS4hzwVw8AYvgL1M8YGzBRtb6hSU++R53C/WBsoWb/BgVbaCB3/w7Rf+kx0L8U1sFv/owRjMxaPbm/5h278g1rBIZPy3Ny0p18vBpf+4IE0zlCl7VTSTOgXdD//yNy6zL//HvDp46395K3hpk3eD7OPI/8aOD9tHtpP7SoMh5GRHUx4psea9VXb8RE8ftKSuwUqzIUony81LU0BVNJRaBb3gL3DNWP2zLln2yuw7Pw5+bya/8eMjm8QwmCd6eHGUQkEHK5dFLy9aUUf7eF6a7zzm/8pye4VURUOpU9BwFsOrn/dob/GWw9sQM5zgqATfRLN4flUN5skmRG1Bj24FTvLW011BWdb81lCORwqoiobixBjUbzYGD/7hrcdHtxaDnkwci+BbNKBUB15CznAM6s+PBY4LysqqtqAFVEVDcWMW74/FdtuXxdFjfbR/VJRv4XhNnbryY8V7dTkk8/3kuw1+uOnyGNSfyhvKlLkqGoob50H9aSkfPPKTmL/77cWgX5PfBiti6np+VQ/mSQfleVC2Nz//yadHu7IHdHcWz/PF3Qqn40VURTMZ9ytJcaMwR3t4QGHcBY2xcAJmEBPA2AsKmg0EBU4DQYHTQFDgNLkE/XWezbkC1xP3GGa5gLjrBYISNo9hlguIu14gKGHzGGa5gLjrBYISNo9hlguIu14gKGHzGGa5gLjrJUbQ4zuzV56oS6drs28/VPdo6BGBoA5hF/R0bcnbu6oufbbkPfOVlTT0iEBQh7ALenxvy+vf2IqW+IdOQ48IBHUIu6D9m0+847sPo6X+zY+VLv7XJfJUhx7BOZ1cmamgvE4VuGThqNgF5b25FNRf6l9fEq5GlPVnPXS86HEPHS9a4Bpa0OQCJ8QdX+CJaUGDFQEQtKDNENQKZQz6PgTNFi5xMwS1EjeLXwhn8QvBLB5dfJZwiZshqJXE86C8EfXPg7KPd7SJPAQtaDMEteLklSQISo0bghqBoAVthqBWICghbghaPRCUEDcErR4ISogbglYPBCXEDUGrB4IS4oag1QNBCXFD0OqBoIS4IWj1QFBC3BC0eiAoIW4IWj0QlBA3BK0eCEqIG4JWDwQlxA1BqweCEuKGoNUDQQlxQ9DqgaCEuCFo9UBQQtwQtHogKCFuCFo9EJQQNwStHghKiBuCVg8EJcQNQasns6B5Xv+TxNDx0is/TQTn6EGskMurZz5DELybSWEcWlBT6+BwC2prDdGCZgGCEnIGQasHghJyBkGrB4IScgZBqweCEnIGQasHghJyBkGrB4IScgZBqweCEnIGQasHghJyNkmCHt1qt9svbMaHrAAISsjZBAm6f36V/Xvw5mp80PKBoIScTY6gg5VF8bn/4uP4sKUDQQk5mxxBj25vap/1AUEJOZscQQcPZN9+cAmCGoCg1KSLFtTbFfOjwcrl+KDlA0EJOZsgQb19bujGhfiQFQBBCTmbJEFdAYIScgZBqweCEnI2QYIOVtrtdu3nmDwISsrZ5AgqZ0e7DhgKQQk5mxxB5fnP+s+CQlBSziZHULSgEFTFOUExBoWgKu4J6gwQlJCzCRN0sILb7cxAUGrSxQu60W6fr/1eOy9W0OM7s1ee6Euna0vqHhDUtLkJgh7dWowPUxl2QbmMe1f1pb1ZCJoYrgmCjkMLenxvy+vf2FKX+t/6LgRNDNcMQT3nx6D9m0+847sPlaXTj34UdfHWV1/pVZXpLVexglreeZU7iO2VXUnlHQlXWk5iKLBaSxaOil3QZ1cCQYOlvQXzGDSu3MOxJrRtpgjTtaCUTBjz/XR48yjpwlFyYi6wPWkb8dVqzneqnNUOoQVlHxA0RbhGCLrbbi8evefAIJQwBt2b5Swou0DQpgrK3Dx46zH7Lz7ZCoibxS+Es/gFZT6vAEEbK+jtTflffLIVkHgelDeiCedBIWjm6jAX2J60jaIF9TYuexuL9T8yV8yVJAiauTrMBbYnbaNoQcV7Rdrt2h+Zg6AQND5ntQNBISgEVYCgKQpsT9pG0YL6XbzTV5JSAEGbKqjE7dNMKYCgzRbU8dNMyUDQZgvqAhAUghqCBGPQn9XehkJQCBqXs9qBoBAUgipA0BQFtidto3BBx+BuphRA0KYKOg53M6UAgjZW0HG4mykZCNpUQXE3EwSNKbA9aRtFC4q7mSBoTIHtSdsoWlB3gKAQ1JozjEEhaHyMI0nbKFpQ8XK7tgsvuIOgENQQJHyB7W8hqAEIakvaRtGCugMEhaCmII16gS0EzVwd5gLbk7ZRtKCDlcuDB6tj/QrwjC8jOhe/mfISobgwGYI8tQRJKu9IWvlzYtkrbx2lCyJKy0afTFDM4p1qQZMzlq4louTEXGB70qQ6IuZbZbCyOO4tKAeCNlVQ7+DSz1cwBoWg5gLbkybVETHfbgJBISgEVYCgKQpsT5pUR8R8uwkEhaAQVAGCpiiwPWlSHRHz7SYQFIIagvj3gzrw8hsICkFNgt7e9AYPVh244Q6CQlAIqgBBUxTYnjSpjoj5VoGgEDSmwPakSXVEzLcKBIWgMQW2J02qI2K+VSAoBI0psD1pUh0R8+0mEBSCQlAFCJqiwPakSXVEzLebQFAICkEVIGiKAtuTJtURMd9uAkEhqCnIvrjQuWjJb4VAUAg6GmTfv5l+o35FISgEHQly9Bfh4r/jPKgBCGpLmlRHxHy7CQSFoKYgzvzUHASFoIYggxU5+Nyv/cHOxN+LV5b612dnG/x78RA0IrgG7/K1+NO1JW/vqrJ0fPeh1//mQ2UXCNpUQcehBT2+t+X1b2xFS8+4rZ+pTSgEbaqgwRj0fO0/RGMXtH/ziWg01aXgg2F9549e7hJfIhQXJkOQp5YgSeVNKHCBOclbR+mClOsbGbugz64EWkZLp2sL6i6pWtDYajEnnSJIo1tQenkn8TSToQU9vqP5CUEbK2j9k6MAwhiUzeKX9F0gaFMFdYe4WfxCOIsXSyN+QlAIWjqJ50F50ymX9mY55Fk8BB1DQY9uXeAfuy7P4lMAQRsr6Hu/L35lzuXzoCmAoI0V9PbmxgXPhckSBIWgZkE9/gJwtKBGIKgLgnoHbzh9JSkFELSpgroDBIWgEBSCjp2gR7cWvY32BUt+KwSCQlBDEP5eJu/oO/9T/y31EBSCGoKISZITvzWnCbrdEsykDQxBmyqo92+rwlKXBD2cC8zcbk0tpwoMQRsrKP+1Y9a9OyTo4dceRWu1L3YgaGMFdQaMQSHoSJDoxQ2DHzrTgmYBgjZTUCdffXM4Ny/Goa3WfOrAELShgorLnI69PIwLeviHfHK0jlk8BHUGTdDu2R221D2TaobkQVAIWj4QFIKOi6Ct1tQrooufThsYgkLQslFn8b1Oa5qJmtpPCApBSwenmSAoBIWgEDQriqD+rSIpz4Omfi1SbLUU9t4hvJupqGot3rFcRIKu+5N3wiAULWhygdOUFy2oHf1KkgCnmSCoO0BQCDoegnrr4iw9ungI6hTKJKlLmiRxICgELRucZoKgEBSCQtCsGATFJAmCugNaUAgKQSFoYwU9uT/yqHrvYvRM8Jef6run750DICgEzSeoULPXic79KIKqrgpyCUq7Fs+BoBBUCqreRFyWoLgWD0HpqILy7p5JxK3sdXi3z/+dCVbzW+Kn/vbMo97FDzqiFQzWi33no08dXOqEoAUI2mVmndxnkm6f3WGCCpm2uYzL4erDuRkmGVvXObvDtym7iyFC8DmUAASFoPkEDceFXdlMctN+w6+as08uXbBafHJpuYNsQ7j7S1K34HMIXIuHoPkEneHtHm9Gg1fPiaaQXzefEoIGq7e5X8xC2VJeXA7fVLfeagnjgk8dXIuHoLkFFT28t+23cKKLn1oOWtBg9Yig/npPjE5Frx18quA0EwTNL6iYYXf9dyLy7pvL15UtaLBadOndM6GgXfUVisEAMxpoBkBQCFqAoL3ONFtkWkoruXy9zpSYLAWr+dBRTJJ8QYP1QtxgTDpyXgqCQtAiBGUjTXk+SXbtfDw59QNm53prOlgdnWaSgobr5XA1+tSBoBA0j6ClA0EhKASFoBA0K6qg4nrq6DDVDgSFoGWjvZuJn8vfDk+Wyl+JV5aiFT4QFIKWjSroyf3gHbac07Ulb++qshStCICgELRstDFo9+xONzy/f3xvy+vf2IqWohUBEBSClo0m6Mn3ltfDM/n9m0+847sPo6VoBSf1a5Fiq6Ww9w7h3UxFVWtF4qVFn8Vvv/ZqeIH02ZXAR38pWhGQUJj4zbkC1xP3GGa5gLjjeWokT4w6uqD8nr2AhBaU09AjAkEJVCuoSvoxqI1xPSIQlEB9gp6uLYSz+AU5i18wz+JtjOsRgaAE6hPUP+3J28yE86A2xvWIQFACNQqaTEOPCAQlAEEdinsMs1xA3PFAUIfiHsMsFxB3PNUKuk17JgmAeEEP51rBI0mt1ugDRynQBN2WT4Km/jFZAGIF5Xd3+HcfrWds91RB/SeW6K8nAZNLrKCHX3vkP+9+8r30d3FqQFCQi1hBe6/u+PfH8Z+CzTR41O9mks82oYsHqYkVlN8bJwUVT8llaUX1FrQVgEYUpCNlCyrIMg7NdZoJgJRjUEHlgjb0xB/OgxJImMXP+LN43tmf/GWe00xcds/4xU5DjwgEJRArqH8elDei26a3MqQgakFZXH4LvJ02qoYeEQhKIF7Q/Ghd/PrIC/HjaegRgaAEKhWUSkOPCAQlUKOgI8/Fn67Nvq0+8dHUIwJBCdQn6Mhz8d5nS+L5uYiGHhEISqA+QY3PJOk09IhAUAL1CWp4qvNjpYu3PK5dCEOlpUdwLs1j4impoLxOFZgo0DkjdBFtDL/6JmLkufj+9SXhakRZf9Yp/hzj406oLuda0OQCJ8QdX+AyW9AqBdVfEF7jc/EQlBr3ZAjqKT+8YBqDvg9Bs4VL3AxBrZjuZpK3Mo08F89n8ejis4RL3AxBrRCfi39Hm8hD0II2Q1ArTl5JgqDUuCdF0O1Wa14biMYDQQvaDEGt6DeLnP3V3Lz4Fdp0QNCCNjdYUMtvxKZm6DQTP9NE/rXjbJshaERzBe3mfXoIghLihqCJKQ9lYH3qgwJbUG+bd/GEpzohaEGbGytosV28/4vc6Z86hqAFbYagVnCaiRA3BE1MuVRBo6eSUgJBC9oMQa3oP0Nzn/bSBgha0GYIamW0iz+5j1k8dUPezRDUyrCgXUySICiFJEHzMtzFk06rQtCCNkNQK/YbllMAQQvaDEGt6F38eiv9nSIeBC1sMwS1MjwG7XUIp5ogaEGbIagVw4n6dcziqRvyboagVjRBWfPpxLuZICg17voELZuhK0m0t39D0II2Q1AruBZPiBuCVo/hh7xwop68Ie9mCGol1w95QdCCNkNQK7l+JwmCFrQZglrJLGie91MlMXS89MpPE8E5ehAr5PLqmc8QZKxeHlY249DFm1oHh1tQW2uIFjQL4zBJgqAQNBsQ1LQZghYJBCXkDIJWjyLoOvknOiGoaTMELZJI0PWzO3KWlB4IatoMQYskFFS8/1t/CXgiENS0GYIWSfRbnXPz8sc/CUBQ02YIWiQQlJAzCFo9EJSQMwhaPRCUkDMIWj2KoK0A124WgaAQNBsQ1LQZghYJBCXkDIJWDwQl5AyCVg8EJeRscgQ9utWWvLAZH7Z0ICghZ5MjqM9uezE+aPlAUELOJkzQo1u1t58QlJSzyRJ0t305PlwlQFBCziZJUCeaTw+CknI2QYLuO9F8ehCUlLPJERSzeAiq4pyg7gBBCTmDoNUTI+jxndkrT/Sl07UldQ8IatrcCEEHK6x/f/FxfMAqsAvKZdy7qi/tzULQxHBNEHSwwudIuw4Yahf0+N6W17+xpS71v/VdCJoYrgmCHt3eDP+tF7ug/ZtPvOO7D5Wl049+FHXx1jcL6VWV6SVCsYJaXimUO4jtjUhJ5R0JV1pOYiiwWkVpx6EFfXYlEDRY2lswj0Hjyj0ca0LbZoowXQtKyYQx30+HN4+SLhwlJ+YC25O2EV+t5nzHBhmDMehIC8o+IGiKcI0Q1BkIY9C9Wc6CsgsEhaBlEzeLXwhn8QvKfF4BgkLQskk8D8ob0YTzoBA0c3WYC2xP2sZECpoMBIWgZQNBIagxZ+J2kdpvFYGgENQcZP/8Kvv34M3V+HTLB4JCUEOQwYp8GGm/9lOhEBSCGoIEFznrv9gJQSGoIcjggezbDy5BUAMQ1Ja0jaIF9XbF/Ehekq8VCApBjTnb54ZuXIhPtgIgKASNy1ntQFAICkEVIGiKAtuTtlG4oGNwu10KIGhTBR2HG5ZTAEGbKug4PPKRAgjaVEHRgkLQmALbk7ZRtKAYg0LQmALbk7ZRuKDOAEEhqC1ngxXcbmeOF4LakrZRvKAb7fb52u+18yAoBDUGObpV+7u/fSAoBDXmDC0oBLUW2J60jeIF9TAGhaC2AtuTtlGKoE6QWdCMLyM6F7+Z8hKhuDAZgjy1BEkq70ha+XNi2StvHaULUpBYRYEW1BwmfXlH0qLkxFxge9KkOiLmW2O33V48es+BQSgEhaCGIMzNg7ces/8sGa4OCApBTYLe3pT/WTJcHRAUgpqCbFz2Nhbrf2QOgkJQYxD/Z2hqf2QOgkLQ+JzVDgSFoBBUAYKmKLA9aVIdEfOt4nfxuJJkjheC2pIm1REx36PgNBMENcZoT5pUR8R8j4LTTBDUGKM9aVIdEfPtJhAUghqCBGPQn9XehkJQCBqXs9qBoBAUgipA0BQFtidNqiNivjVwNxMEtRfYnjSpjoj5VsHdTBA0psD2pEl1RMy3Cu5mgqAxBbYnTaojYr41cDcTBLUX2J40qY6I+VbB3UwQNKbA9qRJdUTMt5tAUAhqzRnGoBDUGKM9aVIdEfOtIl5u13bhBXcQFIIagoQvsP0tBDUAQW1Jk+qImG83Sfy9eGWpf312tsG/Fw9BFcbgBbana0ve3lVl6fjuQ6//zYfKLhC0qYIOVi4PHqy6/Qrw43tbXv/GVrT0jNv6mdqEQtCmCspGn0xQt2fx/ZtPRKOpLgUfDOs7f/Ryl/gSobgwGYI8tQRJKm9CgQvMSd46ShdElHawsuh8C/rsSqBltHS6tqDukqoFja0Wc9IpgjS6BaWXt/Ax6MGln684PgY1tKDHdzQ/IWhzBXUGwhiUzeKX9F0gKAQtm7hZ/EI4ixdLI35CUAhaOonnQXnTKZf2ZjnkWTwEhaA5KP9KEgSFoDmAoBDUEMS/H9SBl99AUAhqEvT2pjd4sOrADXcQFIJCUAgKQbMCQSEoBIWgEDQrEBSCxuWsdiAoBIWgEBSCZgWCQlAICkEhaFYgKASFoBAUgmYFgkJQCApBIWhWICgEhaAQFIJmBYJCUAgKQSFoViAoBIWgEBSCZiWzoKlfixRbLYW9dwjvZiqqWgsSqyjQgprDpC8vWtBSgaAQFIJCUAiaFQgKQSEoBIWgWYGgEBSCQlAImhUICkEhKASFoFmBoBAUgkJQCJoVCApBISgEhaBZgaAQFIJCUAiaFQgKQSEoBIWgWYGgEBSCQlAImhUICkEhKASFoFmBoBAUgkJQCJoVCApBISgEhaBZiRH0+M7slSfqUrTCB4JC0LKxC3q6tuTtXVWWohUBEBSClo1d0ON7W17/xla0FK0IgKAQtGzsgvZvPvGO7z6MlqIVnNTv7YqtlsJejIWXhxVVrWUbR8Qu6LMrgY/+UrQiIKEw8ZtzBa4n7jHMcgFx10vmFpTT0CMCQR2iiDGojXE9IhDUIeJm8QvhLH5BzuIXzLN4G+N6RCCoQySeB+VtZsJ5UBvjekQgqEMUcSUp22Z3jwgEdQgIStg8hlkuIO56ySUoAGUDQYHTQFDgNBAUOA0EBU4DQYHTQFDgNBAUOA0EBU6TXdCRK/OpeDY7+86W/SmnBE7XZt9+mDV0/3qepDOWN1+B6yyvI2QWdPQJpTTwW0+ix5vIcXy2xO+ezhb6+A7bPWvgrOXNWeAay+sKmQUdvTs0LdGtpdQ4+P5ezP2p8cnK+60zJp2jvNkLXGd5XSGzoKP316eF/SFb79FPSvNj3uVlC62HImc/e3mzF7jO8rpCZkFHn1BKR/86q3LrU05JYZd4vWcLLbq8tx9mTDpzefMUuM7yukINLWj2P+t8jQKbNPz5R3W0oJmzXGd5XaGGMSgb+mcdg76fc1jFgtQwBs1c4DrL6wo5ZvHDTyilwe9prE85JfCZ6PKyhebtRxSKnHS28uYscI3ldYWqz4PuzeY4s8f3z35q79msGqqq86C5ClxneR0BV5KA00BQ4DQQFDgNBAVOA0GB00BQ4DQQ9OR+SzIdrvry03Cxd3FZ2WlqeXgDKBkIytFtU7+Fgs7wj+0zj6rNGICgnLSCHs7NV5sxAEE5Skc+7fU6rdaM+Jd/jAgabei99DetM4/Ed3hbFhCUIzU8uT8t/uffRFvJenRd0PUzj5QNvc60H7TXgaElAUE5UsMuH2F2pZS/2ZGr9UkS20HZILTsvYRhaZlAUI4v6NkdRcqumLXrLagg3CC3ravzf1A0EJQzKujh3NSy1oIGgiobgsnU4VwLs/uygKAcX1B+mtPv4oWsXUMLqmyIZvuY3ZcGBOXokySuG5e11zEJGm0Q28TAFWftSwOCcrTTTHxYOc2HllM/mJsfHYNGG9Sxaj35ngAgKHAaCAqcBoICp4GgwGkgKHAaCAqcBoICp4GgwGkgKHAaCAqc5v8BzbjshtzY2vIAAAAASUVORK5CYII=" /><!-- --></p>
+<div id="power-table" class="section level3">
+<h3>Power Table</h3>
+<p>The table below summarizes the power estimates across different
+conditions. The <code>power_xdiff</code> column indicates the proportion
+of trials where the p-value for the difference in means
+(<code>p_xdiff</code>) is less than 0.05, and the <code>median_r2</code>
+column reports the median R-squared value from the regression
+models.</p>
+<table style="width:100%;">
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="9%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">total_pairs</th>
+<th align="right">relatedness</th>
+<th align="left">cov_a</th>
+<th align="left">cov_c</th>
+<th align="left">cov_e</th>
+<th align="right">ace_a</th>
+<th align="right">ace_c</th>
+<th align="right">ace_e</th>
+<th align="right">power_xdiff</th>
+<th align="right">median_r2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">No Covariate E</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">No Covariate C</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">No Covariate A</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">250</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.03</td>
+<td align="right">0.0201218</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0089694</td>
+</tr>
+<tr class="odd">
+<td align="right">1000</td>
+<td align="right">1.0</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.02</td>
+<td align="right">0.0045342</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0038589</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0018504</td>
+</tr>
+<tr class="even">
+<td align="right">500</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.04</td>
+<td align="right">0.0238725</td>
+</tr>
+<tr class="odd">
+<td align="right">750</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.05</td>
+<td align="right">0.0105100</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0.5</td>
+<td align="left">Covariate A (0.25)</td>
+<td align="left">Covariate C (0.25)</td>
+<td align="left">Covariate E (0.25)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.06</td>
+<td align="right">0.0056736</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This vignette demonstrates how to conduct a simulation-based power
+analysis for discordant sibling designs using the <code>discord</code>
+package. By varying genetic relatedness, ACE variance components, and
+covariate settings, we can assess the power of our designs to detect
+causal effects. The results highlight the importance of sample size and
+relatedness level in achieving sufficient power for these analyses.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
