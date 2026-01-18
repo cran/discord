@@ -1,0 +1,2897 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="S. Mason Garrison" />
+
+
+<title>Full Data Workflow</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Full Data Workflow</h1>
+<h4 class="author">S. Mason Garrison</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette provides a complete workflow for conducting
+discordant-kinship regression using the {discord} package. We encourage
+you to read the accompanying paper (Garrison et al., 2025) for a full
+explanation of the methods and their applications. We show how to
+transform data into a format suitable for analysis, then walk through
+standard OLS regression (for comparison) and discordant-kinship
+regression.</p>
+<p>The tutorial covers three common data structures (wide, long, and
+pedigree formats) and uses simulated data for reproducibility. You can
+adapt our R-based analysis pipeline to your own data by substituting
+your variables and kinship links.</p>
+</div>
+<div id="data-structures-and-preparation" class="section level1">
+<h1>Data Structures and Preparation</h1>
+<p>Your data likely exists in one of three common formats: wide, long,
+or pedigree. Regardless of format, the goal is to create wide-format
+data where each row represents a kinship pair. Variables for each member
+of the pair are distinguished by suffixes (e.g., <code>_1</code> and
+<code>_2</code>). Understanding your data structure determines which
+transformation steps you’ll need. Each subsection below outlines how to
+handle these formats.</p>
+<p>First, load the necessary packages:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># For easy data manipulation</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># For kinship linkages</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(NlsyLinks)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># For discordant-kinship regression</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(discord)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co"># To clean data frames</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co"># For pipe</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co"># For pedigree data manipulation</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># For pedigree plotting</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="fu">library</span>(ggpedigree)</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<p>Once you load the necessary packages, feel free to skip to the
+relevant subsection for your data type.</p>
+<div id="wide-format-data" class="section level2">
+<h2>Wide Format Data</h2>
+<p>Wide format is the most direct structure for our analysis. Each row
+represents one kinship pair, with variables appearing twice—once for
+each member of the pair—using suffixes to distinguish the two
+individuals. For example, columns like <code>age_s1</code> and
+<code>age_s2</code>, where <code>_s1</code> and <code>_s2</code>
+identify which sibling’s data appears in each column.</p>
+<p>The simulated sibling data below contains five sibling pairs with
+variables for ID, age, height, and weight for each sibling.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df_wide <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">pid =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">id_s1 =</span> <span class="fu">c</span>(<span class="dv">101</span>, <span class="dv">201</span>, <span class="dv">301</span>, <span class="dv">401</span>, <span class="dv">501</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">id_s2 =</span> <span class="fu">c</span>(<span class="dv">102</span>, <span class="dv">202</span>, <span class="dv">302</span>, <span class="dv">402</span>, <span class="dv">502</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">age_s1 =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">27</span>, <span class="dv">40</span>, <span class="dv">36</span>, <span class="dv">30</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">age_s2 =</span> <span class="fu">c</span>(<span class="dv">28</span>, <span class="dv">25</span>, <span class="dv">38</span>, <span class="dv">35</span>, <span class="dv">28</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">height_s1 =</span> <span class="fu">c</span>(<span class="dv">175</span>, <span class="dv">160</span>, <span class="dv">180</span>, <span class="dv">170</span>, <span class="dv">165</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">height_s2 =</span> <span class="fu">c</span>(<span class="dv">170</span>, <span class="dv">162</span>, <span class="dv">178</span>, <span class="dv">172</span>, <span class="dv">168</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="at">weight_s1 =</span> <span class="fu">c</span>(<span class="dv">70</span>, <span class="dv">60</span>, <span class="dv">80</span>, <span class="dv">75</span>, <span class="dv">65</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">weight_s2 =</span> <span class="fu">c</span>(<span class="dv">68</span>, <span class="dv">62</span>, <span class="dv">78</span>, <span class="dv">74</span>, <span class="dv">66</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>df_wide <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="5%" />
+<col width="8%" />
+<col width="8%" />
+<col width="10%" />
+<col width="10%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">pid</th>
+<th align="right">id_s1</th>
+<th align="right">id_s2</th>
+<th align="right">age_s1</th>
+<th align="right">age_s2</th>
+<th align="right">height_s1</th>
+<th align="right">height_s2</th>
+<th align="right">weight_s1</th>
+<th align="right">weight_s2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">101</td>
+<td align="right">102</td>
+<td align="right">30</td>
+<td align="right">28</td>
+<td align="right">175</td>
+<td align="right">170</td>
+<td align="right">70</td>
+<td align="right">68</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">201</td>
+<td align="right">202</td>
+<td align="right">27</td>
+<td align="right">25</td>
+<td align="right">160</td>
+<td align="right">162</td>
+<td align="right">60</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">301</td>
+<td align="right">302</td>
+<td align="right">40</td>
+<td align="right">38</td>
+<td align="right">180</td>
+<td align="right">178</td>
+<td align="right">80</td>
+<td align="right">78</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">401</td>
+<td align="right">402</td>
+<td align="right">36</td>
+<td align="right">35</td>
+<td align="right">170</td>
+<td align="right">172</td>
+<td align="right">75</td>
+<td align="right">74</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">501</td>
+<td align="right">502</td>
+<td align="right">30</td>
+<td align="right">28</td>
+<td align="right">165</td>
+<td align="right">168</td>
+<td align="right">65</td>
+<td align="right">66</td>
+</tr>
+</tbody>
+</table>
+<p>In this example, <code>pid</code> is a unique identifier for each
+sibling pair. Specifically, each row is anchored by a pair identifier.
+Variables ending in <code>_s1</code> refer to one sibling, while those
+ending in <code>_s2</code> refer to the other. In our case, the starting
+dataset is already arranged so that the older sibling is
+<code>_s1</code> and the younger is <code>_s2</code>. Nevertheless, this
+ordering will be adjusted later based on the outcome variable. If your
+data already has this structure, you can skip ahead to the “Ordering and
+Derived Variables” section.</p>
+</div>
+<div id="long-format-data" class="section level2">
+<h2>Long Format Data</h2>
+<p>Long format structures data with one row per individual. In other
+words, each person appears in their own row, with a pair-identifier
+column linking siblings. This format is common in many datasets (such as
+the NLSY), but it requires transformation for our analysis.</p>
+<p>We can demonstrate long format by reshaping our wide data from above
+into long format using <code>pivot_longer()</code> from the {tidyr}
+package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df_wide <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>pid, <span class="co"># keep the dyad identifier intact</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;.value&quot;</span>, <span class="st">&quot;sibling&quot;</span>), <span class="co"># split base names and the sibling marker</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">&quot;_s&quot;</span> <span class="co"># original suffix delimiter in column names</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  )</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>df_long <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">pid</th>
+<th align="left">sibling</th>
+<th align="right">id</th>
+<th align="right">age</th>
+<th align="right">height</th>
+<th align="right">weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="right">101</td>
+<td align="right">30</td>
+<td align="right">175</td>
+<td align="right">70</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">2</td>
+<td align="right">102</td>
+<td align="right">28</td>
+<td align="right">170</td>
+<td align="right">68</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">1</td>
+<td align="right">201</td>
+<td align="right">27</td>
+<td align="right">160</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">2</td>
+<td align="right">202</td>
+<td align="right">25</td>
+<td align="right">162</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">1</td>
+<td align="right">301</td>
+<td align="right">40</td>
+<td align="right">180</td>
+<td align="right">80</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">2</td>
+<td align="right">302</td>
+<td align="right">38</td>
+<td align="right">178</td>
+<td align="right">78</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">1</td>
+<td align="right">401</td>
+<td align="right">36</td>
+<td align="right">170</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">2</td>
+<td align="right">402</td>
+<td align="right">35</td>
+<td align="right">172</td>
+<td align="right">74</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">1</td>
+<td align="right">501</td>
+<td align="right">30</td>
+<td align="right">165</td>
+<td align="right">65</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="left">2</td>
+<td align="right">502</td>
+<td align="right">28</td>
+<td align="right">168</td>
+<td align="right">66</td>
+</tr>
+</tbody>
+</table>
+<p>Notice how each individual now occupies their own row. The
+<code>sibling</code> column indicating whether each sibling was
+originally labeled <code>1</code> or <code>2</code>. The
+<code>pid</code> column still identifies which individuals form a
+pair.</p>
+<p>Suppose your data does not already have a unique identifier for each
+kinship pair. In that case, you may need to construct one based on the
+available information or download one from a kinship linkage resource.
+Ideally, you will also have information about the type of kinship (e.g.,
+full siblings, half-siblings, cousins) and whether they were raised
+together or apart. (More on how to do this below for pedigree data.)</p>
+<div id="converting-long-to-wide" class="section level3">
+<h3>Converting Long to Wide</h3>
+<p>To convert long format data for discordant-kinship analysis, use
+<code>pivot_wider()</code> from the {tidyr} package:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df_long2wide <span class="ot">&lt;-</span> df_long <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">names_from =</span> sibling, <span class="co"># the column that indicates the sibling number</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(id, age, height, weight), <span class="co"># variables to spread into paired columns</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">&quot;_s&quot;</span> <span class="co"># ensures id_s1, id_s2,etc</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  )</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>df_long2wide <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="5%" />
+<col width="8%" />
+<col width="8%" />
+<col width="10%" />
+<col width="10%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">pid</th>
+<th align="right">id_s1</th>
+<th align="right">id_s2</th>
+<th align="right">age_s1</th>
+<th align="right">age_s2</th>
+<th align="right">height_s1</th>
+<th align="right">height_s2</th>
+<th align="right">weight_s1</th>
+<th align="right">weight_s2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">101</td>
+<td align="right">102</td>
+<td align="right">30</td>
+<td align="right">28</td>
+<td align="right">175</td>
+<td align="right">170</td>
+<td align="right">70</td>
+<td align="right">68</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">201</td>
+<td align="right">202</td>
+<td align="right">27</td>
+<td align="right">25</td>
+<td align="right">160</td>
+<td align="right">162</td>
+<td align="right">60</td>
+<td align="right">62</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">301</td>
+<td align="right">302</td>
+<td align="right">40</td>
+<td align="right">38</td>
+<td align="right">180</td>
+<td align="right">178</td>
+<td align="right">80</td>
+<td align="right">78</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">401</td>
+<td align="right">402</td>
+<td align="right">36</td>
+<td align="right">35</td>
+<td align="right">170</td>
+<td align="right">172</td>
+<td align="right">75</td>
+<td align="right">74</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">501</td>
+<td align="right">502</td>
+<td align="right">30</td>
+<td align="right">28</td>
+<td align="right">165</td>
+<td align="right">168</td>
+<td align="right">65</td>
+<td align="right">66</td>
+</tr>
+</tbody>
+</table>
+<p>The reshaped data now reproduces our original wide format. Each
+analytic variable appears twice with <code>_s1</code> and
+<code>_s2</code> suffixes, and the pair identifier <code>pid</code>
+anchors each row.</p>
+</div>
+<div id="using-existing-kinship-links" class="section level3">
+<h3>Using existing kinship links</h3>
+<p>As mentioned before, if your long-format data lacks pair identifiers,
+you’ll need to create them using family IDs, household identifiers, or
+external kinship resources. This process can be straightforward if you
+have access to family or household identifiers, and are confident in the
+kinship relationships. However, it can be more complex if the
+relationships are not clearly defined or if there are multiple types of
+kinship (e.g., siblings, cousins, half-siblings) in your data.</p>
+<p>For NLSY data specifically, the {NlsyLinks} package provides
+validated kinship links for the vast majority of dyads in the NLSY79 and
+NLSY97 cohorts. These links are provided in wide format, and can be used
+to left-join with the long-format data that the NLSY info website
+provides. See the {NlsyLinks} documentation for more details on how to
+access and use these datasets, or the reproducible source code for the
+analyses in the primary paper (Garrison et al., 2025).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(NlsyLinks)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">data</span>(Links79PairExpanded)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>Links79PairExpanded <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">arrange</span>(ExtendedID) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">filter</span>(RelationshipPath <span class="sc">==</span> <span class="st">&quot;Gen1Housemates&quot;</span> <span class="sc">&amp;</span> RFull <span class="sc">==</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    ExtendedID,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    SubjectTag_S1, SubjectTag_S2,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    RelationshipPath, RFull, IsMz,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    EverSharedHouse</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> <span class="co"># used to make the table</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="16%" />
+<col width="16%" />
+<col width="20%" />
+<col width="7%" />
+<col width="6%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">ExtendedID</th>
+<th align="right">SubjectTag_S1</th>
+<th align="right">SubjectTag_S2</th>
+<th align="left">RelationshipPath</th>
+<th align="right">RFull</th>
+<th align="left">IsMz</th>
+<th align="left">EverSharedHouse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">300</td>
+<td align="right">400</td>
+<td align="left">Gen1Housemates</td>
+<td align="right">0.5</td>
+<td align="left">No</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">500</td>
+<td align="right">600</td>
+<td align="left">Gen1Housemates</td>
+<td align="right">0.5</td>
+<td align="left">No</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="right">1300</td>
+<td align="right">1400</td>
+<td align="left">Gen1Housemates</td>
+<td align="right">0.5</td>
+<td align="left">No</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
+<td align="right">1700</td>
+<td align="right">1800</td>
+<td align="left">Gen1Housemates</td>
+<td align="right">0.5</td>
+<td align="left">No</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="right">20</td>
+<td align="right">2000</td>
+<td align="right">2100</td>
+<td align="left">Gen1Housemates</td>
+<td align="right">0.5</td>
+<td align="left">No</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, this dataset includes an extended family identifier
+(<code>ExtendedID</code>), individual IDs for each sibling in the pair
+(<code>R0000100</code> and <code>R0000200</code>), and their
+RelationshipPath (<code>RelationshipPath</code> = “Gen1Housemates” and
+genetic relatedness (<code>RFull</code> = 0.5). You can merge this
+dataset with your long-format data using the individual IDs.</p>
+<p>At this stage the long‑origin data are indistinguishable from the
+wide-origin wide example. Each analytic variable now appears exactly
+twice—once for <code>_s1</code> and once for <code>_s2</code>—and the
+dyad identifier <code>pid</code> continues to anchor the row. You can
+proceed directly to ordering and construction of <code>*_mean</code> and
+<code>*_diff</code> with <code>discord_data()</code>.</p>
+</div>
+</div>
+<div id="pedigree-data" class="section level2">
+<h2>Pedigree Data</h2>
+<p>Pedigree data is common in genetic and family studies, where detailed
+family trees are available. It is long format data that provides rich
+information about familial relationships, such as (mother ID, father ID,
+spouse ID). Our research team has developed specialized tools in the
+{BGmisc} package to extract kinship links and transform these pedigree
+structures into a wide format suitable for analysis. Below is an example
+of how such a dataset might look in both tabular and graphical
+forms:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">data</span>(potter)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">ggpedigree</span>(potter, <span class="at">config =</span> <span class="fu">list</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">label_method =</span> <span class="st">&quot;geom_text&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">label_nudge_y =</span> .<span class="dv">25</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">focal_fill_personID =</span> <span class="dv">7</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">focal_fill_include =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">focal_fill_force_zero =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">focal_fill_na_value =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">focal_fill_low_color =</span> <span class="st">&quot;darkred&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="at">focal_fill_high_color =</span> <span class="st">&quot;gold&quot;</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="at">focal_fill_mid_color =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="at">focal_fill_scale_midpoint =</span> .<span class="dv">65</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="at">focal_fill_component =</span> <span class="st">&quot;additive&quot;</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="at">focal_fill_method =</span> <span class="st">&quot;steps&quot;</span>, <span class="co">#</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="co"># focal_fill_method = &quot;viridis_c&quot;,</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="at">focal_fill_use_log =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="at">focal_fill_n_breaks =</span> <span class="dv">10</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="at">sex_color_include =</span> F,</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="at">focal_fill_legend_title =</span> <span class="st">&quot;Genetic Relatives </span><span class="sc">\n</span><span class="st">of Harry Potter&quot;</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>)) <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Potter Pedigree Plot&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>The pedigree tree above illustrates the family relationships among
+individuals in the Potter dataset. Each node represents an individual,
+and the lines connecting them indicate familial relationships such as
+parent-child and sibling connections.</p>
+<p>To work with pedigree data, we first need to convert it into a long
+format data frame. The following code extracts relevant columns from the
+<code>potter</code> dataset and adds a synthetic variable
+(<code>x_var</code>) for demonstration purposes:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">data</span>(potter)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>df_ped <span class="ot">&lt;-</span> potter <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    personID, sex, famID, momID, dadID, spouseID,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    twinID, zygosity</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x_var =</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="fu">nrow</span>(.), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>), <span class="at">digits =</span> <span class="dv">2</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>df_ped <span class="sc">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">personID</th>
+<th align="right">sex</th>
+<th align="right">famID</th>
+<th align="right">momID</th>
+<th align="right">dadID</th>
+<th align="right">spouseID</th>
+<th align="right">twinID</th>
+<th align="left">zygosity</th>
+<th align="right">x_var</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">101</td>
+<td align="right">102</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="right">-0.08</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">101</td>
+<td align="right">102</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="right">-0.98</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">103</td>
+<td align="right">104</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="right">-1.88</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">103</td>
+<td align="right">104</td>
+<td align="right">5</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="right">-0.19</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">4</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="right">-0.63</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, each individual is represented in a separate row,
+with columns for their unique identifier, mother’s identifier, father’s
+identifier, and other relevant variables. The {BGmisc} package provides
+functions to compute kinship matrices from pedigree data. The package is
+available on CRAN and GitHub. The package ( and its documentation ) can
+be found at: <a href="https://CRAN.R-project.org/package=BGmisc" class="uri">https://CRAN.R-project.org/package=BGmisc</a> as well as
+it’s accompanying Journal of Open Source Software paper: <a href="https://joss.theoj.org/papers/10.21105/joss.06203" class="uri">https://joss.theoj.org/papers/10.21105/joss.06203</a></p>
+<div id="computing-kinship-matrices" class="section level3">
+<h3>Computing Kinship Matrices</h3>
+<p>To transform this data into a wide format suitable for
+discordant-kinship regression, we need to create kinship links based on
+the pedigree information. To extract the necessary kinship information,
+we need to compute two matrices: the additive genetic relatedness matrix
+(add) and the shared environment matrix (cn). Other matrices, such as
+mitochondrial, can also be computed if needed.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(df_ped)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>cn <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(df_ped)</span></code></pre></div>
+<p>The <code>ped2add()</code> function computes the additive genetic
+relatedness matrix, which quantifies the genetic similarity between
+individuals based on their pedigree information. The
+<code>ped2cn()</code> function computes the shared environment matrix,
+which indicates whether individuals were raised in the same environment
+(1) or different environments (0).</p>
+<p>The resulting matrices are symmetric, with diagonal elements
+representing self-relatedness (1.0). The off-diagonal elements represent
+the relatedness between pairs of individuals, with values ranging from 0
+(no relatedness) to 0.5 (full siblings) to 1 (themselves).</p>
+</div>
+<div id="creating-wide-format-kinship-pairs" class="section level3">
+<h3>Creating Wide-Format Kinship Pairs</h3>
+<p>We convert the component matrices into a wide-form dataframe of kin
+pairs using <code>com2links()</code>. Self-pairs and duplicate entries
+are removed.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>df_links <span class="ot">&lt;-</span> <span class="fu">com2links</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">writetodisk =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">ad_ped_matrix =</span> add,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">cn_ped_matrix =</span> cn,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">drop_upper_triangular =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">filter</span>(ID1 <span class="sc">!=</span> ID2)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>df_links <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">ID1</th>
+<th align="right">ID2</th>
+<th align="right">addRel</th>
+<th align="right">cnuRel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.50</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">0.50</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">0.50</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">0.25</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">0.50</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, the <code>df_links</code> data frame contains pairs
+of individuals (ID1 and ID2) along with their additive genetic
+relatedness (<code>addRel</code>) and shared environment status
+(<code>cnuRel</code>). These data are in wide format, with each row
+representing a unique pair of individuals.</p>
+<p>Further, we can tally the number of pairs by relatedness and shared
+environment to understand the composition of the dataset.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>df_links <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">group_by</span>(addRel, cnuRel) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">tally</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">addRel</th>
+<th align="right">cnuRel</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.0625</td>
+<td align="right">0</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">0.1250</td>
+<td align="right">0</td>
+<td align="right">47</td>
+</tr>
+<tr class="odd">
+<td align="right">0.2500</td>
+<td align="right">0</td>
+<td align="right">104</td>
+</tr>
+<tr class="even">
+<td align="right">0.5000</td>
+<td align="right">0</td>
+<td align="right">50</td>
+</tr>
+<tr class="odd">
+<td align="right">0.5000</td>
+<td align="right">1</td>
+<td align="right">32</td>
+</tr>
+</tbody>
+</table>
+<p>This table shows the number of kinship pairs for each combination of
+genetic relatedness and shared environment status. Although the discord
+regression models can be used with any kin group, it is most
+interpretable when there is a single kinship group.</p>
+<p>Feel free to merge this <code>df_links</code> data frame with your
+pedigree data to include additional variables for each individual in the
+pair.</p>
+<p>The following optional subsection demonstrates how to simulate
+outcome and predictor variables for these kinship pairs.</p>
+</div>
+<div id="simulating-outcome-and-predictor-variables" class="section level3">
+<h3>Simulating Outcome and Predictor Variables</h3>
+<p>To simulate outcome and predictor variables for our kinship pairs, we
+can use the <code>kinsim()</code> function from the {discord} package.
+This function allows us to generate synthetic data based on specified
+genetic and environmental parameters.</p>
+<p>For demonstration, we’ll focus on first cousins raised in separate
+homes from our pedigree data.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>df_cousin <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">125</span>) <span class="sc">%&gt;%</span> <span class="co"># only cousins %&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># only kin raised in separate homes</span></span></code></pre></div>
+<p><code>kinsim</code> allows us to generate synthetic data based on
+specified genetic and environmental parameters or relatedness vectors.
+Here, we simulate data for first cousins raised apart (addRel = 0.125,
+cnuRel = 0) using the <code>df_links</code> data frame we created
+earlier.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>df_synthetic <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">kinsim</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">mu_all =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="co"># means</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="at">cov_a =</span> .<span class="dv">5</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="at">cov_c =</span> .<span class="dv">1</span>, <span class="co">#</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="at">cov_e =</span> .<span class="dv">3</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="at">c_vector =</span> <span class="fu">rep</span>(df_cousin<span class="sc">$</span>cnuRel, <span class="dv">3</span>),</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="at">r_vector =</span> <span class="fu">rep</span>(df_cousin<span class="sc">$</span>addRel, <span class="dv">3</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>)</span></code></pre></div>
+<p>I now have a synthetic dataset containing pairs of first cousins
+raised apart, with simulated values for weight and height. Each row
+represents a unique pair of cousins, with variables for each cousin
+distinguished by the <code>_1</code> and <code>_2</code> suffixes. This
+data is designed such that our weight and height variables have genetic
+(cov_a=.5) and environmental correlations (cov_c=.1, cov_e=.3). By
+default, univariate ACE values are 1/3 genetic, 1/3 shared environment,
+and 1/3 unique environment. Also by default, <code>kinsim()</code>
+generates variables named <code>y1</code> and <code>y2</code> for the
+first and second variables, respectively. We can rename these to more
+meaningful names like <code>weight</code> and <code>height</code> for
+clarity.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>df_synthetic <span class="ot">&lt;-</span> df_synthetic <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    <span class="at">pid =</span> id,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>    r,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>    <span class="at">weight_s1 =</span> y1_1,</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>    <span class="at">weight_s2 =</span> y1_2,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="at">height_s1 =</span> y2_1,</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>    <span class="at">height_s2 =</span> y2_2</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="co"># simulates age such that the 2nd sibling is between 1 and 5 years younger.</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>    <span class="at">age_s1 =</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="fu">nrow</span>(.), <span class="at">mean =</span> <span class="dv">30</span>, <span class="at">sd =</span> <span class="dv">5</span>), <span class="at">digits =</span> <span class="dv">0</span>),</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>    <span class="at">age_s2 =</span> age_s1 <span class="sc">-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">nrow</span>(.), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>  )</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>df_synthetic <span class="sc">%&gt;%</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">pid</th>
+<th align="right">r</th>
+<th align="right">weight_s1</th>
+<th align="right">weight_s2</th>
+<th align="right">height_s1</th>
+<th align="right">height_s2</th>
+<th align="right">age_s1</th>
+<th align="right">age_s2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.12</td>
+<td align="right">2.09</td>
+<td align="right">-1.30</td>
+<td align="right">4.54</td>
+<td align="right">-0.66</td>
+<td align="right">31</td>
+<td align="right">30</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0.12</td>
+<td align="right">1.21</td>
+<td align="right">0.40</td>
+<td align="right">1.20</td>
+<td align="right">0.26</td>
+<td align="right">32</td>
+<td align="right">28</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.12</td>
+<td align="right">1.03</td>
+<td align="right">2.53</td>
+<td align="right">2.76</td>
+<td align="right">0.58</td>
+<td align="right">29</td>
+<td align="right">27</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.12</td>
+<td align="right">1.46</td>
+<td align="right">4.92</td>
+<td align="right">0.93</td>
+<td align="right">-0.67</td>
+<td align="right">30</td>
+<td align="right">29</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">0.12</td>
+<td align="right">2.69</td>
+<td align="right">2.78</td>
+<td align="right">0.95</td>
+<td align="right">-0.54</td>
+<td align="right">23</td>
+<td align="right">18</td>
+</tr>
+</tbody>
+</table>
+<p>This synthetic dataset now contains pairs of first cousins raised
+apart, with simulated values for weight and height, as well as age. Each
+row represents a unique pair of cousins, with variables for each cousin
+distinguished by the <code>_s1</code> and <code>_s2</code> suffixes.</p>
+</div>
+</div>
+</div>
+<div id="ordering-and-derived-variables" class="section level1">
+<h1>Ordering and Derived Variables</h1>
+<p>Now that we have our data in wide format, we can proceed to order the
+pairs and create the derived variables needed for discordant-kinship
+regression. The key steps are:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Ordering the pairs</strong>: We need to ensure that within
+each pair, the individual with the higher outcome value is consistently
+labeled as <code>_1</code> and the other as <code>_2</code>. This
+ordering is to ensure that we can extract meaningful difference
+scores.</li>
+<li><strong>Creating derived variables</strong>: We will create
+<code>*_mean</code> and <code>*_diff*</code> variables for both the
+outcome and predictor variables. The <code>*_mean</code> variable
+represents the average of the two individuals’ values, while the
+<code>*_diff</code> variable represents the difference between the two
+individuals’ values (i.e., <code>_1 - _2</code>).</li>
+</ol>
+<p>These steps can be accomplished using the <code>discord_data()</code>
+function from the {discord} package. This function takes care of
+ordering the pairs and creating the derived variables, ensuring that the
+data is ready for analysis. When using <code>discord_data()</code>, you
+will need to specify the outcome variable, predictor variables, and the
+identifiers for the two members of each pair.</p>
+<p>Below we default to pedigree data of cousins for reproducibility.
+Replace with your chosen source as needed.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># CHOOSE ONE based on your path</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># source_wide &lt;- df_wide</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># source_wide &lt;- df_long2wide</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>source_wide <span class="ot">&lt;-</span> df_synthetic <span class="co"># if you followed the pedigree path</span></span></code></pre></div>
+<p>Now call <code>discord_data()</code> specifying the outcome and
+predictor present for both siblings. Here we use <code>weight</code> as
+the outcome and <code>height</code> and <code>age</code> as the
+predictors, with the <code>_s1</code> / <code>_s2</code> suffix
+convention.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>df_discord_weight <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">discord_data</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">data =</span> source_wide,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;weight&quot;</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="fu">c</span>(<span class="st">&quot;height&quot;</span>, <span class="st">&quot;age&quot;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  <span class="at">demographics =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_s1&quot;</span>, <span class="st">&quot;_s2&quot;</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;pid&quot;</span> <span class="co"># or &quot;famID&quot;</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>)</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>df_discord_weight <span class="sc">%&gt;%</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">&quot;Transformed data ready for discordant-kinship regression&quot;</span>)</span></code></pre></div>
+<table>
+<caption>Transformed data ready for discordant-kinship
+regression</caption>
+<colgroup>
+<col width="2%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="10%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="10%" />
+<col width="5%" />
+<col width="5%" />
+<col width="7%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">weight_1</th>
+<th align="right">weight_2</th>
+<th align="right">weight_diff</th>
+<th align="right">weight_mean</th>
+<th align="right">height_1</th>
+<th align="right">height_2</th>
+<th align="right">height_diff</th>
+<th align="right">height_mean</th>
+<th align="right">age_1</th>
+<th align="right">age_2</th>
+<th align="right">age_diff</th>
+<th align="right">age_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2.09</td>
+<td align="right">-1.30</td>
+<td align="right">3.39</td>
+<td align="right">0.39</td>
+<td align="right">4.54</td>
+<td align="right">-0.66</td>
+<td align="right">5.20</td>
+<td align="right">1.94</td>
+<td align="right">31</td>
+<td align="right">30</td>
+<td align="right">1</td>
+<td align="right">30.5</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.21</td>
+<td align="right">0.40</td>
+<td align="right">0.81</td>
+<td align="right">0.80</td>
+<td align="right">1.20</td>
+<td align="right">0.26</td>
+<td align="right">0.94</td>
+<td align="right">0.73</td>
+<td align="right">32</td>
+<td align="right">28</td>
+<td align="right">4</td>
+<td align="right">30.0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2.53</td>
+<td align="right">1.03</td>
+<td align="right">1.51</td>
+<td align="right">1.78</td>
+<td align="right">0.58</td>
+<td align="right">2.76</td>
+<td align="right">-2.18</td>
+<td align="right">1.67</td>
+<td align="right">27</td>
+<td align="right">29</td>
+<td align="right">-2</td>
+<td align="right">28.0</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">4.92</td>
+<td align="right">1.46</td>
+<td align="right">3.46</td>
+<td align="right">3.19</td>
+<td align="right">-0.67</td>
+<td align="right">0.93</td>
+<td align="right">-1.60</td>
+<td align="right">0.13</td>
+<td align="right">29</td>
+<td align="right">30</td>
+<td align="right">-1</td>
+<td align="right">29.5</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2.78</td>
+<td align="right">2.69</td>
+<td align="right">0.09</td>
+<td align="right">2.74</td>
+<td align="right">-0.54</td>
+<td align="right">0.95</td>
+<td align="right">-1.49</td>
+<td align="right">0.21</td>
+<td align="right">18</td>
+<td align="right">23</td>
+<td align="right">-5</td>
+<td align="right">20.5</td>
+</tr>
+</tbody>
+</table>
+<div id="understanding-the-transformation" class="section level2">
+<h2>Understanding the Transformation</h2>
+<p>Let’s examine what <code>discord_data()</code> did to our
+variables:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Show original data for first 3 pairs</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>source_wide <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">select</span>(pid, weight_s1, weight_s2, height_s1, height_s2) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Original data: siblings not yet ordered by outcome&quot;</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  )</span></code></pre></div>
+<table>
+<caption>Original data: siblings not yet ordered by outcome</caption>
+<thead>
+<tr class="header">
+<th align="right">pid</th>
+<th align="right">weight_s1</th>
+<th align="right">weight_s2</th>
+<th align="right">height_s1</th>
+<th align="right">height_s2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2.09</td>
+<td align="right">-1.30</td>
+<td align="right">4.54</td>
+<td align="right">-0.66</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.21</td>
+<td align="right">0.40</td>
+<td align="right">1.20</td>
+<td align="right">0.26</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1.03</td>
+<td align="right">2.53</td>
+<td align="right">2.76</td>
+<td align="right">0.58</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>df_discord_weight <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>    id,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>    weight_1, weight_2, weight_mean, weight_diff,</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>    height_1, height_2, height_mean, height_diff</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;After discord_data(): siblings ordered so weight_1 &gt;= weight_2&quot;</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>  )</span></code></pre></div>
+<table>
+<caption>After discord_data(): siblings ordered so weight_1 &gt;=
+weight_2</caption>
+<colgroup>
+<col width="3%" />
+<col width="10%" />
+<col width="10%" />
+<col width="13%" />
+<col width="13%" />
+<col width="10%" />
+<col width="10%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">weight_1</th>
+<th align="right">weight_2</th>
+<th align="right">weight_mean</th>
+<th align="right">weight_diff</th>
+<th align="right">height_1</th>
+<th align="right">height_2</th>
+<th align="right">height_mean</th>
+<th align="right">height_diff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2.09</td>
+<td align="right">-1.30</td>
+<td align="right">0.39</td>
+<td align="right">3.39</td>
+<td align="right">4.54</td>
+<td align="right">-0.66</td>
+<td align="right">1.94</td>
+<td align="right">5.20</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.21</td>
+<td align="right">0.40</td>
+<td align="right">0.80</td>
+<td align="right">0.81</td>
+<td align="right">1.20</td>
+<td align="right">0.26</td>
+<td align="right">0.73</td>
+<td align="right">0.94</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">2.53</td>
+<td align="right">1.03</td>
+<td align="right">1.78</td>
+<td align="right">1.51</td>
+<td align="right">0.58</td>
+<td align="right">2.76</td>
+<td align="right">1.67</td>
+<td align="right">-2.18</td>
+</tr>
+</tbody>
+</table>
+<p>Notice several important patterns in this output. First, the ordering
+changes depending on which sibling has the higher outcome value:</p>
+<ul>
+<li>If <code>weight_s1 &gt; weight_s2</code> in the original data,
+sibling 1 becomes <code>_1</code> in the output</li>
+<li>If <code>weight_s2 &gt; weight_s1</code> in the original data, the
+siblings are swapped: sibling 2 becomes <code>_1</code></li>
+<li>The predictor values (height) are reordered accordingly to stay
+matched with the correct sibling</li>
+</ul>
+<p>The sibling with higher weight becomes <code>_1</code> and the
+sibling with lower weight becomes <code>_2</code>. This ordering ensures
+that <code>weight_diff</code> (calculated as
+<code>weight_1 - weight_2</code>) is always non-negative. In the case of
+ties, discord data randomly assigned one sibling as <code>_1</code> and
+perserves that ordering throughout the dataset. Extremely motivated
+readers can dive into the discord source code for exactly how this
+calculation is implemented</p>
+<p>Second, the mean scores represent each pair’s average weight. For
+example, <code>weight_mean</code> equals the average of
+<code>weight_1</code> and <code>weight_2</code>. These means capture
+between-family variation, reflecting differences across sibling pairs so
+that we can compare families to one another.</p>
+<p>Third, the predictor differences can be positive or negative. Even
+though weight differences are always non-negative (by construction),
+height differences vary. The taller sibling might be the heavier one, or
+the shorter sibling might be heavier. This variation is what we’ll test
+in our regression.</p>
+<p>This structure lets us ask a key question: within sibling pairs, does
+the sibling with more of the predictor also have more of the outcome? If
+the taller sibling is systematically heavier even after controlling for
+family background, that suggests height may causally influence weight.
+If not, the association likely reflects familial confounding.</p>
+</div>
+<div id="data-selection-for-standard-ols-regression" class="section level2">
+<h2>Data Selection for Standard OLS Regression</h2>
+<p>For comparison, we also need to prepare data for a standard OLS
+regression. When running a standard OLS regression, researchers
+typically select one sibling per family to avoid non-independence.
+Common approaches include:</p>
+<ul>
+<li><strong>First-born sibling</strong>: The child born first in the
+family</li>
+<li><strong>Oldest sibling</strong>: The sibling with the highest age at
+time of measurement</li>
+<li><strong>Random selection</strong>: Randomly choosing one sibling
+from each pair</li>
+</ul>
+<p>This selection is typically fixed based on a demographic
+characteristic (birth order, age) and remains constant regardless of
+which outcome variable you’re analyzing. In contrast, discordant-kinship
+regression dynamically orders siblings based on the outcome variable.
+Thus each analysis may involve different sibling orderings.</p>
+</div>
+</div>
+<div id="analyzing-the-data" class="section level1">
+<h1>Analyzing the Data</h1>
+<p>With our data prepared, we can now perform both standard OLS
+regression and discordant-kinship regression to compare results.</p>
+<div id="standard-ols-regression" class="section level2">
+<h2>Standard OLS Regression</h2>
+<p>First, let’s run a standard OLS regression using the original
+wide-format data. This will serve as a baseline for comparison with the
+family-based analyses.</p>
+<p>For our baseline analysis, we select one sibling from each pair. In
+the original dataset, s1 was defined as the older sibling, so we can
+simply choose the sibling labeled <code>_s1</code>. But, another way to
+select the oldest sibling is to use the <code>discord_data()</code>
+function with the <code>outcome</code> argument set to the age variable.
+This approach will ensure that <code>_1</code> is always the oldest
+sibling within the pair. In the case of ties, discord data randomly
+assigned one sibling as <code>_1</code>. This assignment is preserved
+thru the entire data management process.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>df_for_ols <span class="ot">&lt;-</span> df_synthetic <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>    <span class="at">id =</span> pid,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>    <span class="at">weight =</span> weight_s1,</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>    <span class="at">height =</span> height_s1,</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>    <span class="at">age =</span> age_s1</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  )</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>df_discord_age <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">discord_data</span>(</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>  <span class="at">data =</span> source_wide,</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;age&quot;</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="fu">c</span>(<span class="st">&quot;height&quot;</span>, <span class="st">&quot;weight&quot;</span>),</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>  <span class="at">demographics =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_s1&quot;</span>, <span class="st">&quot;_s2&quot;</span>),</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;pid&quot;</span> <span class="co"># or &quot;famID&quot; if you followed the pedigree path</span></span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>)</span></code></pre></div>
+<p>The dataframes <code>df_for_ols</code> and
+<code>df_discord_age</code> now both contain one sibling per pair,
+selected based on age. We can verify that they contain the same
+individuals:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>df_discord_age <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>    id, age_1, age_2,</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>    age_mean, age_diff, weight_1, height_1</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;One sibling per pair for OLS regression, selecting by age&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<table>
+<caption>One sibling per pair for OLS regression, selecting by
+age</caption>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">age_1</th>
+<th align="right">age_2</th>
+<th align="right">age_mean</th>
+<th align="right">age_diff</th>
+<th align="right">weight_1</th>
+<th align="right">height_1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">31</td>
+<td align="right">30</td>
+<td align="right">30.5</td>
+<td align="right">1</td>
+<td align="right">2.09</td>
+<td align="right">4.54</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">32</td>
+<td align="right">28</td>
+<td align="right">30.0</td>
+<td align="right">4</td>
+<td align="right">1.21</td>
+<td align="right">1.20</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">29</td>
+<td align="right">27</td>
+<td align="right">28.0</td>
+<td align="right">2</td>
+<td align="right">1.03</td>
+<td align="right">2.76</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">30</td>
+<td align="right">29</td>
+<td align="right">29.5</td>
+<td align="right">1</td>
+<td align="right">1.46</td>
+<td align="right">0.93</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">23</td>
+<td align="right">18</td>
+<td align="right">20.5</td>
+<td align="right">5</td>
+<td align="right">2.69</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>df_for_ols <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">select</span>(id, age, weight, height) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;One sibling per pair for OLS regression using original wide data&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<table>
+<caption>One sibling per pair for OLS regression using original wide
+data</caption>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">age</th>
+<th align="right">weight</th>
+<th align="right">height</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">31</td>
+<td align="right">2.09</td>
+<td align="right">4.54</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">32</td>
+<td align="right">1.21</td>
+<td align="right">1.20</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">29</td>
+<td align="right">1.03</td>
+<td align="right">2.76</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">30</td>
+<td align="right">1.46</td>
+<td align="right">0.93</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">23</td>
+<td align="right">2.69</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, <code>df_for_ols</code> and
+<code>df_discord_age</code> both resulted in the same individuals being
+selected for analysis. The <code>df_discord_age</code> dataset was
+created by ordering siblings based on age, ensuring that <code>_1</code>
+is always the older sibling. The <code>df_for_ols</code> dataset
+directly selects the older sibling from the original wide data.</p>
+<p>By selecting one sibling per pair, we’re analyzing the same number of
+observations as we have kinship pairs. This conrespondses with the
+standard individual-level approach used in most research:</p>
+<p><span class="math display">\[
+Y = \beta_0 + \beta_1 X1 + \beta_2 X2 + \epsilon
+\]</span></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>ols_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(weight <span class="sc">~</span> height <span class="sc">+</span> age, <span class="at">data =</span> df_for_ols)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>stargazer<span class="sc">::</span><span class="fu">stargazer</span>(ols_model,</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;html&quot;</span>, <span class="at">ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">single.row =</span> <span class="cn">TRUE</span>, <span class="at">title =</span> <span class="st">&quot;Standard OLS Regression Results&quot;</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>)</span></code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Standard OLS Regression Results</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+weight
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height
+</td>
+<td>
+0.287<sup>***</sup> (0.134, 0.440)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age
+</td>
+<td>
+-0.073<sup>**</sup> (-0.129, -0.017)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+2.788<sup>***</sup> (1.081, 4.495)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.125
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.112
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+1.573 (df = 138)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+9.857<sup>***</sup> (df = 2; 138)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05;
+<sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>stargazer<span class="sc">::</span><span class="fu">stargazer</span>(ols_model,</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;latex&quot;</span>, <span class="at">ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">single.row =</span> <span class="cn">TRUE</span>, <span class="at">title =</span> <span class="st">&quot;Standard OLS Regression Results&quot;</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>)</span></code></pre></div>
+<p>This standard regression shows associations between our variables
+while controlling only for measured covariates.</p>
+</div>
+<div id="discordant-between-family-regression" class="section level2">
+<h2>Discordant Between-Family Regression</h2>
+<p>Next, we run a between-family regression using the discordant data.
+This model regresses the outcome mean on predictor means, capturing
+between-family variation:</p>
+<p><span class="math display">\[
+Y_{mean} = \beta_0 + \beta_1 X1_{mean} + \beta_2 X2_{mean} + \epsilon
+\]</span></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>between_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>  weight_mean <span class="sc">~</span> height_mean <span class="sc">+</span> age_mean,</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">data =</span> df_discord_weight</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>stargazer<span class="sc">::</span><span class="fu">stargazer</span>(between_model,</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;html&quot;</span>, <span class="at">ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">single.row =</span> <span class="cn">TRUE</span>, <span class="at">title =</span> <span class="st">&quot;Between-Family Regression Results&quot;</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>)</span></code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Between-Family Regression Results</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+weight_mean
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height_mean
+</td>
+<td>
+0.199<sup>**</sup> (0.049, 0.350)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_mean
+</td>
+<td>
+-0.044<sup>*</sup> (-0.089, 0.001)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+2.064<sup>***</sup> (0.759, 3.368)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.067
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.054
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+1.284 (df = 138)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+4.970<sup>***</sup> (df = 2; 138)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05;
+<sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<p>This between-family regression captures how differences in average
+height and age across families relate to average weight. However, it
+does not account for within-family differences, which is where
+discordant-kinship regression comes in.</p>
+<p>It is important to note that the between-family regression results
+are not directly comparable to the standard OLS regression results. The
+between-family model uses mean scores, which represent family-level
+averages, while the OLS model uses individual-level data. Therefore, the
+coefficients from these two models may differ in magnitude and
+interpretation. But, they both provide useful information about the
+relationships among the variables.</p>
+</div>
+<div id="discordant-kinship-regression" class="section level2">
+<h2>Discordant-Kinship Regression</h2>
+<p>Now we return to our prepared data to run discordant-kinship
+regression. We can specify the models manually or use the
+<code>discord_regression()</code> convenience function. Both approaches
+produce identical results.</p>
+<p>The discordant model regresses the outcome difference on outcome
+mean, predictor means, and predictor differences:</p>
+<p><span class="math display">\[ Y_{diff} = \beta_0 + \beta_1 Y_{mean} +
+\beta_2 X1_{mean} + \beta_3 X1_{diff} + \beta_4 X2_{mean} + \beta_5
+X2_{diff} + \epsilon \]</span> When fitting the discordant regression
+model, the coefficient for each <code>*_mean</code> variable captures
+the between-family effect, while the coefficient for each
+<code>*_diff</code> variable captures the within-family effect. The
+within-family effects are of particular interest, as they provide
+insight into how differences between siblings relate to differences in
+the outcome, controlling for shared family background. Below you can see
+how this model is specified manually:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>discord_model_manual <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>  weight_diff <span class="sc">~</span> weight_mean <span class="sc">+</span> height_mean <span class="sc">+</span> height_diff <span class="sc">+</span> age_mean <span class="sc">+</span> age_diff,</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="at">data =</span> df_discord_weight</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>)</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="fu">tidy</span>(discord_model_manual, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">&quot;Discordant Regression (Manual)&quot;</span>)</span></code></pre></div>
+<table>
+<caption>Discordant Regression (Manual)</caption>
+<colgroup>
+<col width="17%" />
+<col width="13%" />
+<col width="14%" />
+<col width="14%" />
+<col width="11%" />
+<col width="13%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.500</td>
+<td align="right">0.528</td>
+<td align="right">0.948</td>
+<td align="right">0.345</td>
+<td align="right">-0.544</td>
+<td align="right">1.544</td>
+</tr>
+<tr class="even">
+<td align="left">weight_mean</td>
+<td align="right">-0.043</td>
+<td align="right">0.065</td>
+<td align="right">-0.660</td>
+<td align="right">0.511</td>
+<td align="right">-0.171</td>
+<td align="right">0.086</td>
+</tr>
+<tr class="odd">
+<td align="left">height_mean</td>
+<td align="right">0.041</td>
+<td align="right">0.060</td>
+<td align="right">0.680</td>
+<td align="right">0.498</td>
+<td align="right">-0.078</td>
+<td align="right">0.159</td>
+</tr>
+<tr class="even">
+<td align="left">height_diff</td>
+<td align="right">0.141</td>
+<td align="right">0.043</td>
+<td align="right">3.254</td>
+<td align="right">0.001</td>
+<td align="right">0.055</td>
+<td align="right">0.226</td>
+</tr>
+<tr class="odd">
+<td align="left">age_mean</td>
+<td align="right">0.031</td>
+<td align="right">0.018</td>
+<td align="right">1.742</td>
+<td align="right">0.084</td>
+<td align="right">-0.004</td>
+<td align="right">0.066</td>
+</tr>
+<tr class="even">
+<td align="left">age_diff</td>
+<td align="right">-0.026</td>
+<td align="right">0.024</td>
+<td align="right">-1.092</td>
+<td align="right">0.277</td>
+<td align="right">-0.074</td>
+<td align="right">0.021</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>stargazer<span class="sc">::</span><span class="fu">stargazer</span>(between_model, discord_model_manual,</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;html&quot;</span>, <span class="at">ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">single.row =</span> <span class="cn">TRUE</span>, <span class="at">title =</span> <span class="st">&quot;Between-Family and Discordant Regression Results&quot;</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>)</span></code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Between-Family and Discordant Regression Results</strong>
+</caption>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+weight_mean
+</td>
+<td>
+weight_diff
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+weight_mean
+</td>
+<td>
+</td>
+<td>
+-0.043 (-0.170, 0.084)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height_mean
+</td>
+<td>
+0.199<sup>**</sup> (0.049, 0.350)
+</td>
+<td>
+0.041 (-0.077, 0.158)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height_diff
+</td>
+<td>
+</td>
+<td>
+0.141<sup>***</sup> (0.056, 0.225)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_mean
+</td>
+<td>
+-0.044<sup>*</sup> (-0.089, 0.001)
+</td>
+<td>
+0.031<sup>*</sup> (-0.004, 0.066)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_diff
+</td>
+<td>
+</td>
+<td>
+-0.026 (-0.074, 0.021)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+2.064<sup>***</sup> (0.759, 3.368)
+</td>
+<td>
+0.500 (-0.534, 1.534)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+141
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.067
+</td>
+<td>
+0.102
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.054
+</td>
+<td>
+0.069
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+1.284 (df = 138)
+</td>
+<td>
+0.978 (df = 135)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+4.970<sup>***</sup> (df = 2; 138)
+</td>
+<td>
+3.060<sup>**</sup> (df = 5; 135)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="2" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05;
+<sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<p>Note that we are using the df_discord_weight dataset created earlier
+with <code>discord_data()</code>. This dataset is ordered such that
+within a pair, the sibling with the higher weight is always
+<code>_1</code>. This ordering ensures that <code>weight_diff</code> is
+always non-negative, which is a key feature of discordant-kinship
+regression.</p>
+<div id="using-the-helper-function" class="section level3">
+<h3>Using the Helper Function</h3>
+<p>Alternatively, we can use the <code>discord_regression()</code>
+function, which simplifies the process:</p>
+<p>By default, <code>discord_regression()</code> orders siblings by the
+outcome variable, creates the necessary derived variables, and fits the
+discordant regression model in one step. This function also allows for
+easy inclusion of demographic covariates if needed. See the function
+documentation for more details on these options, as well as a vignette
+focused on demographic controls.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>discord_model <span class="ot">&lt;-</span> <span class="fu">discord_regression</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>  <span class="at">data =</span> source_wide,</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;weight&quot;</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="fu">c</span>(<span class="st">&quot;height&quot;</span>, <span class="st">&quot;age&quot;</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>  <span class="at">demographics =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>  <span class="at">sex =</span> <span class="cn">NULL</span>,</span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>  <span class="at">race =</span> <span class="cn">NULL</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_s1&quot;</span>, <span class="st">&quot;_s2&quot;</span>),</span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;pid&quot;</span></span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>)</span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" tabindex="-1"></a><span class="fu">tidy</span>(discord_model, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-13"><a href="#cb28-13" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">&quot;Discordant Regression Results&quot;</span>)</span></code></pre></div>
+<table>
+<caption>Discordant Regression Results</caption>
+<colgroup>
+<col width="17%" />
+<col width="13%" />
+<col width="14%" />
+<col width="14%" />
+<col width="11%" />
+<col width="13%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.500</td>
+<td align="right">0.528</td>
+<td align="right">0.948</td>
+<td align="right">0.345</td>
+<td align="right">-0.544</td>
+<td align="right">1.544</td>
+</tr>
+<tr class="even">
+<td align="left">weight_mean</td>
+<td align="right">-0.043</td>
+<td align="right">0.065</td>
+<td align="right">-0.660</td>
+<td align="right">0.511</td>
+<td align="right">-0.171</td>
+<td align="right">0.086</td>
+</tr>
+<tr class="odd">
+<td align="left">height_diff</td>
+<td align="right">0.141</td>
+<td align="right">0.043</td>
+<td align="right">3.254</td>
+<td align="right">0.001</td>
+<td align="right">0.055</td>
+<td align="right">0.226</td>
+</tr>
+<tr class="even">
+<td align="left">age_diff</td>
+<td align="right">-0.026</td>
+<td align="right">0.024</td>
+<td align="right">-1.092</td>
+<td align="right">0.277</td>
+<td align="right">-0.074</td>
+<td align="right">0.021</td>
+</tr>
+<tr class="odd">
+<td align="left">height_mean</td>
+<td align="right">0.041</td>
+<td align="right">0.060</td>
+<td align="right">0.680</td>
+<td align="right">0.498</td>
+<td align="right">-0.078</td>
+<td align="right">0.159</td>
+</tr>
+<tr class="even">
+<td align="left">age_mean</td>
+<td align="right">0.031</td>
+<td align="right">0.018</td>
+<td align="right">1.742</td>
+<td align="right">0.084</td>
+<td align="right">-0.004</td>
+<td align="right">0.066</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">glance</span>(discord_model) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>  <span class="fu">select</span>(r.squared, adj.r.squared, sigma, p.value, nobs) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">r.squared</th>
+<th align="right">adj.r.squared</th>
+<th align="right">sigma</th>
+<th align="right">p.value</th>
+<th align="right">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.102</td>
+<td align="right">0.069</td>
+<td align="right">0.978</td>
+<td align="right">0.012</td>
+<td align="right">141</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>stargazer<span class="sc">::</span><span class="fu">stargazer</span>(discord_model,</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  discord_model_manual,</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;html&quot;</span>, <span class="at">ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">single.row =</span> <span class="cn">TRUE</span>, <span class="at">title =</span> <span class="st">&quot;Discordant Regression Results Comparison&quot;</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>% Error: Unrecognized object type.</p>
+<p>Both the manual and helper function approaches yield identical
+results.</p>
+</div>
+</div>
+</div>
+<div id="comparing-the-three-approaches" class="section level1">
+<h1>Comparing the Three Approaches</h1>
+<p>To fully understand the value of discordant-kinship regression, it’s
+helpful to compare all three models side by side. Each approach answers
+a different question about the data.</p>
+<div id="side-by-side-model-comparison" class="section level2">
+<h2>Side-by-Side Model Comparison</h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>stargazer<span class="sc">::</span><span class="fu">stargazer</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>  ols_model,</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  between_model,</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  discord_model_manual,</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;html&quot;</span>, <span class="at">ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>  <span class="at">single.row =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Comparison of OLS, Between-Family, and Discordant Regression Models&quot;</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>  <span class="at">column.labels =</span> <span class="fu">c</span>(<span class="st">&quot;Standard OLS&quot;</span>, <span class="st">&quot;Between-Family&quot;</span>, <span class="st">&quot;Discordant&quot;</span>),</span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>  <span class="at">model.names =</span> <span class="cn">FALSE</span></span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>)</span></code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Comparison of OLS, Between-Family, and Discordant Regression
+Models</strong>
+</caption>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="3">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+weight
+</td>
+<td>
+weight_mean
+</td>
+<td>
+weight_diff
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+Standard OLS
+</td>
+<td>
+Between-Family
+</td>
+<td>
+Discordant
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+<td>
+(3)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height
+</td>
+<td>
+0.287<sup>***</sup> (0.134, 0.440)
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age
+</td>
+<td>
+-0.073<sup>**</sup> (-0.129, -0.017)
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+weight_mean
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-0.043 (-0.170, 0.084)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height_mean
+</td>
+<td>
+</td>
+<td>
+0.199<sup>**</sup> (0.049, 0.350)
+</td>
+<td>
+0.041 (-0.077, 0.158)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+height_diff
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.141<sup>***</sup> (0.056, 0.225)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_mean
+</td>
+<td>
+</td>
+<td>
+-0.044<sup>*</sup> (-0.089, 0.001)
+</td>
+<td>
+0.031<sup>*</sup> (-0.004, 0.066)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_diff
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-0.026 (-0.074, 0.021)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+2.788<sup>***</sup> (1.081, 4.495)
+</td>
+<td>
+2.064<sup>***</sup> (0.759, 3.368)
+</td>
+<td>
+0.500 (-0.534, 1.534)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+141
+</td>
+<td>
+141
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.125
+</td>
+<td>
+0.067
+</td>
+<td>
+0.102
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.112
+</td>
+<td>
+0.054
+</td>
+<td>
+0.069
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+1.573 (df = 138)
+</td>
+<td>
+1.284 (df = 138)
+</td>
+<td>
+0.978 (df = 135)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+9.857<sup>***</sup> (df = 2; 138)
+</td>
+<td>
+4.970<sup>***</sup> (df = 2; 138)
+</td>
+<td>
+3.060<sup>**</sup> (df = 5; 135)
+</td>
+</tr>
+<tr>
+<td colspan="4" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="3" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05;
+<sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+</div>
+<div id="interpreting-the-differences" class="section level2">
+<h2>Interpreting the Differences</h2>
+<p>For each model, we can summarize the key features, what they capture,
+and how to interpret the results:</p>
+<p><strong>Standard OLS Regression</strong> provides estimates of
+associations between variables at the individual level, controlling for
+measured covariates. However, it does not account for unmeasured
+familial confounding, which may bias the results. -
+<strong>Data</strong>: One sibling per family (e.g., first-born or older
+sibling)</p>
+<ul>
+<li><p><strong>Level of analysis</strong>: Individual level</p></li>
+<li><p><strong>What it captures</strong>: Total association between
+predictors and outcome, confounded by both genetic and environmental
+factors shared within families</p></li>
+<li><p><strong>Interpretation</strong>: “Individuals with higher height
+and age tend to have higher weight”</p></li>
+</ul>
+<p><strong>Between-Family Regression</strong> compares kin from
+different families, effectively controlling for all family-level
+unobserved heterogeneity. While it provides a clearer picture of the
+effects of interest, it may miss important individual-level variation
+within families. - <strong>Data</strong>: Average values for each kin
+pair</p>
+<ul>
+<li><p><strong>Level of analysis</strong>: Family level</p></li>
+<li><p><strong>What it captures</strong>: How family-average predictors
+relate to family-average outcomes</p></li>
+<li><p><strong>Interpretation</strong>: “Cousin pairs with higher
+average height and age tend to have higher average weight”</p></li>
+</ul>
+<p><strong>Discordant Regression</strong> focuses on within-family
+comparisons by examining kin with differing outcomes. It allows for a
+nuanced understanding of how individual-level factors interact above and
+beyond familial confounding. - <strong>Data</strong>: Differences
+between cousins within families</p>
+<ul>
+<li><p><strong>Level of analysis</strong>: Within-family (controlling
+for between-family variation)</p></li>
+<li><p><strong>What it captures</strong>: Within-family effects after
+controlling for shared genetic and environmental factors</p></li>
+<li><p><strong>Key coefficients</strong>:</p>
+<ul>
+<li><p><code>*_mean</code>: Between-family effects (similar to
+between-family model)</p></li>
+<li><p><code>*_diff</code>: Within-family effects - the unique
+contribution of the predictor after controlling for familial
+confounding</p></li>
+</ul></li>
+<li><p><strong>Interpretation</strong>: “The cousin with higher weight
+tends to have higher height and age”</p></li>
+<li><p><strong>Advantage</strong>: Controls for unmeasured familial
+confounders, providing stronger evidence for (or against) causal effects
+# Conclusion</p></li>
+</ul>
+<p>Discordant-kinship regression offers a powerful tool for
+disentangling within-family effects from between-family confounding. By
+leveraging sibling and cousin comparisons, researchers can gain insights
+into causal relationships that are often obscured in traditional
+analyses.</p>
+</div>
+</div>
+<div id="session-info" class="section level1">
+<h1>Session Info</h1>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co">#&gt; Warning in system2(&quot;quarto&quot;, &quot;-V&quot;, stdout = TRUE, env = paste0(&quot;TMPDIR=&quot;, :</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="co">#&gt; running command &#39;&quot;quarto&quot;</span></span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#&gt; TMPDIR=C:/Users/smaso/AppData/Local/Temp/RtmpUHzh2u/filefb784b013fb2 -V&#39; had</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co">#&gt; status 1</span></span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co">#&gt; ─ Session info ───────────────────────────────────────────────────────────────</span></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co">#&gt;  setting  value</span></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="co">#&gt;  version  R version 4.5.2 (2025-10-31 ucrt)</span></span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a><span class="co">#&gt;  os       Windows 11 x64 (build 26200)</span></span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a><span class="co">#&gt;  system   x86_64, mingw32</span></span>
+<span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a><span class="co">#&gt;  ui       RTerm</span></span>
+<span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a><span class="co">#&gt;  language (EN)</span></span>
+<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a><span class="co">#&gt;  collate  C</span></span>
+<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a><span class="co">#&gt;  ctype    English_United States.utf8</span></span>
+<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a><span class="co">#&gt;  tz       America/New_York</span></span>
+<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a><span class="co">#&gt;  date     2026-01-18</span></span>
+<span id="cb32-17"><a href="#cb32-17" tabindex="-1"></a><span class="co">#&gt;  pandoc   3.6.3 @ C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)</span></span>
+<span id="cb32-18"><a href="#cb32-18" tabindex="-1"></a><span class="co">#&gt;  quarto   NA @ C:\\PROGRA~1\\RStudio\\RESOUR~1\\app\\bin\\quarto\\bin\\quarto.exe</span></span>
+<span id="cb32-19"><a href="#cb32-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb32-20"><a href="#cb32-20" tabindex="-1"></a><span class="co">#&gt; ─ Packages ───────────────────────────────────────────────────────────────────</span></span>
+<span id="cb32-21"><a href="#cb32-21" tabindex="-1"></a><span class="co">#&gt;  package      * version date (UTC) lib source</span></span>
+<span id="cb32-22"><a href="#cb32-22" tabindex="-1"></a><span class="co">#&gt;  backports      1.5.0   2024-05-23 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-23"><a href="#cb32-23" tabindex="-1"></a><span class="co">#&gt;  BGmisc       * 1.5.2   2025-12-20 [3] local</span></span>
+<span id="cb32-24"><a href="#cb32-24" tabindex="-1"></a><span class="co">#&gt;  broom        * 1.0.11  2025-12-04 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-25"><a href="#cb32-25" tabindex="-1"></a><span class="co">#&gt;  bslib          0.9.0   2025-01-30 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-26"><a href="#cb32-26" tabindex="-1"></a><span class="co">#&gt;  cachem         1.1.0   2024-05-16 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-27"><a href="#cb32-27" tabindex="-1"></a><span class="co">#&gt;  cli            3.6.5   2025-04-23 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-28"><a href="#cb32-28" tabindex="-1"></a><span class="co">#&gt;  data.table     1.18.0  2025-12-24 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-29"><a href="#cb32-29" tabindex="-1"></a><span class="co">#&gt;  dichromat      2.0-0.1 2022-05-02 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-30"><a href="#cb32-30" tabindex="-1"></a><span class="co">#&gt;  digest         0.6.39  2025-11-19 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-31"><a href="#cb32-31" tabindex="-1"></a><span class="co">#&gt;  discord      * 1.3     2026-01-18 [1] local</span></span>
+<span id="cb32-32"><a href="#cb32-32" tabindex="-1"></a><span class="co">#&gt;  dplyr        * 1.1.4   2023-11-17 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-33"><a href="#cb32-33" tabindex="-1"></a><span class="co">#&gt;  evaluate       1.0.5   2025-08-27 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-34"><a href="#cb32-34" tabindex="-1"></a><span class="co">#&gt;  farver         2.1.2   2024-05-13 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-35"><a href="#cb32-35" tabindex="-1"></a><span class="co">#&gt;  fastmap        1.2.0   2024-05-15 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-36"><a href="#cb32-36" tabindex="-1"></a><span class="co">#&gt;  generics       0.1.4   2025-05-09 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-37"><a href="#cb32-37" tabindex="-1"></a><span class="co">#&gt;  ggpedigree   * 1.1.0.3 &lt;NA&gt;       [3] local</span></span>
+<span id="cb32-38"><a href="#cb32-38" tabindex="-1"></a><span class="co">#&gt;  ggplot2      * 4.0.1   2025-11-14 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-39"><a href="#cb32-39" tabindex="-1"></a><span class="co">#&gt;  ggrepel        0.9.6   2024-09-07 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-40"><a href="#cb32-40" tabindex="-1"></a><span class="co">#&gt;  glue           1.8.0   2024-09-30 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-41"><a href="#cb32-41" tabindex="-1"></a><span class="co">#&gt;  gtable         0.3.6   2024-10-25 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-42"><a href="#cb32-42" tabindex="-1"></a><span class="co">#&gt;  htmltools      0.5.9   2025-12-04 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-43"><a href="#cb32-43" tabindex="-1"></a><span class="co">#&gt;  janitor      * 2.2.1   2024-12-22 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-44"><a href="#cb32-44" tabindex="-1"></a><span class="co">#&gt;  jquerylib      0.1.4   2021-04-26 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-45"><a href="#cb32-45" tabindex="-1"></a><span class="co">#&gt;  jsonlite       2.0.0   2025-03-27 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-46"><a href="#cb32-46" tabindex="-1"></a><span class="co">#&gt;  kableExtra     1.4.0   2024-01-24 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-47"><a href="#cb32-47" tabindex="-1"></a><span class="co">#&gt;  knitr          1.51    2025-12-20 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-48"><a href="#cb32-48" tabindex="-1"></a><span class="co">#&gt;  labeling       0.4.3   2023-08-29 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-49"><a href="#cb32-49" tabindex="-1"></a><span class="co">#&gt;  lattice        0.22-7  2025-04-02 [4] CRAN (R 4.5.2)</span></span>
+<span id="cb32-50"><a href="#cb32-50" tabindex="-1"></a><span class="co">#&gt;  lifecycle      1.0.5   2026-01-08 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-51"><a href="#cb32-51" tabindex="-1"></a><span class="co">#&gt;  lubridate      1.9.4   2024-12-08 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-52"><a href="#cb32-52" tabindex="-1"></a><span class="co">#&gt;  magrittr     * 2.0.4   2025-09-12 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-53"><a href="#cb32-53" tabindex="-1"></a><span class="co">#&gt;  Matrix         1.7-4   2025-08-28 [4] CRAN (R 4.5.2)</span></span>
+<span id="cb32-54"><a href="#cb32-54" tabindex="-1"></a><span class="co">#&gt;  NlsyLinks    * 2.2.3   2025-08-31 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-55"><a href="#cb32-55" tabindex="-1"></a><span class="co">#&gt;  otel           0.2.0   2025-08-29 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-56"><a href="#cb32-56" tabindex="-1"></a><span class="co">#&gt;  pillar         1.11.1  2025-09-17 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-57"><a href="#cb32-57" tabindex="-1"></a><span class="co">#&gt;  pkgconfig      2.0.3   2019-09-22 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-58"><a href="#cb32-58" tabindex="-1"></a><span class="co">#&gt;  purrr          1.2.0   2025-11-04 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-59"><a href="#cb32-59" tabindex="-1"></a><span class="co">#&gt;  quadprog       1.5-8   2019-11-20 [3] CRAN (R 4.5.0)</span></span>
+<span id="cb32-60"><a href="#cb32-60" tabindex="-1"></a><span class="co">#&gt;  R6             2.6.1   2025-02-15 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-61"><a href="#cb32-61" tabindex="-1"></a><span class="co">#&gt;  RColorBrewer   1.1-3   2022-04-03 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-62"><a href="#cb32-62" tabindex="-1"></a><span class="co">#&gt;  Rcpp           1.1.0   2025-07-02 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-63"><a href="#cb32-63" tabindex="-1"></a><span class="co">#&gt;  rlang          1.1.6   2025-04-11 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-64"><a href="#cb32-64" tabindex="-1"></a><span class="co">#&gt;  rmarkdown      2.30    2025-09-28 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-65"><a href="#cb32-65" tabindex="-1"></a><span class="co">#&gt;  rstudioapi     0.18.0  2026-01-16 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-66"><a href="#cb32-66" tabindex="-1"></a><span class="co">#&gt;  S7             0.2.1   2025-11-14 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-67"><a href="#cb32-67" tabindex="-1"></a><span class="co">#&gt;  sass           0.4.10  2025-04-11 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-68"><a href="#cb32-68" tabindex="-1"></a><span class="co">#&gt;  scales         1.4.0   2025-04-24 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-69"><a href="#cb32-69" tabindex="-1"></a><span class="co">#&gt;  sessioninfo    1.2.3   2025-02-05 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-70"><a href="#cb32-70" tabindex="-1"></a><span class="co">#&gt;  snakecase      0.11.1  2023-08-27 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-71"><a href="#cb32-71" tabindex="-1"></a><span class="co">#&gt;  stargazer      5.2.3   2022-03-04 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-72"><a href="#cb32-72" tabindex="-1"></a><span class="co">#&gt;  stringi        1.8.7   2025-03-27 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-73"><a href="#cb32-73" tabindex="-1"></a><span class="co">#&gt;  stringr        1.6.0   2025-11-04 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-74"><a href="#cb32-74" tabindex="-1"></a><span class="co">#&gt;  svglite        2.2.2   2025-10-21 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-75"><a href="#cb32-75" tabindex="-1"></a><span class="co">#&gt;  systemfonts    1.3.1   2025-10-01 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-76"><a href="#cb32-76" tabindex="-1"></a><span class="co">#&gt;  textshaping    1.0.4   2025-10-10 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-77"><a href="#cb32-77" tabindex="-1"></a><span class="co">#&gt;  tibble         3.3.0   2025-06-08 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-78"><a href="#cb32-78" tabindex="-1"></a><span class="co">#&gt;  tidyr        * 1.3.2   2025-12-19 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-79"><a href="#cb32-79" tabindex="-1"></a><span class="co">#&gt;  tidyselect     1.2.1   2024-03-11 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-80"><a href="#cb32-80" tabindex="-1"></a><span class="co">#&gt;  timechange     0.3.0   2024-01-18 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-81"><a href="#cb32-81" tabindex="-1"></a><span class="co">#&gt;  vctrs          0.6.5   2023-12-01 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-82"><a href="#cb32-82" tabindex="-1"></a><span class="co">#&gt;  viridisLite    0.4.2   2023-05-02 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-83"><a href="#cb32-83" tabindex="-1"></a><span class="co">#&gt;  withr          3.0.2   2024-10-28 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-84"><a href="#cb32-84" tabindex="-1"></a><span class="co">#&gt;  xfun           0.55    2025-12-16 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-85"><a href="#cb32-85" tabindex="-1"></a><span class="co">#&gt;  xml2           1.5.1   2025-12-01 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-86"><a href="#cb32-86" tabindex="-1"></a><span class="co">#&gt;  yaml           2.3.12  2025-12-10 [3] CRAN (R 4.5.2)</span></span>
+<span id="cb32-87"><a href="#cb32-87" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb32-88"><a href="#cb32-88" tabindex="-1"></a><span class="co">#&gt;  [1] C:/Users/smaso/AppData/Local/Temp/RtmpcLi3Py/Rinst1bb01a30288e</span></span>
+<span id="cb32-89"><a href="#cb32-89" tabindex="-1"></a><span class="co">#&gt;  [2] C:/Users/smaso/AppData/Local/Temp/Rtmpqo9sh4/temp_libpath5f0871e1e6</span></span>
+<span id="cb32-90"><a href="#cb32-90" tabindex="-1"></a><span class="co">#&gt;  [3] C:/Users/smaso/AppData/Local/R/win-library/4.5</span></span>
+<span id="cb32-91"><a href="#cb32-91" tabindex="-1"></a><span class="co">#&gt;  [4] C:/Program Files/R/R-4.5.2/library</span></span>
+<span id="cb32-92"><a href="#cb32-92" tabindex="-1"></a><span class="co">#&gt;  * ── Packages attached to the search path.</span></span>
+<span id="cb32-93"><a href="#cb32-93" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb32-94"><a href="#cb32-94" tabindex="-1"></a><span class="co">#&gt; ──────────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

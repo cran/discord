@@ -192,3 +192,6 @@ flu_model_output %>%
 #   kableExtra::kbl(format = "latex", booktabs = TRUE, align = "c") %>%
 #   kableExtra::kable_styling(latex_options = c("striped", "hold_position"), position = "center")
 
+## ----session-info, echo = FALSE-----------------------------------------------
+sessioninfo::session_info()
+

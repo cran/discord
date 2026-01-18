@@ -94,7 +94,6 @@ check_sibling_order_fast <- function(data, outcome, pair_identifiers) {
 }
 
 
-
 #' @title Make Mean Differences
 #'
 #' @description This function calculates differences and means of a given variable for each kinship pair. The order of subtraction and the variables' names in the output dataframe depend on the order column set by check_sibling_order().
@@ -185,7 +184,7 @@ make_mean_diffs_ram_optimized <- function(data, id, sex, race, demographics,
 recode_demographics <- function(demographics, data, raceS1, raceS2,
                                 race, sexS1, sexS2, sex, coding_method, output, fast = FALSE) {
   # check for whether or not race and sex are defined
-  if (fast) {
+  if (fast == TRUE) {
     if (demographics == "race") {
       output_demographics <- data.frame(
         race_1 = data[[raceS1]],
@@ -294,7 +293,6 @@ recode_demographics <- function(demographics, data, raceS1, raceS2,
 
   return(output)
 }
-
 
 
 make_mean_diffs_fast <- function(data, id, sex, race, demographics,

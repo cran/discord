@@ -127,7 +127,7 @@ cat_race <- discord_data(
 ## ----preview-race, echo = FALSE, eval = knitr::is_html_output()---------------
 cat_race <- cat_race %>%
   dplyr::mutate(RACE_binarymatch = case_when(
-    RACE_binarymatch == 0 ~ "mixed-race",
+    RACE_binarymatch == 0 ~ "diff-race",
     RACE_binarymatch == 1 ~ "same-race"
   ))
 
@@ -160,7 +160,7 @@ cat_both <- discord_data(
 cat_both <- cat_both %>%
   dplyr::mutate(
     RACE_binarymatch = case_when(
-      RACE_binarymatch == 0 ~ "mixed-race",
+      RACE_binarymatch == 0 ~ "diff-race",
       RACE_binarymatch == 1 ~ "same-race"
     ),
     SEX_binarymatch = case_when(

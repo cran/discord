@@ -34,6 +34,7 @@
 #' @param cov_a Numeric. Shared variance for additive genetics between variables; default is 0.
 #' @param cov_c Numeric. Shared variance for shared-environment between variables; default is 0.
 #' @param cov_e Numeric. Shared variance for non-shared-environment between variables; default is 0.
+#' @param id Numeric vector. Optional unique identifiers for each kinship pair;
 #' @param ... Additional arguments passed to other methods.
 
 #' @return A data frame with the following columns:
@@ -73,21 +74,23 @@
 #' @export
 
 kinsim <- function(
-    r_all = c(1, .5),
-    c_all = 1,
-    npg_all = 500,
-    npergroup_all = rep(npg_all, length(r_all)),
-    mu_all = 0,
-    variables = 2,
-    mu_list = rep(mu_all, variables),
-    r_vector = NULL, # alternative specification, give vector of rs
-    c_vector = NULL, #
-    ace_all = c(1, 1, 1), # variance default
-    ace_list = matrix(rep(ace_all, variables), byrow = TRUE, nrow = variables),
-    cov_a = 0, # default shared covariance for genetics across variables
-    cov_c = 0, # default shared variance for c across variables
-    cov_e = 0, # default shared variance for e across variables
-    ...) {
+  r_all = c(1, .5),
+  c_all = 1,
+  npg_all = 500,
+  npergroup_all = rep(npg_all, length(r_all)),
+  mu_all = 0,
+  variables = 2,
+  mu_list = rep(mu_all, variables),
+  r_vector = NULL, # alternative specification, give vector of rs
+  c_vector = NULL, #
+  ace_all = c(1, 1, 1), # variance default
+  ace_list = matrix(rep(ace_all, variables), byrow = TRUE, nrow = variables),
+  cov_a = 0, # default shared covariance for genetics across variables
+  cov_c = 0, # default shared variance for c across variables
+  cov_e = 0, # default shared variance for e across variables
+  id = NULL,
+  ...
+) {
   # Check if the number of rows in ace_list matches the number of variables
   mu <- NULL
   sA <- ace_list[, 1]^0.5
@@ -103,7 +106,10 @@ kinsim <- function(
       npergroup = npergroup_all, #
       mu = mu_list[1], # intercept
       ace = ace_list[1, ],
-      r_vector = r_vector
+      r_vector = r_vector,
+      c_vector = c_vector,
+      id = id,
+      ...
     )
     data_v$A1_u <- data_v$A1
     data_v$A2_u <- data_v$A2
@@ -115,7 +121,6 @@ kinsim <- function(
     data_v$y2_u <- data_v$y2
 
 
-
     merged.data.frame <- data_v
     names(merged.data.frame)[c(1, 10)] <- c("id", "r")
   }
@@ -123,7 +128,10 @@ kinsim <- function(
     stop("You have tried to generate data beyond the current limitations of this program. Maximum variables 2.")
   }
   if (is.null(r_vector)) {
-    id <- 1:sum(npergroup_all)
+    if (is.null(id)) {
+      id <- 1:sum(npergroup_all)
+    }
+
     for (i in 1:length(r_all)) {
       n <- npergroup_all[i]
 
@@ -154,9 +162,11 @@ kinsim <- function(
       sigma_c[4, 1] <- cov_c * 1
       sigma_c[3, 2] <- cov_c * 1
       sigma_c[2, 3] <- cov_c * 1
+
       C.r <- .rmvn(n,
         sigma = sigma_c
       )
+
       C.r[, 1:2] <- C.r[, 1:2] * sC[1]
       C.r[, 3:4] <- C.r[, 3:4] * sC[2]
 
@@ -200,7 +210,10 @@ kinsim <- function(
     merged.data.frame <- Reduce(function(...) merge(..., all = TRUE), datalist)
     merged.data.frame$id <- id
   } else {
-    id <- seq_along(r_vector)
+    if (is.null(id)) {
+      id <- seq_along(r_vector)
+    }
+
     # Initialize full-length empty matrices
     n <- length(r_vector)
     A.r <- matrix(NA_real_, nrow = n, ncol = 4)
@@ -247,6 +260,11 @@ kinsim <- function(
 
       # Shared E
       sigma_e <- diag(4) + S2 * 0
+
+      # probably can optimize by only doing this in one
+      # however it doesn't seem to actual behave when I try to do that
+      # sigma_e[c(1, 3,4,2), c(3, 1,4,2)] <- cov_e
+
       sigma_e[1, 3] <- cov_e
       sigma_e[3, 1] <- cov_e
       sigma_e[2, 4] <- cov_e

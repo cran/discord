@@ -49,8 +49,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -390,9 +391,14 @@ downstream pedigree operations.</p>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">ggpedigree</span>(potter)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">ggpedigree</span>(potter, <span class="at">config =</span> <span class="fu">list</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">label_method =</span> <span class="st">&quot;geom_text&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">label_nudge_y =</span> .<span class="dv">25</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>)) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Pedigree Plot of the Potter Dataset&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img role="img" aria-label="Pedigree plot of the Potter dataset" src="data:image/png;base64,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" alt="Pedigree plot of the Potter dataset" />
+<img role="img" aria-label="Pedigree plot of the Potter dataset" src="data:image/png;base64,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" alt="Pedigree plot of the Potter dataset" />
 <p class="caption">
 Pedigree plot of the Potter dataset
 </p>
@@ -407,7 +413,8 @@ edges indicate familial relationships.</p>
 matrices: the additive genetic relatedness matrix and the shared
 environment matrix. These matrices are derived from the pedigree data
 and are essential for understanding the genetic and environmental
-relationships among individuals. Using {BGmisc}, we compute:</p>
+relationships among individuals.</p>
+<p>Using {BGmisc}, we compute:</p>
 <ul>
 <li><p>The additive genetic relatedness matrix (add).</p></li>
 <li><p>The shared environment matrix (cn), indicating whether kin were
@@ -430,14 +437,15 @@ pairs using <code>com2links()</code>. Self-pairs and duplicate entries
 are removed.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df_links <span class="ot">&lt;-</span> <span class="fu">com2links</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">writetodisk =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">ad_ped_matrix =</span> add, <span class="at">cn_ped_matrix =</span> cn,</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">drop_upper_triangular =</span> <span class="cn">TRUE</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">filter</span>(ID1 <span class="sc">!=</span> ID2)</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>df_links <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">ad_ped_matrix =</span> add,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">cn_ped_matrix =</span> cn,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">drop_upper_triangular =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">filter</span>(ID1 <span class="sc">!=</span> ID2)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>df_links <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -510,6 +518,33 @@ are removed.</p>
 </tr>
 </tbody>
 </table>
+<p>As you can see, the <code>df_links</code> data frame contains pairs
+of individuals (ID1 and ID2) along with their additive genetic
+relatedness (<code>addRel</code>) and shared environment status
+(<code>cnuRel</code>). These data are in wide format, with each row
+representing a unique pair of individuals.</p>
+<p>Further, we can tally the number of pairs by relatedness and shared
+environment to understand the composition of the dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df_links <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">group_by</span>(addRel, cnuRel) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 3</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; # Groups:   addRel [4]</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   addRel cnuRel     n</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 1 0.0625      0     3</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 2 0.125       0    47</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 3 0.25        0   104</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 4 0.5         0    50</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 5 0.5         1    32</span></span></code></pre></div>
+<p>As you can see, the dataset contains a variety of kinship pairs,
+including full siblings, parent-child, aunt-nephew, cousins, and
+unrelated individuals, with varying degrees of shared environment.</p>
+<p>For this demonstration, we will focus on cousins. Cousins share some
+genetic relatedness but typically do not share the same environment. (In
+contrast, full siblings share both genetic relatedness and environment.
+Half-siblings share genetic relatedness but sometimes do not share the
+same environment, making them less ideal for this demonstration.)</p>
 <p>We then extract two subsets:</p>
 <ul>
 <li><p>Full siblings: additive relatedness = 0.5 and shared environment
@@ -517,62 +552,169 @@ are removed.</p>
 <li><p>Cousins: additive relatedness = 0.125 and shared environment =
 0</p></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df_sim <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="co"># only full siblings %&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">1</span>) <span class="co"># only kin raised in the same home</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>df_cousin <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">125</span>) <span class="sc">%&gt;%</span> <span class="co"># only cousins %&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># only kin raised in separate homes</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df_siblings <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="co"># only full siblings %&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">1</span>) <span class="co"># only kin raised in the same home</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>df_cousin <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">filter</span>(addRel <span class="sc">==</span> .<span class="dv">125</span>) <span class="sc">%&gt;%</span> <span class="co"># only cousins %&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">filter</span>(cnuRel <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># only kin raised in separate homes</span></span></code></pre></div>
+<p>Now for the rest of the vignette, we will use the cousin subset
+(<code>df_cousin</code>) to illustrate the process of simulating
+phenotypic data and fitting a discordant-kinship regression model.
+However, given the small sample size of cousins in this dataset, we will
+simulate four datasets worth of cousins and combine them to increase the
+sample size.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>df_cousin <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  df_cousin,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  df_cousin <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">ID1 =</span> ID1 <span class="sc">+</span> <span class="dv">1000</span>, <span class="at">ID2 =</span> ID2 <span class="sc">+</span> <span class="dv">1000</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  df_cousin <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">ID1 =</span> ID1 <span class="sc">+</span> <span class="dv">2000</span>, <span class="at">ID2 =</span> ID2 <span class="sc">+</span> <span class="dv">2000</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  df_cousin <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">ID1 =</span> ID1 <span class="sc">+</span> <span class="dv">3000</span>, <span class="at">ID2 =</span> ID2 <span class="sc">+</span> <span class="dv">3000</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="simulate-phenotypic-data" class="section level1">
 <h1>Simulate Phenotypic Data</h1>
 <p>To simulate phenotypic data, we need to create a data frame that
 includes the kinship information and the outcome variables. We will
-simulate two outcome variables (y1 and y2) for each cousin pair in the
+simulate two outcome variables (y1 and y2) for each kin pair in the
 dataset. The <code>kinsim()</code> function from {discord} is used to
-generate the simulated data based on the specified variance
-structure.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>syn_df <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">kinsim</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">mu_all =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">cov_a =</span> .<span class="dv">4</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">cov_e =</span> .<span class="dv">4</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="at">c_all =</span> <span class="dv">0</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">r_vector =</span> df_cousin<span class="sc">$</span>addRel</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    A1_1, A1_2, A2_1, A2_2,</span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    C1_1, C1_2, C2_1, C2_2,</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    E1_1, E1_2, E2_1, E2_2,</span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>    r</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  ))</span></code></pre></div>
+generate the simulated data based on the specified variance structure.
+For convenience, we will generate data for all the cousins in
+<code>df_links</code>. However, we could also generate data for the full
+siblings or any other kinship pairs.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>syn_df <span class="ot">&lt;-</span> discord<span class="sc">::</span><span class="fu">kinsim</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">mu_all =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">cov_a =</span> .<span class="dv">4</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">cov_e =</span> .<span class="dv">4</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">c_vector =</span> df_cousin<span class="sc">$</span>cnuRel,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">r_vector =</span> df_cousin<span class="sc">$</span>addRel</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>    A1_1, A1_2, A2_1, A2_2,</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>    C1_1, C1_2, C2_1, C2_2,</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>    E1_1, E1_2, E2_1, E2_2,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>    r</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  ))</span></code></pre></div>
 <p>The simulated data reflect a known variance structure: additive
-genetic covariance = .4, genetic correlation = 0.125, no shared
+genetic covariance = .4, genetic relatedness of 0.125, no shared
 environment, and residual (unique environment) variance = 0.4. Latent
-component scores are excluded from the final dataset, but they can be
+component scores are dropped from the final dataset, but they can be
 useful for debugging and understanding the underlying structure of the
 data.</p>
-<p>We bind the simulated outcome data to the cousin link data to prepare
-it for modeling.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>data_demo <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df_cousin, syn_df)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">summary</span>(data_demo)</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt;       ID1             ID2             addRel          cnuRel       y1_1        </span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt;  Min.   : 3.00   Min.   :  7.00   Min.   :0.125   Min.   :0   Min.   :-3.6557  </span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:21.00   1st Qu.: 26.00   1st Qu.:0.125   1st Qu.:0   1st Qu.:-0.4007  </span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;  Median :23.00   Median : 28.00   Median :0.125   Median :0   Median : 0.3537  </span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;  Mean   :21.62   Mean   : 36.55   Mean   :0.125   Mean   :0   Mean   : 0.6055  </span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:24.00   3rd Qu.: 30.00   3rd Qu.:0.125   3rd Qu.:0   3rd Qu.: 1.6073  </span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;  Max.   :28.00   Max.   :104.00   Max.   :0.125   Max.   :0   Max.   : 4.5506  </span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;       y1_2              y2_1              y2_2               id      </span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt;  Min.   :-1.1505   Min.   :-2.2658   Min.   :-2.3618   Min.   : 1.0  </span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:-0.0983   1st Qu.:-0.4629   1st Qu.: 0.3215   1st Qu.:12.5  </span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt;  Median : 1.1069   Median : 0.7087   Median : 1.4460   Median :24.0  </span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt;  Mean   : 1.1957   Mean   : 0.9443   Mean   : 1.1523   Mean   :24.0  </span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: 2.1121   3rd Qu.: 2.2073   3rd Qu.: 2.1726   3rd Qu.:35.5  </span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt;  Max.   : 5.0089   Max.   : 5.3431   Max.   : 4.2828   Max.   :47.0</span></span></code></pre></div>
+<p>We bind the simulated outcome data to the links data to prepare it
+for modeling.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>data_demo <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df_cousin, syn_df) <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">arrange</span>(ID1, ID2)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">summary</span>(data_demo)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;       ID1              ID2             addRel          cnuRel </span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;  Min.   :   3.0   Min.   :   7.0   Min.   :0.125   Min.   :0  </span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 759.2   1st Qu.: 781.2   1st Qu.:0.125   1st Qu.:0  </span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt;  Median :1515.5   Median :1555.5   Median :0.125   Median :0  </span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt;  Mean   :1521.6   Mean   :1536.6   Mean   :0.125   Mean   :0  </span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:2271.8   3rd Qu.:2329.8   3rd Qu.:0.125   3rd Qu.:0  </span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;  Max.   :3028.0   Max.   :3104.0   Max.   :0.125   Max.   :0  </span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;       y1_1              y1_2              y2_1             y2_2        </span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt;  Min.   :-3.3672   Min.   :-1.5255   Min.   :-2.959   Min.   :-2.3276  </span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 0.6044   1st Qu.: 0.8779   1st Qu.: 0.787   1st Qu.: 0.9394  </span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt;  Median : 1.7633   Median : 2.1013   Median : 1.847   Median : 2.0066  </span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt;  Mean   : 1.7469   Mean   : 2.0855   Mean   : 2.039   Mean   : 2.1207  </span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: 2.9137   3rd Qu.: 3.1359   3rd Qu.: 3.208   3rd Qu.: 3.3210  </span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt;  Max.   : 6.0358   Max.   : 6.1543   Max.   : 6.783   Max.   : 6.7877  </span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt;        id        </span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt;  Min.   :  1.00  </span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 47.75  </span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt;  Median : 94.50  </span></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt;  Mean   : 94.50  </span></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:141.25  </span></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt;  Max.   :188.00</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>data_demo <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="5%" />
+<col width="10%" />
+<col width="10%" />
+<col width="16%" />
+<col width="16%" />
+<col width="14%" />
+<col width="14%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">ID1</th>
+<th align="right">ID2</th>
+<th align="right">addRel</th>
+<th align="right">cnuRel</th>
+<th align="right">y1_1</th>
+<th align="right">y1_2</th>
+<th align="right">y2_1</th>
+<th align="right">y2_2</th>
+<th align="right">id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">21</td>
+<td align="right">0.125</td>
+<td align="right">0</td>
+<td align="right">0.6984681</td>
+<td align="right">-0.9463635</td>
+<td align="right">0.9203754</td>
+<td align="right">0.8795634</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">22</td>
+<td align="right">0.125</td>
+<td align="right">0</td>
+<td align="right">3.4082317</td>
+<td align="right">0.1747639</td>
+<td align="right">4.5457972</td>
+<td align="right">0.2776425</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">23</td>
+<td align="right">0.125</td>
+<td align="right">0</td>
+<td align="right">-1.9437220</td>
+<td align="right">-1.4571830</td>
+<td align="right">2.8360088</td>
+<td align="right">2.4356576</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">0.125</td>
+<td align="right">0</td>
+<td align="right">3.0188293</td>
+<td align="right">5.1542516</td>
+<td align="right">0.7041064</td>
+<td align="right">0.9333481</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">21</td>
+<td align="right">24</td>
+<td align="right">0.125</td>
+<td align="right">0</td>
+<td align="right">0.5056531</td>
+<td align="right">0.0700135</td>
+<td align="right">1.1275003</td>
+<td align="right">4.2852528</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
 <p>The <code>data_demo</code> data frame now contains the kinship
 information along with the simulated outcome variables y1 and y2. Each
 row represents a pair of cousins, and the columns include the IDs of the
@@ -587,39 +729,168 @@ between the two outcome variables, as there is a known overlapping
 non-shared environment covariance.</p>
 <p>The model is fit using the <code>discord_regression()</code>
 function, which takes the following arguments:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>model_output <span class="ot">&lt;-</span> <span class="fu">discord_regression</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">data =</span> data_demo,</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;y1&quot;</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;id&quot;</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">sex =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">race =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_1&quot;</span>, <span class="st">&quot;_2&quot;</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="fu">summary</span>(model_output)</span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = y1_diff ~ y1_mean + y2_diff + y2_mean, data = preppedData)</span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; -1.6044 -0.9315 -0.1824  0.7204  2.7929 </span></span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value  Pr(&gt;|t|)    </span></span>
-<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; (Intercept)  1.21796    0.24153   5.043 0.0000088 ***</span></span>
-<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; y1_mean      0.08375    0.13099   0.639    0.5260    </span></span>
-<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; y2_diff      0.27022    0.08830   3.060    0.0038 ** </span></span>
-<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; y2_mean      0.11734    0.11812   0.993    0.3261    </span></span>
-<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
-<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.117 on 43 degrees of freedom</span></span>
-<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.2033, Adjusted R-squared:  0.1477 </span></span>
-<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; F-statistic: 3.657 on 3 and 43 DF,  p-value: 0.01959</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>model_output <span class="ot">&lt;-</span> <span class="fu">discord_regression</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="at">data =</span> data_demo,</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;y1&quot;</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;id&quot;</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="at">sex =</span> <span class="cn">NULL</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="at">race =</span> <span class="cn">NULL</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_1&quot;</span>, <span class="st">&quot;_2&quot;</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>)</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">summary</span>(model_output)</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = y1_diff ~ y1_mean + y2_diff + y2_mean, data = preppedData)</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; -1.8511 -0.8476 -0.1705  0.6317  3.6083 </span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="co">#&gt; (Intercept)  1.38903    0.17337   8.012 1.25e-13 ***</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="co">#&gt; y1_mean      0.06308    0.06038   1.045  0.29749    </span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="co">#&gt; y2_diff      0.13111    0.04081   3.213  0.00155 ** </span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="co">#&gt; y2_mean     -0.04300    0.05654  -0.761  0.44789    </span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.108 on 184 degrees of freedom</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.06089,    Adjusted R-squared:  0.04557 </span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a><span class="co">#&gt; F-statistic: 3.976 on 3 and 184 DF,  p-value: 0.00893</span></span></code></pre></div>
 <p>The output of the model includes estimates of the regression
 coefficients, standard errors, and p-values for the association between
 the two outcome variables.</p>
+</div>
+<div id="alternative-specifications" class="section level1">
+<h1>Alternative Specifications</h1>
+<p>If desired, one can manually prepare the data using
+<code>discord_data()</code> and then fit separate models for the
+individual-level, between-pair, and within-pair effects. This approach
+provides more flexibility in specifying the models and allows for a
+deeper understanding of the different components of the association.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> <span class="fu">discord_data</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="at">data =</span> data_demo,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="st">&quot;y1&quot;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="at">predictors =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;id&quot;</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="at">sex =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">race =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="at">demographics =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="at">pair_identifiers =</span> <span class="fu">c</span>(<span class="st">&quot;_1&quot;</span>, <span class="st">&quot;_2&quot;</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>)</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">summary</span>(data_df)</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;        id              y1_1             y1_2            y1_diff        </span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt;  Min.   :  1.00   Min.   :-1.457   Min.   :-3.3672   Min.   :0.003215  </span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 47.75   1st Qu.: 1.643   1st Qu.: 0.1777   1st Qu.:0.707853  </span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt;  Median : 94.50   Median : 2.723   Median : 1.1478   Median :1.311807  </span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt;  Mean   : 94.50   Mean   : 2.679   Mean   : 1.1538   Mean   :1.524696  </span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:141.25   3rd Qu.: 3.882   3rd Qu.: 2.1351   3rd Qu.:2.207785  </span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt;  Max.   :188.00   Max.   : 6.154   Max.   : 4.9615   Max.   :5.157103  </span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt;     y1_mean            y2_1             y2_2           y2_diff       </span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt;  Min.   :-1.700   Min.   :-2.109   Min.   :-2.959   Min.   :-3.9241  </span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 1.006   1st Qu.: 1.291   1st Qu.: 0.574   1st Qu.:-0.4878  </span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt;  Median : 1.912   Median : 2.364   Median : 1.505   Median : 0.8402  </span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt;  Mean   : 1.916   Mean   : 2.478   Mean   : 1.682   Mean   : 0.7951  </span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: 2.884   3rd Qu.: 3.602   3rd Qu.: 2.775   3rd Qu.: 2.0682  </span></span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#&gt;  Max.   : 5.053   Max.   : 6.788   Max.   : 6.783   Max.   : 6.9832  </span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt;     y2_mean      </span></span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a><span class="co">#&gt;  Min.   :-1.154  </span></span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 1.077  </span></span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a><span class="co">#&gt;  Median : 1.936  </span></span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="co">#&gt;  Mean   : 2.080  </span></span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: 2.911  </span></span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="co">#&gt;  Max.   : 6.119</span></span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a>lm_ind <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1_1 <span class="sc">~</span> y2_1, <span class="at">data =</span> data_df)</span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="fu">summary</span>(lm_ind)</span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="co">#&gt; lm(formula = y1_1 ~ y2_1, data = data_df)</span></span>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a><span class="co">#&gt; -4.1295 -0.9876  0.0817  1.1612  3.7977 </span></span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="co">#&gt; (Intercept)  2.30725    0.18995  12.146   &lt;2e-16 ***</span></span>
+<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="co">#&gt; y2_1         0.14987    0.06282   2.386    0.018 *  </span></span>
+<span id="cb14-49"><a href="#cb14-49" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb14-50"><a href="#cb14-50" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb14-51"><a href="#cb14-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-52"><a href="#cb14-52" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.493 on 186 degrees of freedom</span></span>
+<span id="cb14-53"><a href="#cb14-53" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.0297, Adjusted R-squared:  0.02448 </span></span>
+<span id="cb14-54"><a href="#cb14-54" tabindex="-1"></a><span class="co">#&gt; F-statistic: 5.692 on 1 and 186 DF,  p-value: 0.01804</span></span>
+<span id="cb14-55"><a href="#cb14-55" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" tabindex="-1"></a>lm_ind2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1_2 <span class="sc">~</span> y2_2, <span class="at">data =</span> data_df)</span>
+<span id="cb14-57"><a href="#cb14-57" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a><span class="fu">summary</span>(lm_ind2)</span>
+<span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="co">#&gt; lm(formula = y1_2 ~ y2_2, data = data_df)</span></span>
+<span id="cb14-62"><a href="#cb14-62" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-63"><a href="#cb14-63" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb14-64"><a href="#cb14-64" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb14-65"><a href="#cb14-65" tabindex="-1"></a><span class="co">#&gt; -4.4598 -0.9950 -0.0377  0.9567  3.3692 </span></span>
+<span id="cb14-66"><a href="#cb14-66" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-67"><a href="#cb14-67" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb14-68"><a href="#cb14-68" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb14-69"><a href="#cb14-69" tabindex="-1"></a><span class="co">#&gt; (Intercept)  0.87682    0.14193   6.178    4e-09 ***</span></span>
+<span id="cb14-70"><a href="#cb14-70" tabindex="-1"></a><span class="co">#&gt; y2_2         0.16466    0.05788   2.845  0.00494 ** </span></span>
+<span id="cb14-71"><a href="#cb14-71" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb14-72"><a href="#cb14-72" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb14-73"><a href="#cb14-73" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-74"><a href="#cb14-74" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.416 on 186 degrees of freedom</span></span>
+<span id="cb14-75"><a href="#cb14-75" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.0417, Adjusted R-squared:  0.03655 </span></span>
+<span id="cb14-76"><a href="#cb14-76" tabindex="-1"></a><span class="co">#&gt; F-statistic: 8.094 on 1 and 186 DF,  p-value: 0.004939</span></span>
+<span id="cb14-77"><a href="#cb14-77" tabindex="-1"></a></span>
+<span id="cb14-78"><a href="#cb14-78" tabindex="-1"></a></span>
+<span id="cb14-79"><a href="#cb14-79" tabindex="-1"></a>lm_between <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1_mean <span class="sc">~</span> y2_mean, <span class="at">data =</span> data_df)</span>
+<span id="cb14-80"><a href="#cb14-80" tabindex="-1"></a><span class="fu">summary</span>(lm_between)</span>
+<span id="cb14-81"><a href="#cb14-81" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-82"><a href="#cb14-82" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb14-83"><a href="#cb14-83" tabindex="-1"></a><span class="co">#&gt; lm(formula = y1_mean ~ y2_mean, data = data_df)</span></span>
+<span id="cb14-84"><a href="#cb14-84" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-85"><a href="#cb14-85" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb14-86"><a href="#cb14-86" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb14-87"><a href="#cb14-87" tabindex="-1"></a><span class="co">#&gt; -3.7107 -0.8579  0.0237  0.9435  3.3296 </span></span>
+<span id="cb14-88"><a href="#cb14-88" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-89"><a href="#cb14-89" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb14-90"><a href="#cb14-90" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb14-91"><a href="#cb14-91" tabindex="-1"></a><span class="co">#&gt; (Intercept)   1.5642     0.1713   9.131   &lt;2e-16 ***</span></span>
+<span id="cb14-92"><a href="#cb14-92" tabindex="-1"></a><span class="co">#&gt; y2_mean       0.1692     0.0675   2.507    0.013 *  </span></span>
+<span id="cb14-93"><a href="#cb14-93" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb14-94"><a href="#cb14-94" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb14-95"><a href="#cb14-95" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-96"><a href="#cb14-96" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.346 on 186 degrees of freedom</span></span>
+<span id="cb14-97"><a href="#cb14-97" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.03268,    Adjusted R-squared:  0.02748 </span></span>
+<span id="cb14-98"><a href="#cb14-98" tabindex="-1"></a><span class="co">#&gt; F-statistic: 6.284 on 1 and 186 DF,  p-value: 0.01304</span></span>
+<span id="cb14-99"><a href="#cb14-99" tabindex="-1"></a></span>
+<span id="cb14-100"><a href="#cb14-100" tabindex="-1"></a>lm_within <span class="ot">&lt;-</span> <span class="fu">lm</span>(y1_diff <span class="sc">~</span> y1_mean <span class="sc">+</span> y2_diff <span class="sc">+</span> y2_mean, <span class="at">data =</span> data_df)</span>
+<span id="cb14-101"><a href="#cb14-101" tabindex="-1"></a><span class="fu">summary</span>(lm_within)</span>
+<span id="cb14-102"><a href="#cb14-102" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-103"><a href="#cb14-103" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb14-104"><a href="#cb14-104" tabindex="-1"></a><span class="co">#&gt; lm(formula = y1_diff ~ y1_mean + y2_diff + y2_mean, data = data_df)</span></span>
+<span id="cb14-105"><a href="#cb14-105" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-106"><a href="#cb14-106" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb14-107"><a href="#cb14-107" tabindex="-1"></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb14-108"><a href="#cb14-108" tabindex="-1"></a><span class="co">#&gt; -1.8511 -0.8476 -0.1705  0.6317  3.6083 </span></span>
+<span id="cb14-109"><a href="#cb14-109" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-110"><a href="#cb14-110" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb14-111"><a href="#cb14-111" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb14-112"><a href="#cb14-112" tabindex="-1"></a><span class="co">#&gt; (Intercept)  1.38903    0.17337   8.012 1.25e-13 ***</span></span>
+<span id="cb14-113"><a href="#cb14-113" tabindex="-1"></a><span class="co">#&gt; y1_mean      0.06308    0.06038   1.045  0.29749    </span></span>
+<span id="cb14-114"><a href="#cb14-114" tabindex="-1"></a><span class="co">#&gt; y2_diff      0.13111    0.04081   3.213  0.00155 ** </span></span>
+<span id="cb14-115"><a href="#cb14-115" tabindex="-1"></a><span class="co">#&gt; y2_mean     -0.04300    0.05654  -0.761  0.44789    </span></span>
+<span id="cb14-116"><a href="#cb14-116" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb14-117"><a href="#cb14-117" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb14-118"><a href="#cb14-118" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb14-119"><a href="#cb14-119" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 1.108 on 184 degrees of freedom</span></span>
+<span id="cb14-120"><a href="#cb14-120" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.06089,    Adjusted R-squared:  0.04557 </span></span>
+<span id="cb14-121"><a href="#cb14-121" tabindex="-1"></a><span class="co">#&gt; F-statistic: 3.976 on 3 and 184 DF,  p-value: 0.00893</span></span></code></pre></div>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>

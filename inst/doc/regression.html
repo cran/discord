@@ -13,7 +13,7 @@
 <meta name="author" content="Jonathan Trattner" />
 
 
-<title>Regression demonstration</title>
+<title>NLSY: Regression demonstration with Flu Vaccination and SES data</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -273,8 +273,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -285,7 +286,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -584,24 +585,34 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Regression demonstration</h1>
+<h1 class="title toc-ignore">NLSY: Regression demonstration with Flu
+Vaccination and SES data</h1>
 <h4 class="author">Jonathan Trattner</h4>
 
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This vignette presents a simple example of a discordant-kinship
-regression using the <code>discord</code> package.</p>
-<p>The analysis draws from work presented by Trattner et al (2020) <span class="citation">(Trattner, Kennon, and Garrison 2020)</span>, which was
-initially motivated by reports of health disparities among ethnic
-minority groups during the COVID-19 pandemic <span class="citation">(Hooper, Nápoles, and Pérez-Stable 2020)</span>. The
-data come from the 1979 National Longitudinal Survey of Youth (NLSY79),
-a nationally-representative household probability sample jointly
-sponsored by the U.S. Bureau of Labor Statistics and the Department of
-Defense. Participants were surveyed annually from 1979 until 1994 at
-which point surveys occurred biennially. The data are publicly available
-at <a href="https://www.nlsinfo.org/" class="uri">https://www.nlsinfo.org/</a> and include responses from a
+<p>This vignette shows how to run a <strong>discordant-kinship
+regression</strong> with the <code>{discord}</code> package and the
+<code>{NLSYLinks}</code> package. The example uses data on flu
+vaccination and socioeconomic status (SES) from the National
+Longitudinal Survey of Youth 1979 (NLSY79). The goal of this analysis is
+to examine whether SES at age 40 predicts the number of flu vaccinations
+received between 2006 and 2016, while controlling for genetic and shared
+environmental factors by leveraging a discordant-kinship design.</p>
+<div id="data-description" class="section level2">
+<h2>Data Description</h2>
+<p>We build on Trattner et al. (2020) <span class="citation">(Trattner,
+Kennon, and Garrison 2020)</span>, originally motivated by reports of
+health disparities among ethnic minority groups during the COVID-19
+pandemic <span class="citation">(Hooper, Nápoles, and Pérez-Stable
+2020)</span>. The data come from the 1979 National Longitudinal Survey
+of Youth (NLSY79), a nationally-representative household probability
+sample jointly sponsored by the U.S. Bureau of Labor Statistics and the
+Department of Defense. Participants were surveyed annually from 1979
+until 1994 at which point surveys occurred biennially. The data are
+publicly available at <a href="https://www.nlsinfo.org/" class="uri">https://www.nlsinfo.org/</a> and include responses from a
 biennial flu vaccine survey administered between 2006 and 2016.</p>
 <p>The original analysis examined whether socioeconomic status (SES) at
 age 40 predicted flu vaccination rates, using a discordant kinship
@@ -616,9 +627,14 @@ cohort <span class="citation">(Rodgers et al. 2016)</span>. These
 kinship links are provided in the <a href="https://nlsy-links.github.io/NlsyLinks/index.html">{NlsyLinks}</a>
 R package <span class="citation">(Beasley et al. 2016)</span>, and can
 be easily utilized with the {discord} package.</p>
+</div>
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
-<p>For this example, we will load the following packages:</p>
+<div id="prepare-person-level-data" class="section level3">
+<h3>Prepare person-level data</h3>
+<p>To perform a discordant-kinship regression, we first need to
+preprocess the data. For this example, we will load the following
+packages:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># For easy data manipulation</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># For kinship linkages</span></span>
@@ -660,24 +676,44 @@ S00_H40
 <tbody>
 <tr>
 <td style="text-align:center;">
-306
-</td>
-<td style="text-align:center;">
-1
-</td>
-<td style="text-align:center;">
-1
+401
 </td>
 <td style="text-align:center;">
 0
 </td>
 <td style="text-align:center;">
-46.090390
+0
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+35.16884
 </td>
 </tr>
 <tr>
 <td style="text-align:center;">
-148
+29
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+56.80481
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+282
+</td>
+<td style="text-align:center;">
+0
 </td>
 <td style="text-align:center;">
 0
@@ -686,49 +722,46 @@ S00_H40
 1
 </td>
 <td style="text-align:center;">
-3
-</td>
-<td style="text-align:center;">
-64.153236
+78.51113
 </td>
 </tr>
 <tr>
 <td style="text-align:center;">
-470
+369
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+72.44180
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+268
 </td>
 <td style="text-align:center;">
 0
 </td>
 <td style="text-align:center;">
 1
-</td>
-<td style="text-align:center;">
-0
-</td>
-<td style="text-align:center;">
-27.501260
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-236
-</td>
-<td style="text-align:center;">
-0
-</td>
-<td style="text-align:center;">
-0
 </td>
 <td style="text-align:center;">
 5
 </td>
 <td style="text-align:center;">
-61.668347
+34.53569
 </td>
 </tr>
 <tr>
 <td style="text-align:center;">
-466
+257
 </td>
 <td style="text-align:center;">
 0
@@ -740,24 +773,7 @@ S00_H40
 0
 </td>
 <td style="text-align:center;">
-64.566532
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-229
-</td>
-<td style="text-align:center;">
-0
-</td>
-<td style="text-align:center;">
-0
-</td>
-<td style="text-align:center;">
-0
-</td>
-<td style="text-align:center;">
-5.399446
+24.66490
 </td>
 </tr>
 </tbody>
@@ -780,9 +796,13 @@ drawn from the preprocessed data previewed above.</p>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="st">&quot;FLU_2012&quot;</span>, <span class="st">&quot;FLU_2014&quot;</span>, <span class="st">&quot;FLU_2016&quot;</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="st">&quot;S00_H40&quot;</span>, <span class="st">&quot;RACE&quot;</span>, <span class="st">&quot;SEX&quot;</span></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="create-kinship-linked-data" class="section level3">
+<h3>Create kinship-linked data</h3>
 <p>We now link the subjects by the specified variables using
 <code>CreatePairLinksSingleEntered()</code>, from the {NlsyLinks}
-package.</p>
+package. We filter full siblings (RFull == .5) and use RelationshipPath
+== “Gen1Housemates”; see {NlsyLinks} docs for other kin types.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Specify NLSY database and kin relatedness</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>link_pairs <span class="ot">&lt;-</span> Links79PairExpanded <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">filter</span>(RelationshipPath <span class="sc">==</span> <span class="st">&quot;Gen1Housemates&quot;</span> <span class="sc">&amp;</span> RFull <span class="sc">==</span> <span class="fl">0.5</span>)</span>
@@ -793,7 +813,7 @@ package.</p>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="at">outcomeNames =</span> link_vars</span>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>)</span></code></pre></div>
 <p>We have saved this data frame as <code>df_link</code>. A random
-subset of this data is shown below::<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+subset of this data is shown below:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -823,59 +843,59 @@ S00_H40_S2
 <tbody>
 <tr>
 <td style="text-align:center;">
-1366
+1151
 </td>
 <td style="text-align:center;">
-136600
+115100
 </td>
 <td style="text-align:center;">
-136800
-</td>
-<td style="text-align:center;">
-1
+115300
 </td>
 <td style="text-align:center;">
 0
 </td>
 <td style="text-align:center;">
-62.51680
-</td>
-<td style="text-align:center;">
-55.05292
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-498
-</td>
-<td style="text-align:center;">
-49800
-</td>
-<td style="text-align:center;">
-50000
-</td>
-<td style="text-align:center;">
 0
 </td>
 <td style="text-align:center;">
-1
+43.01999
 </td>
 <td style="text-align:center;">
-53.36106
-</td>
-<td style="text-align:center;">
-68.52776
+7.597851
 </td>
 </tr>
 <tr>
 <td style="text-align:center;">
-58
+67
 </td>
 <td style="text-align:center;">
-5800
+6700
 </td>
 <td style="text-align:center;">
-5900
+6800
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+89.67767
+</td>
+<td style="text-align:center;">
+82.686492
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+875
+</td>
+<td style="text-align:center;">
+87700
+</td>
+<td style="text-align:center;">
+87800
 </td>
 <td style="text-align:center;">
 5
@@ -884,79 +904,79 @@ S00_H40_S2
 0
 </td>
 <td style="text-align:center;">
-80.56835
+85.74444
 </td>
 <td style="text-align:center;">
-49.68414
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-1027
-</td>
-<td style="text-align:center;">
-102800
-</td>
-<td style="text-align:center;">
-102900
-</td>
-<td style="text-align:center;">
-0
-</td>
-<td style="text-align:center;">
-4
-</td>
-<td style="text-align:center;">
-11.85086
-</td>
-<td style="text-align:center;">
-37.19758
+64.793347
 </td>
 </tr>
 <tr>
 <td style="text-align:center;">
-309
+190
 </td>
 <td style="text-align:center;">
-30900
+19000
 </td>
 <td style="text-align:center;">
-31100
+19100
 </td>
 <td style="text-align:center;">
-2
+5
 </td>
 <td style="text-align:center;">
 1
 </td>
 <td style="text-align:center;">
-48.00674
+83.36064
 </td>
 <td style="text-align:center;">
-35.33512
+88.718342
 </td>
 </tr>
 <tr>
 <td style="text-align:center;">
-673
+801
 </td>
 <td style="text-align:center;">
-67300
+80100
 </td>
 <td style="text-align:center;">
-67400
+80200
+</td>
+<td style="text-align:center;">
+3
 </td>
 <td style="text-align:center;">
 2
 </td>
 <td style="text-align:center;">
-4
+37.08921
 </td>
 <td style="text-align:center;">
-34.00706
+33.322833
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+726
 </td>
 <td style="text-align:center;">
-42.90100
+72600
+</td>
+<td style="text-align:center;">
+72700
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+67.93095
+</td>
+<td style="text-align:center;">
+36.712450
 </td>
 </tr>
 </tbody>
@@ -1369,16 +1389,16 @@ ses_age_40_s2
 85
 </td>
 <td style="text-align:center;text-align: center;">
-8500
-</td>
-<td style="text-align:center;text-align: center;">
 8600
 </td>
 <td style="text-align:center;text-align: center;">
-0
+8700
 </td>
 <td style="text-align:center;text-align: center;">
 0
+</td>
+<td style="text-align:center;text-align: center;">
+4
 </td>
 <td style="text-align:center;text-align: center;">
 1
@@ -1387,20 +1407,21 @@ ses_age_40_s2
 1
 </td>
 <td style="text-align:center;text-align: center;">
-1
-</td>
-<td style="text-align:center;text-align: center;">
 0
 </td>
 <td style="text-align:center;text-align: center;">
-40.12748
+1
 </td>
 <td style="text-align:center;text-align: center;">
 45.06552
 </td>
+<td style="text-align:center;text-align: center;">
+64.14045
+</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div id="modeling-and-interpretation" class="section level2">
 <h2>Modeling and Interpretation</h2>
@@ -1458,13 +1479,13 @@ P Value
 (Intercept)
 </td>
 <td style="text-align:center;text-align: center;">
-1.468
+1.362
 </td>
 <td style="text-align:center;text-align: center;">
-0.192
+0.193
 </td>
 <td style="text-align:center;text-align: center;">
-7.627
+7.072
 </td>
 <td style="text-align:center;text-align: center;">
 p&lt;0.001
@@ -1475,13 +1496,13 @@ p&lt;0.001
 flu_total_mean
 </td>
 <td style="text-align:center;text-align: center;">
-0.186
+0.208
 </td>
 <td style="text-align:center;text-align: center;">
 0.033
 </td>
 <td style="text-align:center;text-align: center;">
-5.565
+6.292
 </td>
 <td style="text-align:center;text-align: center;">
 p&lt;0.001
@@ -1492,16 +1513,16 @@ p&lt;0.001
 s00_h40_diff
 </td>
 <td style="text-align:center;text-align: center;">
-0.005
+0.006
 </td>
 <td style="text-align:center;text-align: center;">
 0.002
 </td>
 <td style="text-align:center;text-align: center;">
-2.398
+3.112
 </td>
 <td style="text-align:center;text-align: center;">
-p=0.017
+p=0.002
 </td>
 </tr>
 <tr>
@@ -1515,10 +1536,10 @@ s00_h40_mean
 0.003
 </td>
 <td style="text-align:center;text-align: center;">
-0.933
+1.032
 </td>
 <td style="text-align:center;text-align: center;">
-p=0.351
+p=0.303
 </td>
 </tr>
 <tr>
@@ -1526,16 +1547,16 @@ p=0.351
 sex_1
 </td>
 <td style="text-align:center;text-align: center;">
--0.123
+-0.174
 </td>
 <td style="text-align:center;text-align: center;">
-0.098
+0.097
 </td>
 <td style="text-align:center;text-align: center;">
--1.255
+-1.783
 </td>
 <td style="text-align:center;text-align: center;">
-p=0.210
+p=0.075
 </td>
 </tr>
 <tr>
@@ -1543,16 +1564,16 @@ p=0.210
 race_1
 </td>
 <td style="text-align:center;text-align: center;">
--0.095
+-0.046
 </td>
 <td style="text-align:center;text-align: center;">
-0.103
+0.102
 </td>
 <td style="text-align:center;text-align: center;">
--0.923
+-0.447
 </td>
 <td style="text-align:center;text-align: center;">
-p=0.356
+p=0.655
 </td>
 </tr>
 <tr>
@@ -1560,16 +1581,16 @@ p=0.356
 sex_2
 </td>
 <td style="text-align:center;text-align: center;">
--0.006
+0.034
 </td>
 <td style="text-align:center;text-align: center;">
-0.098
+0.097
 </td>
 <td style="text-align:center;text-align: center;">
--0.061
+0.352
 </td>
 <td style="text-align:center;text-align: center;">
-p=0.951
+p=0.725
 </td>
 </tr>
 </tbody>
@@ -1579,7 +1600,7 @@ average difference in outcomes between siblings, controlling for all
 other variables. That is, it estimates the expected difference for two
 sisters of a non-minority ethnic background (the reference groups for
 sex and race), when SES and all other predictors are equal –
-approximately 1.5. The term <code>flu_total_mean</code> is essentially
+approximately 1.4. The term <code>flu_total_mean</code> is essentially
 an extra component of the intercept that adjusts for between-family
 differences in the outcome variable. It allows the model to capture how
 the expected difference between siblings changes as a function of their
@@ -1598,7 +1619,7 @@ An interpretation of this result might be, “the difference in
 socioeconomic status between siblings at age 40 is positively associated
 with the difference in the number of flu vaccinations received between
 2006-2016.” This finding means that a sibling with 10% higher SES is
-expected to have 0.0481597 average in flu shots.</p>
+expected to have 0.0618227 average in flu shots.</p>
 <p>The goal of performing a discordant-kinship regression is to see
 whether there is a significant difference in some behavioral measure
 while controlling for as much gene-and-environmental variance as
@@ -1614,9 +1635,9 @@ and between-family differences in our predictors and outcomes.</p>
 <h1>Conclusion</h1>
 <p>In its current implementation, the {discord} package encourages best
 practices for performing discordant-kinship regressions. For example,
-the main function has the default expectation that sex and race
-indicators will be supplied. These measures are both important
-covariates <strong>when testing for causality between familial
+the main function has the default expectation that demographic
+covariates (sex and race) will be supplied. These measures are both
+important covariates <strong>when testing for causality between familial
 background and psychological characteristics.</strong></p>
 <p>This, and other design choices, are crucial to facilitating
 transparent and reproducible results. Software ever-evolves, however,
@@ -1628,6 +1649,119 @@ implementation and results.</p>
 <h1>Acknowledgments</h1>
 <p>We acknowledge contributions from Cermet Ream, Joe Rodgers, and
 support from Lucy D’Agostino McGowan on this project.</p>
+</div>
+<div id="session-info" class="section level1">
+<h1>Session Info</h1>
+<pre><code>#&gt; Warning in system2(&quot;quarto&quot;, &quot;-V&quot;, stdout = TRUE, env = paste0(&quot;TMPDIR=&quot;, :
+#&gt; running command &#39;&quot;quarto&quot;
+#&gt; TMPDIR=C:/Users/smaso/AppData/Local/Temp/RtmpUHzh2u/filefb781302321 -V&#39; had
+#&gt; status 1
+#&gt; ─ Session info ───────────────────────────────────────────────────────────────
+#&gt;  setting  value
+#&gt;  version  R version 4.5.2 (2025-10-31 ucrt)
+#&gt;  os       Windows 11 x64 (build 26200)
+#&gt;  system   x86_64, mingw32
+#&gt;  ui       RTerm
+#&gt;  language (EN)
+#&gt;  collate  C
+#&gt;  ctype    English_United States.utf8
+#&gt;  tz       America/New_York
+#&gt;  date     2026-01-18
+#&gt;  pandoc   3.6.3 @ C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
+#&gt;  quarto   NA @ C:\\PROGRA~1\\RStudio\\RESOUR~1\\app\\bin\\quarto\\bin\\quarto.exe
+#&gt; 
+#&gt; ─ Packages ───────────────────────────────────────────────────────────────────
+#&gt;  package      * version date (UTC) lib source
+#&gt;  backports      1.5.0   2024-05-23 [3] CRAN (R 4.5.2)
+#&gt;  BGmisc       * 1.5.2   2025-12-20 [3] local
+#&gt;  broom        * 1.0.11  2025-12-04 [3] CRAN (R 4.5.2)
+#&gt;  bslib          0.9.0   2025-01-30 [3] CRAN (R 4.5.2)
+#&gt;  cachem         1.1.0   2024-05-16 [3] CRAN (R 4.5.2)
+#&gt;  cli            3.6.5   2025-04-23 [3] CRAN (R 4.5.2)
+#&gt;  data.table     1.18.0  2025-12-24 [3] CRAN (R 4.5.2)
+#&gt;  dichromat      2.0-0.1 2022-05-02 [3] CRAN (R 4.5.2)
+#&gt;  digest         0.6.39  2025-11-19 [3] CRAN (R 4.5.2)
+#&gt;  discord      * 1.3     2026-01-18 [1] local
+#&gt;  dplyr        * 1.1.4   2023-11-17 [3] CRAN (R 4.5.2)
+#&gt;  evaluate       1.0.5   2025-08-27 [3] CRAN (R 4.5.2)
+#&gt;  farver         2.1.2   2024-05-13 [3] CRAN (R 4.5.2)
+#&gt;  fastmap        1.2.0   2024-05-15 [3] CRAN (R 4.5.2)
+#&gt;  forcats      * 1.0.1   2025-09-25 [3] CRAN (R 4.5.2)
+#&gt;  generics       0.1.4   2025-05-09 [3] CRAN (R 4.5.2)
+#&gt;  ggExtra      * 0.11.0  2025-09-01 [3] CRAN (R 4.5.2)
+#&gt;  ggpedigree   * 1.1.0.3 &lt;NA&gt;       [3] local
+#&gt;  ggplot2      * 4.0.1   2025-11-14 [3] CRAN (R 4.5.2)
+#&gt;  ggrepel        0.9.6   2024-09-07 [3] CRAN (R 4.5.2)
+#&gt;  glue           1.8.0   2024-09-30 [3] CRAN (R 4.5.2)
+#&gt;  gridExtra    * 2.3     2017-09-09 [3] CRAN (R 4.5.2)
+#&gt;  gtable         0.3.6   2024-10-25 [3] CRAN (R 4.5.2)
+#&gt;  hms            1.1.4   2025-10-17 [3] CRAN (R 4.5.2)
+#&gt;  htmltools      0.5.9   2025-12-04 [3] CRAN (R 4.5.2)
+#&gt;  httpuv         1.6.16  2025-04-16 [3] CRAN (R 4.5.2)
+#&gt;  igraph         2.2.1   2025-10-27 [3] CRAN (R 4.5.2)
+#&gt;  janitor      * 2.2.1   2024-12-22 [3] CRAN (R 4.5.2)
+#&gt;  jquerylib      0.1.4   2021-04-26 [3] CRAN (R 4.5.2)
+#&gt;  jsonlite       2.0.0   2025-03-27 [3] CRAN (R 4.5.2)
+#&gt;  kableExtra     1.4.0   2024-01-24 [3] CRAN (R 4.5.2)
+#&gt;  knitr          1.51    2025-12-20 [3] CRAN (R 4.5.2)
+#&gt;  labeling       0.4.3   2023-08-29 [3] CRAN (R 4.5.2)
+#&gt;  later          1.4.5   2026-01-08 [3] CRAN (R 4.5.2)
+#&gt;  lattice        0.22-7  2025-04-02 [4] CRAN (R 4.5.2)
+#&gt;  lifecycle      1.0.5   2026-01-08 [3] CRAN (R 4.5.2)
+#&gt;  lubridate    * 1.9.4   2024-12-08 [3] CRAN (R 4.5.2)
+#&gt;  magrittr     * 2.0.4   2025-09-12 [3] CRAN (R 4.5.2)
+#&gt;  Matrix         1.7-4   2025-08-28 [4] CRAN (R 4.5.2)
+#&gt;  mgcv           1.9-4   2025-11-07 [3] CRAN (R 4.5.2)
+#&gt;  mime           0.13    2025-03-17 [3] CRAN (R 4.5.2)
+#&gt;  miniUI         0.1.2   2025-04-17 [3] CRAN (R 4.5.2)
+#&gt;  nlme           3.1-168 2025-03-31 [4] CRAN (R 4.5.2)
+#&gt;  NlsyLinks    * 2.2.3   2025-08-31 [3] CRAN (R 4.5.2)
+#&gt;  otel           0.2.0   2025-08-29 [3] CRAN (R 4.5.2)
+#&gt;  pillar         1.11.1  2025-09-17 [3] CRAN (R 4.5.2)
+#&gt;  pkgconfig      2.0.3   2019-09-22 [3] CRAN (R 4.5.2)
+#&gt;  promises       1.5.0   2025-11-01 [3] CRAN (R 4.5.2)
+#&gt;  purrr        * 1.2.0   2025-11-04 [3] CRAN (R 4.5.2)
+#&gt;  quadprog       1.5-8   2019-11-20 [3] CRAN (R 4.5.0)
+#&gt;  R6             2.6.1   2025-02-15 [3] CRAN (R 4.5.2)
+#&gt;  RColorBrewer   1.1-3   2022-04-03 [3] CRAN (R 4.5.2)
+#&gt;  Rcpp           1.1.0   2025-07-02 [3] CRAN (R 4.5.2)
+#&gt;  readr        * 2.1.6   2025-11-14 [3] CRAN (R 4.5.2)
+#&gt;  rlang          1.1.6   2025-04-11 [3] CRAN (R 4.5.2)
+#&gt;  rmarkdown      2.30    2025-09-28 [3] CRAN (R 4.5.2)
+#&gt;  rstudioapi     0.18.0  2026-01-16 [3] CRAN (R 4.5.2)
+#&gt;  S7             0.2.1   2025-11-14 [3] CRAN (R 4.5.2)
+#&gt;  sass           0.4.10  2025-04-11 [3] CRAN (R 4.5.2)
+#&gt;  scales         1.4.0   2025-04-24 [3] CRAN (R 4.5.2)
+#&gt;  sessioninfo    1.2.3   2025-02-05 [3] CRAN (R 4.5.2)
+#&gt;  shiny          1.12.1  2025-12-09 [3] CRAN (R 4.5.2)
+#&gt;  snakecase      0.11.1  2023-08-27 [3] CRAN (R 4.5.2)
+#&gt;  stargazer      5.2.3   2022-03-04 [3] CRAN (R 4.5.2)
+#&gt;  stringi        1.8.7   2025-03-27 [3] CRAN (R 4.5.2)
+#&gt;  stringr      * 1.6.0   2025-11-04 [3] CRAN (R 4.5.2)
+#&gt;  svglite        2.2.2   2025-10-21 [3] CRAN (R 4.5.2)
+#&gt;  systemfonts    1.3.1   2025-10-01 [3] CRAN (R 4.5.2)
+#&gt;  textshaping    1.0.4   2025-10-10 [3] CRAN (R 4.5.2)
+#&gt;  tibble       * 3.3.0   2025-06-08 [3] CRAN (R 4.5.2)
+#&gt;  tidyr        * 1.3.2   2025-12-19 [3] CRAN (R 4.5.2)
+#&gt;  tidyselect     1.2.1   2024-03-11 [3] CRAN (R 4.5.2)
+#&gt;  tidyverse    * 2.0.0   2023-02-22 [3] CRAN (R 4.5.2)
+#&gt;  timechange     0.3.0   2024-01-18 [3] CRAN (R 4.5.2)
+#&gt;  tzdb           0.5.0   2025-03-15 [3] CRAN (R 4.5.2)
+#&gt;  vctrs          0.6.5   2023-12-01 [3] CRAN (R 4.5.2)
+#&gt;  viridisLite    0.4.2   2023-05-02 [3] CRAN (R 4.5.2)
+#&gt;  withr          3.0.2   2024-10-28 [3] CRAN (R 4.5.2)
+#&gt;  xfun           0.55    2025-12-16 [3] CRAN (R 4.5.2)
+#&gt;  xml2           1.5.1   2025-12-01 [3] CRAN (R 4.5.2)
+#&gt;  xtable         1.8-4   2019-04-21 [3] CRAN (R 4.5.2)
+#&gt;  yaml           2.3.12  2025-12-10 [3] CRAN (R 4.5.2)
+#&gt; 
+#&gt;  [1] C:/Users/smaso/AppData/Local/Temp/RtmpcLi3Py/Rinst1bb01a30288e
+#&gt;  [2] C:/Users/smaso/AppData/Local/Temp/Rtmpqo9sh4/temp_libpath5f0871e1e6
+#&gt;  [3] C:/Users/smaso/AppData/Local/R/win-library/4.5
+#&gt;  [4] C:/Program Files/R/R-4.5.2/library
+#&gt;  * ── Packages attached to the search path.
+#&gt; 
+#&gt; ──────────────────────────────────────────────────────────────────────────────</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>

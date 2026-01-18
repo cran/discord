@@ -1,3 +1,12 @@
+# discord 1.3
+* Adding new full data tutorial in response to reviewers
+* Adding links to external repositories for reproducible examples from publications
+* Added smarter id handling to `discord_data()`
+* Added more tests to legacy comparisons and ids
+* Clean up vignette code for graphics vignette
+* Cleaned up readme documentation
+* Added vignette change to ensure compatibility with dpylr
+
 
 # discord 1.2.4.1
 * Added a new vignette demonstrating ways to visualize discordant kinship data using the `ggplot2` package. 
@@ -5,6 +14,7 @@
 * Vectorizing `discord_data()` to improve performance.
 * Adding tests to ensure comparability between optimized and non-optimized versions of `discord_data()`.
 * Adding `discord_between_model()` to get the between-family model
+* Adding `discord_within_model()` to get the within-family model
 * Added unique filter for `discord_data()` to ensure that the data is not duplicated.
 * Added tests for categorical variables in `discord_data()`.
 * Added hotfix to BGmisc vignette.
@@ -47,7 +57,7 @@
 
 * Added a `NEWS.md` file to track changes to the package.
 * Combined the functions `kinsim1` and `kinsim_multi` into `kinsim` to simplify simulations.
-* Revised `discord_data` and `discord_regression` to support functional programming and the [tidyverse](https://www.tidyverse.org/) principles.
+* Revised `discord_data` and `discord_regression` to support functional programming and the [tidyverse](https://tidyverse.org/) principles.
 
 # discord 0.1
 
